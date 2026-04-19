@@ -1,162 +1,171 @@
-// Synced world map + journey section using d3-geo + topojson
+// Journey section — hover-synced vertical timeline + world map
+const { useState, useEffect } = React;
 
-function JourneyMap({ activeCountry, onCountryChange }) {
-  const [hovered, setHovered] = useState(null);
+const COUNTRY_INFO = {
+  US: {
+    name: 'United States', code: 'USA', years: '2020 — 2026',
+    cities: ['Villanova, PA', 'Arlington, VA', 'Orlando, FL'],
+    summary: 'Undergraduate at Villanova, summer internship at Area2Farms, incoming Ph.D. at UCF.',
+    chips: ['Villanova', 'Area2Farms', 'UCF']
+  },
+  KR: {
+    name: 'South Korea', code: 'KOR', years: '2022 — 2026',
+    cities: ['Seoul (Yonsei)', 'Seoul (SNU)'],
+    summary: 'Year-long Yonsei exchange, SNU research internship, M.S. on GaussianFeels and PoP-SLAM.',
+    chips: ['Yonsei', 'SNU', 'SRBL']
+  },
+  IN: {
+    name: 'India', code: 'IND', years: 'Origin',
+    cities: ['Home'],
+    summary: 'Roots before university — the foundation behind the international academic path.',
+    chips: ['Origin']
+  }
+};
+
+const HIGHLIGHT = { '840': 'US', '410': 'KR', '356': 'IN' };
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/* ── World map SVG — driven entirely by parent activeCountry ── */
+function JourneyMapSVG({ activeCountry, onCountryEnter }) {
   const [geo, setGeo] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const countries = {
-    US: {
-      name: 'United States',
-      code: 'USA',
-      years: '2020 — 2026',
-      cities: ['Villanova, PA', 'Arlington, VA', 'Orlando, FL'],
-      summary: 'Undergraduate degree at Villanova, summer robotics work at Area2Farms in Arlington, and the incoming Ph.D. chapter at UCF in Orlando.',
-      chips: ['Villanova', 'Area2Farms', 'UCF (incoming)']
-    },
-    KR: {
-      name: 'South Korea',
-      code: 'KOR',
-      years: '2022 — 2026',
-      cities: ['Seoul'],
-      summary: "Year-long Yonsei exchange, SNU research internship, and the current M.S. at Seoul National University focused on PoP-SLAM and GaussianFeels.",
-      chips: ['Yonsei', 'SNU', 'Soft Robotics & Bionics Lab']
-    },
-    IN: {
-      name: 'India',
-      code: 'IND',
-      years: 'Origin',
-      cities: ['Home'],
-      summary: 'Home base before university, and still part of the through-line behind the broader international academic path.',
-      chips: ['Origin']
-    }
-  };
-
-  const highlight = { '840': 'US', '410': 'KR', '356': 'IN' };
 
   useEffect(() => {
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(r => r.json())
-      .then(world => {
-        const features = topojson.feature(world, world.objects.countries).features;
-        setGeo(features);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      .then(w => setGeo(topojson.feature(w, w.objects.countries).features))
+      .catch(() => {});
   }, []);
 
-  const shown = hovered || activeCountry;
-  const info = countries[shown] || countries.KR;
-  const W = 800;
-  const H = 380;
-  const d3ready = typeof d3 !== 'undefined';
-  const projection = d3ready ? d3.geoNaturalEarth1().scale(143).translate([W / 2, H / 2 + 12]) : null;
-  const pathGen = d3ready ? d3.geoPath().projection(projection) : null;
+  const W = 700, H = 330;
+
+  if (!geo || typeof d3 === 'undefined') {
+    return <div className="wmap-loading">{!geo ? 'Loading map…' : 'Loading libraries…'}</div>;
+  }
+
+  const proj = d3.geoNaturalEarth1().scale(122).translate([W / 2, H / 2 + 8]);
+  const path = d3.geoPath().projection(proj);
   const sphere = { type: 'Sphere' };
-  const graticule = d3ready ? d3.geoGraticule()() : null;
 
   return (
-    <div className="journey-map">
-      <div className="journey-map-graphic wmap">
-        {loading || !d3ready || !pathGen ? (
-          <div className="wmap-loading">{!d3ready ? 'Map library loading…' : 'Loading map…'}</div>
-        ) : (
-          <svg viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" aria-label="Map of countries studied and worked in">
-            <defs>
-              <clipPath id="journey-map-clip">
-                <path d={pathGen(sphere)} />
-              </clipPath>
-            </defs>
-            <path d={pathGen(sphere)} className="wmap-ocean" />
-            <path d={pathGen(graticule)} className="wmap-graticule" clipPath="url(#journey-map-clip)" />
-            {geo.map((feature, idx) => {
-              const key = highlight[String(feature.id)];
-              const isActive = key === shown;
-              const d = pathGen(feature);
-              if (!d) return null;
-              return (
-                <path
-                  key={idx}
-                  d={d}
-                  className={'country' + (key ? ' visited' : '') + (isActive ? ' active' : '')}
-                  onMouseEnter={key ? () => setHovered(key) : undefined}
-                  onMouseLeave={key ? () => setHovered(null) : undefined}
-                  onClick={key ? () => onCountryChange(key) : undefined}
-                  clipPath="url(#journey-map-clip)"
-                />
-              );
-            })}
-            <path d={pathGen(sphere)} className="wmap-sphere" />
-          </svg>
-        )}
-      </div>
-      <div className="wmap-legend">
-        <span><span className="sw active"></span>Focused chapter</span>
-        <span><span className="sw visited"></span>Worked / studied</span>
-      </div>
-      <div className="journey-map-info">
-        <div className="code">{info.code} · {info.years}</div>
-        <h4>{info.name}</h4>
-        <dl className="stat-row">
-          <dt>Cities</dt><dd>{info.cities.join(' · ')}</dd>
-          <dt>Period</dt><dd>{info.years}</dd>
-        </dl>
-        <p>{info.summary}</p>
-        <div className="wmap-chips">
-          {info.chips.map(chip => <span key={chip} className="chip">{chip}</span>)}
-        </div>
-      </div>
-    </div>
+    <svg viewBox={`0 0 ${W} ${H}`} className="jv2-svg" aria-label="World map">
+      <defs>
+        <clipPath id="jmap-clip">
+          <path d={path(sphere)} />
+        </clipPath>
+      </defs>
+      <path d={path(sphere)} className="wmap-ocean" />
+      <path d={path(d3.geoGraticule()())} className="wmap-graticule" clipPath="url(#jmap-clip)" />
+      {geo.map((f, i) => {
+        const key = HIGHLIGHT[String(f.id)];
+        const isActive = key === activeCountry;
+        const d = path(f);
+        if (!d) return null;
+        return (
+          <path key={i} d={d}
+            className={'country' + (key ? ' visited' : '') + (isActive ? ' active' : '')}
+            clipPath="url(#jmap-clip)"
+            onMouseEnter={key ? () => onCountryEnter(key) : undefined}
+            style={{ cursor: key ? 'pointer' : 'default' }}
+          />
+        );
+      })}
+      <path d={path(sphere)} className="wmap-sphere" />
+    </svg>
   );
 }
 
 function JourneySection() {
   const events = window.JOURNEY_EVENTS || [];
-  const [activeIndex, setActiveIndex] = useState(Math.max(0, events.findIndex(event => event.title === 'GaussianFeels')));
-
-  useEffect(() => {
-    if (!events.length) return;
-    if (activeIndex >= 0 && activeIndex < events.length) return;
-    setActiveIndex(0);
-  }, [activeIndex, events.length]);
+  const [activeIdx, setActiveIdx] = useState(
+    Math.max(0, events.findIndex(e => e.title === 'GaussianFeels'))
+  );
 
   if (!events.length) return null;
 
-  const activeEvent = events[activeIndex];
+  const active = events[activeIdx];
+  const info = COUNTRY_INFO[active.country] || COUNTRY_INFO.KR;
+
+  /* Hover on map country → jump to most recent event in that country */
+  const handleCountryEnter = (country) => {
+    // Find the LAST event in that country (most recent)
+    let match = -1;
+    for (let i = events.length - 1; i >= 0; i--) {
+      if (events[i].country === country) { match = i; break; }
+    }
+    if (match >= 0) setActiveIdx(match);
+  };
 
   return (
-    <section id="journey">
+    <section id="journey" data-screen-label="Journey">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 02.b / JOURNEY</div>
           <div>
-            <h2 className="section-title">The path,<br/><span style={{ fontStyle: 'italic' }}>mapped.</span></h2>
-            <p className="section-sub">A single timeline line for the milestones, synced to the geography of where each chapter happened.</p>
+            <h2 className="section-title">The path,<br /><span style={{ fontStyle: 'italic' }}>mapped.</span></h2>
+            <p className="section-sub">Every milestone — degrees, labs, internships, competitions. Hover to explore.</p>
           </div>
         </div>
-        <div className="journey-layout">
-          <div className="journey-story">
-            <JourneyTimeline events={events} activeIndex={activeIndex} onChange={setActiveIndex} />
-            <article className="journey-summary">
-              <div className="journey-summary-meta">
-                <span>{activeEvent.month}/{activeEvent.year}</span>
-                <span>{activeEvent.country}</span>
+
+        <div className="journey-v2">
+          {/* ── Vertical timeline — hover sets active ── */}
+          <div className="jv2-list">
+            {events.map((ev, i) => (
+              <div
+                key={i}
+                className={'jv2-event in' + (i === activeIdx ? ' active' : '')}
+                onMouseEnter={() => setActiveIdx(i)}
+                role="button" tabIndex={0}
+                onKeyDown={e => e.key === 'Enter' && setActiveIdx(i)}
+                aria-pressed={i === activeIdx}
+              >
+                <div className="jv2-date">
+                  <span className="jv2-mon">{MONTHS[ev.month - 1]}</span>
+                  <span className="jv2-yr">{ev.year}</span>
+                </div>
+                <div className="jv2-axis">
+                  <div className="jv2-dot" />
+                  {i < events.length - 1 && <div className="jv2-line" />}
+                </div>
+                <div className="jv2-body">
+                  <span className="jv2-flag">{ev.country}</span>
+                  <div className="jv2-title">{ev.title}</div>
+                  <div className="jv2-sum">{ev.summary}</div>
+                </div>
               </div>
-              <h3>{activeEvent.title}</h3>
-              <p>{activeEvent.summary}</p>
-            </article>
+            ))}
           </div>
-          <JourneyMap
-            activeCountry={activeEvent.country}
-            onCountryChange={(country) => {
-              const match = events.findIndex(event => event.country === country);
-              if (match >= 0) setActiveIndex(match);
-            }}
-          />
+
+          {/* ── Sticky map + info panel ── */}
+          <div className="jv2-map-wrap">
+            <div className="jv2-map-card wmap">
+              <JourneyMapSVG
+                activeCountry={active.country}
+                onCountryEnter={handleCountryEnter}
+              />
+            </div>
+            <div className="wmap-legend">
+              <span><span className="sw active" />Active chapter</span>
+              <span><span className="sw visited" />Studied / worked</span>
+            </div>
+            <div className="jv2-info">
+              <div className="jv2-info-code">{info.code} · {info.years}</div>
+              <h4 className="jv2-info-name">{info.name}</h4>
+              <div className="jv2-info-cities">{info.cities.join(' · ')}</div>
+              <p className="jv2-info-text">{info.summary}</p>
+              <div className="wmap-chips">
+                {info.chips.map(c => <span key={c} className="chip">{c}</span>)}
+              </div>
+              <div className="jv2-event-preview">
+                <div className="jv2-ep-date">{MONTHS[active.month - 1]} {active.year}</div>
+                <div className="jv2-ep-title">{active.title}</div>
+                <div className="jv2-ep-sum">{active.summary}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-Object.assign(window, { JourneyMap, JourneySection });
+Object.assign(window, { JourneyMap: JourneyMapSVG, JourneySection });

@@ -1,13 +1,46 @@
-// Research + Projects + Experience + Awards + Education + Gallery + Contact sections
+// Research + Projects + Experience + Awards + Education + Gallery + Contact
+const { useState, useEffect, useRef, useCallback } = React;
 
+/* ── Text scramble hook ── */
+function useScramble(text) {
+  const [display, setDisplay] = useState(text);
+  const ivRef = useRef(null);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  const start = useCallback(() => {
+    clearInterval(ivRef.current);
+    let frame = 0, total = 16;
+    ivRef.current = setInterval(() => {
+      frame++;
+      setDisplay(text.split('').map((c, i) => {
+        if (c === ' ' || c === '.' || c === '-' || c === '/') return c;
+        if (i < text.length * (frame / total)) return c;
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join(''));
+      if (frame >= total) { clearInterval(ivRef.current); setDisplay(text); }
+    }, 38);
+  }, [text]);
+
+  const stop = useCallback(() => {
+    clearInterval(ivRef.current);
+    setDisplay(text);
+  }, [text]);
+
+  return { display, onMouseEnter: start, onMouseLeave: stop };
+}
+
+/* ── Research ── */
 function ResearchCard({ item, onOpen, featured }) {
+  const scr = useScramble(item.title);
   return (
-    <article className={"card" + (featured ? " featured" : "")} tabIndex="0" onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()}>
+    <article className={"card" + (featured ? " featured" : "")} tabIndex="0"
+      onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()}
+      onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
       <div className="card-meta">
         <span>{item.date}</span>
         <span className="tag">{item.tag}</span>
       </div>
-      <h3 className="card-title">{item.title}</h3>
+      <h3 className="card-title">{scr.display}</h3>
       <div className="card-sub">{item.subtitle}</div>
       <p className="card-summary">{item.summary}</p>
       {item.programme && (
@@ -28,12 +61,12 @@ function ResearchCard({ item, onOpen, featured }) {
 function ResearchSection({ data, onOpen }) {
   const visible = data.research.filter(r => !r.hidden);
   return (
-    <section id="research">
+    <section id="research" data-screen-label="03 Research">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 03 / RESEARCH</div>
           <div>
-            <h2 className="section-title">Perception systems for<br/><span style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>dexterous robots.</span></h2>
+            <h2 className="section-title">Perception systems for<br /><span style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>dexterous robots.</span></h2>
             <p className="section-sub">Flagship work in 3D reconstruction, visuo-tactile SLAM, and in-hand manipulation. Click any card for the full write-up.</p>
           </div>
         </div>
@@ -47,17 +80,49 @@ function ResearchSection({ data, onOpen }) {
   );
 }
 
+/* ── Projects (with see-more) ── */
+const PROJECTS_INITIAL = 4;
+
+function ProjectCard({ item, onOpen }) {
+  const scr = useScramble(item.title);
+  return (
+    <article className="card" tabIndex="0"
+      onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()}
+      onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
+      <div className="card-meta">
+        <span>{item.date}</span>
+        <span className="tag">{item.category}</span>
+      </div>
+      <h3 className="card-title" style={{ fontSize: 26 }}>{scr.display}</h3>
+      <div className="card-sub">{item.subtitle}</div>
+      <p className="card-summary">{item.summary}</p>
+      <div className="card-foot">
+        <span>{item.video ? '▶ video' : (item.gallery?.length ? `${item.gallery.length} image${item.gallery.length > 1 ? 's' : ''}` : 'detail')}</span>
+        <span className="open">Open</span>
+      </div>
+    </article>
+  );
+}
+
 function ProjectsSection({ data, onOpen }) {
   const [filter, setFilter] = useState('all');
+  const [showAll, setShowAll] = useState(false);
+
   const filtered = filter === 'all' ? data.projects : data.projects.filter(p => p.category === filter);
+  const visible = showAll ? filtered : filtered.slice(0, PROJECTS_INITIAL);
+  const hasMore = filtered.length > PROJECTS_INITIAL;
+
+  // Reset showAll when filter changes
+  useEffect(() => { setShowAll(false); }, [filter]);
+
   return (
-    <section id="projects">
+    <section id="projects" data-screen-label="04 Projects">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 04 / PROJECTS</div>
           <div>
-            <h2 className="section-title">Things I've<br/><span style={{ fontStyle: 'italic' }}>built.</span></h2>
-            <p className="section-sub">Capstone, course projects, internship artifacts, and hardware I've built for fun. Filter by type.</p>
+            <h2 className="section-title">Things I've<br /><span style={{ fontStyle: 'italic' }}>built.</span></h2>
+            <p className="section-sub">Capstone, course projects, internship artifacts, and hardware I've built for fun.</p>
           </div>
         </div>
         <div className="filter-row">
@@ -70,41 +135,38 @@ function ProjectsSection({ data, onOpen }) {
           ))}
         </div>
         <div className="cards">
-          {filtered.map(p => (
-            <article key={p.id} className="card" tabIndex="0" onClick={() => onOpen(p, 'project')} onKeyDown={(e) => e.key === 'Enter' && onOpen(p, 'project')}>
-              <div className="card-meta">
-                <span>{p.date}</span>
-                <span className="tag">{p.category}</span>
-              </div>
-              <h3 className="card-title" style={{ fontSize: 26 }}>{p.title}</h3>
-              <div className="card-sub">{p.subtitle}</div>
-              <p className="card-summary">{p.summary}</p>
-              <div className="card-foot">
-                <span>{p.video ? '▶ video' : (p.gallery && p.gallery.length ? `${p.gallery.length} image${p.gallery.length>1?'s':''}` : 'detail')}</span>
-                <span className="open">Open</span>
-              </div>
-            </article>
-          ))}
+          {visible.map(p => <ProjectCard key={p.id} item={p} onOpen={() => onOpen(p, 'project')} />)}
         </div>
+        {!showAll && hasMore && (
+          <div className="see-more-wrap">
+            <button className="see-more-btn" onClick={() => setShowAll(true)}>
+              Show {filtered.length - PROJECTS_INITIAL} more projects
+              <span className="see-more-arrow">↓</span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
+/* ── Experience ── */
 function ExperienceSection({ data, onOpen }) {
   return (
-    <section id="experience">
+    <section id="experience" data-screen-label="05 Experience">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 05 / EXPERIENCE</div>
           <div>
-            <h2 className="section-title">Where I've<br/><span style={{ fontStyle: 'italic' }}>worked.</span></h2>
+            <h2 className="section-title">Where I've<br /><span style={{ fontStyle: 'italic' }}>worked.</span></h2>
             <p className="section-sub">Research, industry, and campus roles — most recent first.</p>
           </div>
         </div>
         <div className="timeline">
           {data.experience.map(e => (
-            <div key={e.id} className="tl-row" tabIndex="0" onClick={() => onOpen(e, 'experience')} onKeyDown={(ev) => ev.key === 'Enter' && onOpen(e, 'experience')}>
+            <div key={e.id} className="tl-row" tabIndex="0"
+              onClick={() => onOpen(e, 'experience')}
+              onKeyDown={(ev) => ev.key === 'Enter' && onOpen(e, 'experience')}>
               <div className="date">{e.date}</div>
               <div className="main">
                 <h3>{e.title}</h3>
@@ -120,20 +182,30 @@ function ExperienceSection({ data, onOpen }) {
   );
 }
 
+/* ── Awards (with see-more) ── */
+const AWARDS_INITIAL = 4;
+
 function AwardsSection({ data, onOpen }) {
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? data.awards : data.awards.slice(0, AWARDS_INITIAL);
+  const hasMore = data.awards.length > AWARDS_INITIAL;
+
   return (
-    <section id="awards">
+    <section id="awards" data-screen-label="06 Awards">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 06 / AWARDS & CERTS</div>
           <div>
-            <h2 className="section-title">Recognition &<br/><span style={{ fontStyle: 'italic' }}>credentials.</span></h2>
-            <p className="section-sub">Fellowships, awards, and certifications. Click any card to view the details or open the attached document.</p>
+            <h2 className="section-title">Recognition &<br /><span style={{ fontStyle: 'italic' }}>credentials.</span></h2>
+            <p className="section-sub">Fellowships, awards, and certifications.</p>
           </div>
         </div>
         <div className="cards">
-          {data.awards.map(a => (
-            <article key={a.id} className="card" tabIndex="0" onClick={() => onOpen(a, 'award')} onKeyDown={(e) => e.key === 'Enter' && onOpen(a, 'award')} style={{ minHeight: 200 }}>
+          {visible.map(a => (
+            <article key={a.id} className="card" tabIndex="0"
+              onClick={() => onOpen(a, 'award')}
+              onKeyDown={(e) => e.key === 'Enter' && onOpen(a, 'award')}
+              style={{ minHeight: 200 }}>
               <div className="card-meta">
                 <span>{a.date}</span>
                 <span className="tag">{a.kind}</span>
@@ -148,19 +220,28 @@ function AwardsSection({ data, onOpen }) {
             </article>
           ))}
         </div>
+        {!showAll && hasMore && (
+          <div className="see-more-wrap">
+            <button className="see-more-btn" onClick={() => setShowAll(true)}>
+              Show {data.awards.length - AWARDS_INITIAL} more awards & certs
+              <span className="see-more-arrow">↓</span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
+/* ── Education ── */
 function EducationSection({ data }) {
   return (
-    <section id="education">
+    <section id="education" data-screen-label="07 Education">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 07 / EDUCATION</div>
           <div>
-            <h2 className="section-title">Four schools,<br/><span style={{ fontStyle: 'italic' }}>three continents.</span></h2>
+            <h2 className="section-title">Four schools,<br /><span style={{ fontStyle: 'italic' }}>three continents.</span></h2>
             <p className="section-sub">Villanova · Yonsei (exchange) · Seoul National · UCF (incoming).</p>
           </div>
         </div>
@@ -181,6 +262,7 @@ function EducationSection({ data }) {
   );
 }
 
+/* ── Skills ── */
 function SkillsBlock({ data }) {
   return (
     <section id="skills" style={{ paddingTop: 40 }}>
@@ -188,7 +270,7 @@ function SkillsBlock({ data }) {
         <div className="section-head">
           <div className="section-num">§ 07.b / STACK</div>
           <div>
-            <h2 className="section-title">Tools, languages,<br/><span style={{ fontStyle: 'italic' }}>hardware.</span></h2>
+            <h2 className="section-title">Tools, languages,<br /><span style={{ fontStyle: 'italic' }}>hardware.</span></h2>
           </div>
         </div>
         <div className="skills-grid">
@@ -206,16 +288,17 @@ function SkillsBlock({ data }) {
   );
 }
 
+/* ── Gallery ── */
 function GallerySection({ data, onLightbox }) {
   const layoutClasses = ['tall', '', 'wide', '', '', 'tall', 'wide', '', '', ''];
   return (
-    <section id="gallery">
+    <section id="gallery" data-screen-label="08 Gallery">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 08 / MEDIA</div>
           <div>
-            <h2 className="section-title">Media &<br/><span style={{ fontStyle: 'italic' }}>gallery.</span></h2>
-            <p className="section-sub">A visual tour: research robots, builds, internship work, and moments along the way.</p>
+            <h2 className="section-title">Media &<br /><span style={{ fontStyle: 'italic' }}>gallery.</span></h2>
+            <p className="section-sub">Research robots, builds, internship work, and moments along the way.</p>
           </div>
         </div>
         <div className="gallery">
@@ -225,7 +308,7 @@ function GallerySection({ data, onLightbox }) {
               <div className="cap">{g.caption}</div>
             </div>
           ))}
-          <div className="gal-item wide" onClick={() => onLightbox({ src: 'assets/videos/silo-internship.mp4', caption: 'Summer 2023 · Silo automation · Area2Farms', video: true })}>
+          <div className="gal-item wide" onClick={() => onLightbox({ src: 'assets/videos/silo-internship.mp4', caption: 'Silo automation · Area2Farms · Summer 2023', video: true })}>
             <video src="assets/videos/silo-internship.mp4" muted loop playsInline preload="metadata" />
             <div className="cap">▶ Silo internship · Area2Farms · Summer 2023</div>
           </div>
@@ -239,45 +322,31 @@ function GallerySection({ data, onLightbox }) {
   );
 }
 
+/* ── Contact ── */
 function ContactSection({ data }) {
   const c = data.profile.contact;
   return (
-    <section id="contact">
+    <section id="contact" data-screen-label="09 Contact">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ 09 / CONTACT</div>
           <div>
-            <h2 className="section-title">Let's talk<br/><span style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>robots.</span></h2>
-            <p className="section-sub">Open to research collaborations, Ph.D.-adjacent discussions, and engineering roles. I respond to email.</p>
+            <h2 className="section-title">Let's talk<br /><span style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>robots.</span></h2>
+            <p className="section-sub">Open to research collaborations, Ph.D.-adjacent discussions, and engineering roles.</p>
           </div>
         </div>
         <div className="contact-wrap">
           <div>
             <p className="contact-big">
-              Write to me at<br/><a href={`mailto:${c.email}`}>{c.email}</a>.
+              Write to me at<br /><a href={`mailto:${c.email}`}>{c.email}</a>.
             </p>
           </div>
           <div className="contact-list">
-            <a href={`mailto:${c.email}`}>
-              <div><div className="label">Email</div><div className="val">{c.email}</div></div>
-              <Icon name="mail" size={15} />
-            </a>
-            <a href={c.linkedin} target="_blank" rel="noopener">
-              <div><div className="label">LinkedIn</div><div className="val">linkedin.com/in/krishi-attri15</div></div>
-              <Icon name="linkedin" size={15} />
-            </a>
-            <a href={c.github} target="_blank" rel="noopener">
-              <div><div className="label">GitHub</div><div className="val">github.com/Archerkattri</div></div>
-              <Icon name="github" size={15} />
-            </a>
-            <a href="assets/docs/Krishi_Attri_CV.pdf" target="_blank">
-              <div><div className="label">Curriculum Vitae</div><div className="val">Krishi_Attri_CV.pdf</div></div>
-              <Icon name="download" size={15} />
-            </a>
-            <a href="assets/docs/Krishi_Attri_Resume.pdf" target="_blank">
-              <div><div className="label">Resume</div><div className="val">Krishi_Attri_Resume.pdf</div></div>
-              <Icon name="download" size={15} />
-            </a>
+            <a href={`mailto:${c.email}`}><div><div className="label">Email</div><div className="val">{c.email}</div></div><Icon name="mail" size={15} /></a>
+            <a href={c.linkedin} target="_blank" rel="noopener"><div><div className="label">LinkedIn</div><div className="val">linkedin.com/in/krishi-attri15</div></div><Icon name="linkedin" size={15} /></a>
+            <a href={c.github} target="_blank" rel="noopener"><div><div className="label">GitHub</div><div className="val">github.com/Archerkattri</div></div><Icon name="github" size={15} /></a>
+            <a href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><div><div className="label">Curriculum Vitae</div><div className="val">Krishi_Attri_CV.pdf</div></div><Icon name="download" size={15} /></a>
+            <a href="assets/docs/Krishi_Attri_Resume.pdf" target="_blank"><div><div className="label">Resume</div><div className="val">Krishi_Attri_Resume.pdf</div></div><Icon name="download" size={15} /></a>
           </div>
         </div>
       </div>
