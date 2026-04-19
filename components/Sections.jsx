@@ -34,7 +34,8 @@ function ResearchCard({ item, onOpen, featured }) {
   const scr = useScramble(item.title);
   return (
     <article className={"card" + (featured ? " featured" : "")} tabIndex="0"
-      onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()}
+      onClick={(e) => onOpen(e.currentTarget.getBoundingClientRect())}
+      onKeyDown={(e) => e.key === 'Enter' && onOpen()}
       onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
       <div className="card-meta">
         <span>{item.date}</span>
@@ -72,7 +73,7 @@ function ResearchSection({ data, onOpen }) {
         </div>
         <div className="cards">
           {visible.map((r, i) => (
-            <ResearchCard key={r.id} item={r} onOpen={() => onOpen(r, 'research')} featured={i === 0} />
+            <ResearchCard key={r.id} item={r} onOpen={(rect) => onOpen(r, 'research', rect)} featured={i === 0} />
           ))}
         </div>
       </div>
@@ -87,7 +88,8 @@ function ProjectCard({ item, onOpen }) {
   const scr = useScramble(item.title);
   return (
     <article className="card" tabIndex="0"
-      onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()}
+      onClick={(e) => onOpen(e.currentTarget.getBoundingClientRect())}
+      onKeyDown={(e) => e.key === 'Enter' && onOpen()}
       onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
       <div className="card-meta">
         <span>{item.date}</span>
@@ -115,6 +117,14 @@ function ProjectsSection({ data, onOpen }) {
   // Reset showAll when filter changes
   useEffect(() => { setShowAll(false); }, [filter]);
 
+  // Reveal newly added cards when showAll flips true
+  useEffect(() => {
+    if (!showAll) return;
+    setTimeout(() => {
+      document.querySelectorAll('#projects .card:not(.in)').forEach(el => el.classList.add('in'));
+    }, 30);
+  }, [showAll]);
+
   return (
     <section id="projects" data-screen-label="04 Projects">
       <div className="container">
@@ -135,7 +145,7 @@ function ProjectsSection({ data, onOpen }) {
           ))}
         </div>
         <div className="cards">
-          {visible.map(p => <ProjectCard key={p.id} item={p} onOpen={() => onOpen(p, 'project')} />)}
+          {visible.map(p => <ProjectCard key={p.id} item={p} onOpen={(rect) => onOpen(p, 'project', rect)} />)}
         </div>
         {!showAll && hasMore && (
           <div className="see-more-wrap">
@@ -165,7 +175,7 @@ function ExperienceSection({ data, onOpen }) {
         <div className="timeline">
           {data.experience.map(e => (
             <div key={e.id} className="tl-row" tabIndex="0"
-              onClick={() => onOpen(e, 'experience')}
+              onClick={(ev) => onOpen(e, 'experience', ev.currentTarget.getBoundingClientRect())}
               onKeyDown={(ev) => ev.key === 'Enter' && onOpen(e, 'experience')}>
               <div className="date">{e.date}</div>
               <div className="main">
@@ -190,6 +200,13 @@ function AwardsSection({ data, onOpen }) {
   const visible = showAll ? data.awards : data.awards.slice(0, AWARDS_INITIAL);
   const hasMore = data.awards.length > AWARDS_INITIAL;
 
+  useEffect(() => {
+    if (!showAll) return;
+    setTimeout(() => {
+      document.querySelectorAll('#awards .card:not(.in)').forEach(el => el.classList.add('in'));
+    }, 30);
+  }, [showAll]);
+
   return (
     <section id="awards" data-screen-label="06 Awards">
       <div className="container">
@@ -203,7 +220,7 @@ function AwardsSection({ data, onOpen }) {
         <div className="cards">
           {visible.map(a => (
             <article key={a.id} className="card" tabIndex="0"
-              onClick={() => onOpen(a, 'award')}
+              onClick={(e) => onOpen(a, 'award', e.currentTarget.getBoundingClientRect())}
               onKeyDown={(e) => e.key === 'Enter' && onOpen(a, 'award')}
               style={{ minHeight: 200 }}>
               <div className="card-meta">

@@ -22,18 +22,60 @@ function Icon({ name, size = 16 }) {
   );
 }
 
-function Modal({ open, onClose, kicker, children }) {
-  const closeRef = useRef();
+function Modal({ open, onClose, kicker, children, sourceRect }) {
+  const closeRef = useRef(null);
+  const overlayRef = useRef(null);
+
+  // Keyboard + scroll lock
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
-    setTimeout(() => closeRef.current?.focus(), 100);
+    setTimeout(() => closeRef.current?.focus(), 120);
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
   }, [open, onClose]);
+
+  // Clip-path expansion from source card rect
+  useEffect(() => {
+    const el = overlayRef.current;
+    if (!el) return;
+
+    if (open && sourceRect) {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const { top, left, width, height } = sourceRect;
+      // Clip the overlay to the card's exact viewport position
+      const clipStart = `inset(${top}px ${vw - left - width}px ${vh - top - height}px ${left}px round 6px)`;
+      el.style.transition = 'none';
+      el.style.clipPath = clipStart;
+      // Double rAF forces a layout flush so transition actually fires
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.transition = 'clip-path 0.58s cubic-bezier(0.16, 1, 0.3, 1)';
+          el.style.clipPath = 'inset(0px round 0px)';
+        });
+      });
+    } else if (open && !sourceRect) {
+      // Fallback: no rect → just clear any stale clip
+      el.style.clipPath = '';
+      el.style.transition = '';
+    } else if (!open) {
+      // Reset on close
+      setTimeout(() => {
+        if (el) { el.style.clipPath = ''; el.style.transition = ''; }
+      }, 320);
+    }
+  }, [open, sourceRect]);
+
   return (
-    <div className={"modal-overlay" + (open ? " open" : "")} onClick={onClose} role="dialog" aria-modal="true">
+    <div
+      ref={overlayRef}
+      className={"modal-overlay" + (open ? " open" : "")}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-head">
           <span>{kicker || 'Detail'}</span>

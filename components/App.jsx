@@ -28,6 +28,7 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('portfolio-theme') || 'light');
   const [modalItem, setModalItem] = useState(null);
   const [modalKind, setModalKind] = useState(null);
+  const [sourceRect, setSourceRect] = useState(null);
   const [lightbox, setLightbox] = useState(null);
   const [active, setActive] = useState('home');
 
@@ -68,8 +69,8 @@ function App() {
     return () => { obs.disconnect(); clearTimeout(t); };
   }, []);
 
-  const openDetail = (item, kind) => { setModalItem(item); setModalKind(kind); };
-  const closeDetail = () => { setModalItem(null); setModalKind(null); };
+  const openDetail = (item, kind, rect) => { setModalItem(item); setModalKind(kind); setSourceRect(rect || null); };
+  const closeDetail = () => { setModalItem(null); setModalKind(null); setSourceRect(null); };
   const kickerFor = k => ({ research: 'Research · Detail', project: 'Project · Detail', experience: 'Experience · Detail', award: 'Award · Detail' }[k] || 'Detail');
 
   return (
@@ -94,7 +95,7 @@ function App() {
           <span>Built with React · ♥ for robots</span>
         </div>
       </footer>
-      <Modal open={!!modalItem} onClose={closeDetail} kicker={kickerFor(modalKind)}>
+      <Modal open={!!modalItem} onClose={closeDetail} kicker={kickerFor(modalKind)} sourceRect={sourceRect}>
         <DetailBody item={modalItem} kind={modalKind} onLightbox={setLightbox} />
       </Modal>
       <Lightbox item={lightbox} onClose={() => setLightbox(null)} />
