@@ -1,3 +1,5 @@
+import { Icon } from "./Modal";
+
 // Detail renderer for the modal — research/project/experience/award
 
 function DetailBody({ item, kind, onLightbox }) {
@@ -238,3 +240,6 @@ function DetailBody({ item, kind, onLightbox }) {
 }
 
 Object.assign(window, { DetailBody });
+
+
+export { DetailBody };

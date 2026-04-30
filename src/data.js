@@ -1,5 +1,5 @@
 // Portfolio data — edit this file to update content
-window.PORTFOLIO_DATA = {
+export const PORTFOLIO_DATA = {
   profile: {
     name: "Krishi Attri",
     tagline: "Robotics Researcher · 3D Reconstruction · Visuo-Tactile SLAM",

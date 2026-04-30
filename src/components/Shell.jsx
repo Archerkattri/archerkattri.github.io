@@ -1,5 +1,6 @@
 // Shell — Nav, Hero, WhatIBuild, AboutSection, ResearchDirection, NowSection
-const { useState, useEffect, useRef, useCallback } = React;
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Icon } from "./Modal";
 
 /* ── Typewriter ── */
 function useTypewriter(text, speed = 42, startDelay = 600) {
@@ -380,3 +381,6 @@ const ProfileMetaPanel = () => null;
 const AboutBlock = () => null;
 
 Object.assign(window, { Nav, Hero, About, AboutSection, WhatIBuild, ResearchDirection, NowSection, ProfileCard, ProfileMetaPanel, AboutBlock });
+
+
+export { Nav, Hero, WhatIBuild, ResearchDirection, NowSection };
