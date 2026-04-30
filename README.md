@@ -1,29 +1,20 @@
 # Krishi Attri Portfolio
 
-This repository contains the source for https://archerkattri.github.io, now powered by **Vite + React**.
+This repository is configured to work directly on GitHub Pages **without any build step**.
 
-## Local development
+## Deploy model (important)
+- GitHub Pages serves `index.html` from the repository root.
+- The site uses browser-loaded React + Babel scripts and root-level files:
+  - `index.html`
+  - `styles.css`
+  - `data.js`
+  - `components/*.jsx`
+- Public files remain under `/assets/...`, plus `robots.txt` and `sitemap.xml`.
 
-```bash
-npm install
-npm run dev
-```
+## Updating content safely
+- Edit portfolio data in `data.js`.
+- Edit section UI in `components/*.jsx`.
+- Keep `index.html` script order unchanged unless you know why you are changing it.
 
-## Production build
-
-```bash
-npm run build
-npm run preview
-```
-
-## Deployment
-
-GitHub Actions builds and deploys the `dist/` directory to GitHub Pages via `.github/workflows/deploy.yml`.
-
-## Notes
-
-- Public assets remain available at:
-  - `/assets/images/...`
-  - `/assets/docs/...`
-  - `/assets/videos/...`
-- `robots.txt` and `sitemap.xml` stay at the repository root for GitHub Pages.
+## Why this setup
+This avoids the GitHub Pages MIME issue for `/src/main.jsx` and works immediately when pushing repo contents to Pages.
