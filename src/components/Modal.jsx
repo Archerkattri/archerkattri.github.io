@@ -1,5 +1,5 @@
 // Modal component + icons
-const { useState, useEffect, useRef, useCallback } = React;
+import { useState, useEffect, useRef, useCallback } from "react";
 
 function Icon({ name, size = 16 }) {
   const paths = {
@@ -126,4 +126,4 @@ function Lightbox({ item, onClose }) {
   );
 }
 
-Object.assign(window, { Icon, Modal, Lightbox });
+export { Icon, Modal, Lightbox };
