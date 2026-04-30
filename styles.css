@@ -2455,3 +2455,72 @@ section.in-view::before { transform: scaleX(1); }
 .wk-grid .wk-card:nth-child(2) { transition-delay: 70ms; }
 .wk-grid .wk-card:nth-child(3) { transition-delay: 140ms; }
 .wk-grid .wk-card:nth-child(4) { transition-delay: 210ms; }
+
+
+/* ================================================================
+   POLISH PATCH — skills density, card alignment, modal spacing
+   ================================================================ */
+
+/* Tighter skills */
+.skills-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+}
+@media (max-width: 960px) { .skills-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr !important; } }
+
+.skill-group {
+  padding: 18px 18px 16px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+}
+.skill-group h4 {
+  margin: 0 0 12px !important;
+  padding-bottom: 8px !important;
+  font-size: 10.5px !important;
+}
+.skill-chips { gap: 4px !important; }
+.skill-chips .chip {
+  padding: 4px 8px !important;
+  font-size: 11px !important;
+  line-height: 1.3;
+}
+
+/* Card foot alignment — equal heights for grid rows */
+.cards { align-items: stretch; }
+.card { display: flex; flex-direction: column; }
+.card-summary { flex: 1; }
+.card-foot { margin-top: auto; }
+
+.wk-grid { align-items: stretch; }
+.wk-card { height: 100%; }
+
+.wib-grid { align-items: stretch; }
+.wib-card { display: flex; flex-direction: column; }
+.wib-tags { margin-top: auto; }
+
+/* Credentials: equal column heights */
+.cred-grid { align-items: start; }
+
+/* Modal: section spacing tighter */
+.modal-body h3 {
+  margin-top: 24px !important;
+  margin-bottom: 8px !important;
+  font-size: 11px;
+}
+.modal-body h3:first-child { margin-top: 0 !important; }
+.modal-body p { margin: 0 0 12px; line-height: 1.65; }
+.modal-body p + p { margin-top: -4px; }
+
+/* Modal placeholder for missing diagrams */
+.modal-diagram-placeholder {
+  border: 1px dashed var(--line);
+  background: var(--bg-hush);
+  padding: 60px 24px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-soft);
+  letter-spacing: 0.08em;
+  margin: 14px 0 18px;
+}
