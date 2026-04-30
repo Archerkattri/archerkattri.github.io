@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://archerkattri.github.io/sitemap.xml
