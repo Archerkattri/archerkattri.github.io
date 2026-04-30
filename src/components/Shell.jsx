@@ -380,7 +380,6 @@ const About = AboutSection;
 const ProfileMetaPanel = () => null;
 const AboutBlock = () => null;
 
-Object.assign(window, { Nav, Hero, About, AboutSection, WhatIBuild, ResearchDirection, NowSection, ProfileCard, ProfileMetaPanel, AboutBlock });
 
 
 export { Nav, Hero, WhatIBuild, ResearchDirection, NowSection };
