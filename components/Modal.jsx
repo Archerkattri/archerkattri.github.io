@@ -25,61 +25,78 @@ function Icon({ name, size = 16 }) {
 function Modal({ open, onClose, kicker, children, sourceRect }) {
   const closeRef = useRef(null);
   const overlayRef = useRef(null);
+  const [closing, setClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    if (closing) return;
+    setClosing(true);
+    const el = overlayRef.current;
+    if (el) {
+      const vw = window.innerWidth, vh = window.innerHeight;
+      if (sourceRect) {
+        const { top, left, width, height } = sourceRect;
+        const clipEnd = `inset(${top}px ${vw - left - width}px ${vh - top - height}px ${left}px round 6px)`;
+        el.style.transition = 'clip-path 0.42s cubic-bezier(0.4, 0, 1, 1), opacity 0.42s ease';
+        el.style.clipPath = clipEnd;
+      } else {
+        // fallback: shrink to center
+        const cx = vw / 2, cy = vh / 2;
+        el.style.transition = 'clip-path 0.38s cubic-bezier(0.4, 0, 1, 1), opacity 0.3s ease';
+        el.style.clipPath = `inset(${cy}px ${vw - cx}px ${vh - cy}px ${cx}px round 50%)`;
+      }
+      el.style.opacity = '0';
+    }
+    setTimeout(() => { setClosing(false); onClose(); }, 460);
+  }, [closing, onClose, sourceRect]);
 
   // Keyboard + scroll lock
   useEffect(() => {
     if (!open) return;
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    const onKey = (e) => { if (e.key === 'Escape') handleClose(); };
     window.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
     setTimeout(() => closeRef.current?.focus(), 120);
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = ''; };
-  }, [open, onClose]);
+  }, [open, handleClose]);
 
-  // Clip-path expansion from source card rect
+  // Clip-path expansion from source card rect on open
   useEffect(() => {
     const el = overlayRef.current;
     if (!el) return;
-
     if (open && sourceRect) {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+      const vw = window.innerWidth, vh = window.innerHeight;
       const { top, left, width, height } = sourceRect;
-      // Clip the overlay to the card's exact viewport position
       const clipStart = `inset(${top}px ${vw - left - width}px ${vh - top - height}px ${left}px round 6px)`;
       el.style.transition = 'none';
       el.style.clipPath = clipStart;
-      // Double rAF forces a layout flush so transition actually fires
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          el.style.transition = 'clip-path 0.58s cubic-bezier(0.16, 1, 0.3, 1)';
-          el.style.clipPath = 'inset(0px round 0px)';
-        });
-      });
-    } else if (open && !sourceRect) {
-      // Fallback: no rect → just clear any stale clip
+      el.style.opacity = '1';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.transition = 'clip-path 0.58s cubic-bezier(0.16, 1, 0.3, 1)';
+        el.style.clipPath = 'inset(0px round 0px)';
+      }));
+    } else if (open) {
       el.style.clipPath = '';
       el.style.transition = '';
-    } else if (!open) {
-      // Reset on close
-      setTimeout(() => {
-        if (el) { el.style.clipPath = ''; el.style.transition = ''; }
-      }, 320);
+      el.style.opacity = '1';
+    } else if (!open && !closing) {
+      setTimeout(() => { if (el) { el.style.clipPath = ''; el.style.transition = ''; el.style.opacity = ''; } }, 50);
     }
   }, [open, sourceRect]);
+
+  if (!open && !closing) return null;
 
   return (
     <div
       ref={overlayRef}
       className={"modal-overlay" + (open ? " open" : "")}
-      onClick={onClose}
+      onClick={handleClose}
       role="dialog"
       aria-modal="true"
     >
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-head">
           <span>{kicker || 'Detail'}</span>
-          <button ref={closeRef} className="modal-close" aria-label="Close" onClick={onClose}>
+          <button ref={closeRef} className="modal-close" aria-label="Close" onClick={handleClose}>
             <Icon name="close" size={14} />
           </button>
         </div>

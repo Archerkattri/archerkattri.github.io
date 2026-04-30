@@ -1,8 +1,8 @@
-// Nav + Hero + About — v2 redesign
-const { useState, useEffect, useRef } = React;
+// Shell — Nav, Hero, WhatIBuild, AboutSection, ResearchDirection, NowSection
+const { useState, useEffect, useRef, useCallback } = React;
 
-/* ── Typewriter hook ── */
-function useTypewriter(text, speed = 42, startDelay = 500) {
+/* ── Typewriter ── */
+function useTypewriter(text, speed = 42, startDelay = 600) {
   const [display, setDisplay] = useState('');
   useEffect(() => {
     let iv;
@@ -23,14 +23,12 @@ function StatItem({ value, label }) {
   const numMatch = String(value).match(/^(\d+)(\+?)$/);
   const target = numMatch ? parseInt(numMatch[1]) : 0;
   const suffix = numMatch ? numMatch[2] : '';
-
   useEffect(() => {
     if (!ref.current) return;
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.5 });
     obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
-
   useEffect(() => {
     if (!inView || !target) return;
     let cur = 0;
@@ -42,7 +40,6 @@ function StatItem({ value, label }) {
     }, 16);
     return () => clearInterval(id);
   }, [inView, target]);
-
   return (
     <div ref={ref} className="pc-stat">
       <span className="pc-sv">{target ? `${count}${suffix}` : value}</span>
@@ -51,7 +48,7 @@ function StatItem({ value, label }) {
   );
 }
 
-/* ── Canvas: sensor-network particles ── */
+/* ── Animated canvas ── */
 function HeroCanvas() {
   const ref = useRef(null);
   useEffect(() => {
@@ -104,14 +101,13 @@ function HeroCanvas() {
 
 /* ── Profile Card ── */
 function ProfileCard({ data }) {
-  const p = data.profile;
   const metrics = [['15+', 'Builds'], ['4', 'Univs'], ['3', 'Countries'], ['6', 'Awards']];
   const tags = ['SLAM', 'Perception', 'Hardware', 'Robotics'];
   return (
     <aside className="pc-wrap">
-      {p.headshot && (
+      {data.profile.headshot && (
         <div className="pc-photo-wrap">
-          <img src={p.headshot} alt="Krishi Attri" className="pc-photo" />
+          <img src={data.profile.headshot} alt="Krishi Attri" className="pc-photo" />
         </div>
       )}
       <dl className="pc-meta">
@@ -133,10 +129,13 @@ function ProfileCard({ data }) {
 function Nav({ active, onSetActive, theme, onToggleTheme }) {
   const [open, setOpen] = useState(false);
   const links = [
-    ['01', 'Home', 'home'], ['02', 'About', 'about'], ['03', 'Research', 'research'],
-    ['04', 'Projects', 'projects'], ['05', 'Experience', 'experience'],
-    ['06', 'Awards', 'awards'], ['07', 'Education', 'education'],
-    ['08', 'Gallery', 'gallery'], ['09', 'Contact', 'contact'],
+    ['01', 'Home',        'home'],
+    ['02', 'What I Build','what-i-build'],
+    ['03', 'Work',        'selected-work'],
+    ['04', 'Direction',   'research-direction'],
+    ['05', 'Experience',  'experience'],
+    ['06', 'Credentials', 'credentials'],
+    ['07', 'Contact',     'contact'],
   ];
   return (
     <nav className="nav" role="navigation">
@@ -167,8 +166,8 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
 
 /* ── Hero ── */
 function Hero({ data }) {
-  const kicker = useTypewriter('— robotics researcher', 42, 500);
-  const showCursor = kicker.length < '— robotics researcher'.length;
+  const kicker = useTypewriter('Robotics & AI Researcher', 45, 500);
+  const done = kicker.length >= 'Robotics & AI Researcher'.length;
   return (
     <section id="home" className="hero-v2" data-screen-label="01 Home">
       <HeroCanvas />
@@ -176,28 +175,23 @@ function Hero({ data }) {
         <div className="hv2-meta">
           <span>Seoul National University</span>
           <span className="hv2-sep">·</span>
-          <span>Robotics / Perception / SLAM</span>
+          <span>M.S. Mechanical Engineering</span>
           <span className="hv2-sep">·</span>
-          <span>{new Date().getFullYear()}</span>
+          <span>Incoming Ph.D. UCF · Aug 2026</span>
         </div>
         <div className="hv2-split">
           <div className="hv2-left">
-            <p className="hv2-kicker" aria-label="robotics researcher">
-              {kicker}{showCursor && <span className="hv2-cursor">|</span>}
+            <p className="hv2-kicker" aria-label="Robotics & AI Researcher">
+              {kicker}{!done && <span className="hv2-cursor">|</span>}
             </p>
             <h1 className="hv2-title">Krishi<br /><em>Attri</em></h1>
-            <p className="hv2-tagline">{data.profile.tagline}</p>
-            <p className="hv2-short">{data.profile.short}</p>
+            <p className="hv2-tagline">Robotics Researcher · 3D Perception · Visuo-Tactile SLAM · Applied AI</p>
+            <p className="hv2-short">Building perception systems for real-world robots. I work across visuo-tactile SLAM, 3D reconstruction, Gaussian Splatting, robotic manipulation, and applied AI systems.</p>
             <div className="hv2-cta">
-              <a className="btn primary" href={`mailto:${data.profile.contact.email}`}>
-                <Icon name="mail" size={13} /> Get in touch
-              </a>
-              <a className="btn" href="assets/docs/Krishi_Attri_CV.pdf" target="_blank">
-                <Icon name="download" size={13} /> CV.pdf
-              </a>
-              <a className="btn" href="assets/docs/Krishi_Attri_Resume.pdf" target="_blank">
-                <Icon name="download" size={13} /> Resume.pdf
-              </a>
+              <a className="btn primary" href="#selected-work">View Selected Work <span className="arrow">→</span></a>
+              <a className="btn" href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><Icon name="download" size={13} /> CV.pdf</a>
+              <a className="btn" href="#research-direction">Research Direction</a>
+              <a className="btn" href={`mailto:${data.profile.contact.email}`}><Icon name="mail" size={13} /> Contact</a>
             </div>
           </div>
           <div className="hv2-right">
@@ -213,14 +207,138 @@ function Hero({ data }) {
   );
 }
 
-/* ── About (separate section, non-duplicate aside) ── */
+/* ── What I Build ── */
+const BUILD_CARDS = [
+  {
+    icon: '◈',
+    title: 'Robot Perception',
+    body: 'Real-time mapping, tracking, reconstruction, and scene understanding for robotic systems — from sensor bring-up to deployable on-robot modules.',
+    tags: ['SLAM', 'Sensor Fusion', 'Real-time', 'ROS'],
+  },
+  {
+    icon: '◉',
+    title: '3D Reconstruction & SLAM',
+    body: 'Gaussian Splatting, neural fields, RGB-D sensing, tactile sensing, pose tracking, and object-level reconstruction in contact-rich environments.',
+    tags: ['3D Gaussian Splatting', 'NeRF', 'Tactile', 'Pose Tracking'],
+  },
+  {
+    icon: '◎',
+    title: 'Applied AI Systems',
+    body: 'Full-stack ML pipelines, CV detection systems, deep-learned gesture recognition, and production-style models benchmarked on real hardware.',
+    tags: ['PyTorch', 'CUDA', 'Computer Vision', 'Deep Learning'],
+  },
+];
+
+function WhatIBuild() {
+  return (
+    <section id="what-i-build" data-screen-label="02 What I Build">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ 01 / WHAT I BUILD</div>
+          <div>
+            <h2 className="section-title">Three domains,<br /><em style={{ color: 'var(--accent-ink)' }}>one mission.</em></h2>
+            <p className="section-sub">I build systems that let robots perceive, reconstruct, and act in the real world.</p>
+          </div>
+        </div>
+        <div className="wib-grid">
+          {BUILD_CARDS.map((c, i) => (
+            <div key={i} className="wib-card reveal" style={{ '--i': i }}>
+              <div className="wib-icon">{c.icon}</div>
+              <h3 className="wib-title">{c.title}</h3>
+              <p className="wib-body">{c.body}</p>
+              <div className="wib-tags">
+                {c.tags.map(t => <span key={t} className="chip">{t}</span>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Research Direction ── */
+function ResearchDirection() {
+  const bullets = [
+    { label: 'Current focus', text: 'Visuo-tactile SLAM and 3D Gaussian representations for in-hand manipulation' },
+    { label: 'Research interest', text: 'Object-level reconstruction, pose tracking, tactile perception, and robot learning' },
+    { label: 'Long-term goal', text: 'Robust robot perception for manipulation in cluttered and occluded environments' },
+  ];
+  return (
+    <section id="research-direction" data-screen-label="Research Direction">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ 04 / RESEARCH DIRECTION</div>
+          <div>
+            <h2 className="section-title">Intentional,<br /><em style={{ color: 'var(--accent-ink)' }}>not random.</em></h2>
+            <p className="section-sub">A clear through-line across every project.</p>
+          </div>
+        </div>
+        <div className="rd-wrap">
+          <div className="rd-prose reveal">
+            <p>My long-term research direction is to build robotic systems that can perceive, reconstruct, and manipulate the physical world with less dependence on clean visual input.</p>
+            <p>I am especially interested in combining vision, touch, proprioception, and 3D representations to make robot perception more robust during contact-rich manipulation — where standard vision pipelines fail because the hand occludes exactly what the robot needs to see.</p>
+          </div>
+          <div className="rd-bullets">
+            {bullets.map((b, i) => (
+              <div key={i} className="rd-bullet reveal" style={{ '--i': i }}>
+                <span className="rd-label">{b.label}</span>
+                <span className="rd-text">{b.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Now ── */
+function NowSection({ data }) {
+  return (
+    <section id="now" data-screen-label="Now">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ NOW</div>
+          <div>
+            <h2 className="section-title">What I'm<br /><em style={{ color: 'var(--accent-ink)' }}>doing now.</em></h2>
+          </div>
+        </div>
+        <div className="now-wrap">
+          <div className="now-main reveal">
+            <p>Currently working on <strong>visuo-tactile SLAM</strong>, <strong>object-level 3D reconstruction</strong>, and robotic perception systems for manipulation at Seoul National University's Soft Robotics & Bionics Lab.</p>
+            <p>Starting a Ph.D. at the University of Central Florida in August 2026 as an ORCGS Doctoral Fellow.</p>
+          </div>
+          <div className="now-open">
+            <div className="now-open-label">Open to</div>
+            {[
+              'Research collaborations',
+              'Robotics / AI internships',
+              'Ph.D. research discussions',
+              'Roles in robot perception, 3D vision & SLAM',
+            ].map((item, i) => (
+              <div key={i} className="now-open-item">
+                <span className="now-dot">◆</span>{item}
+              </div>
+            ))}
+            <a className="btn primary" href={`mailto:${data.profile.contact.email}`} style={{ marginTop: 20, display: 'inline-flex' }}>
+              <Icon name="mail" size={13} /> Get in touch
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── About (kept for scroll target compatibility) ── */
 function AboutSection({ data }) {
   const p = data.profile;
   return (
-    <section id="about" data-screen-label="02 About">
+    <section id="about" data-screen-label="About" style={{ paddingBottom: 40 }}>
       <div className="container">
         <div className="section-head">
-          <div className="section-num">§ 02 / ABOUT</div>
+          <div className="section-num">§ ABOUT</div>
           <div>
             <h2 className="section-title">Research engineer<br /><em style={{ color: 'var(--accent-ink)' }}>who ships.</em></h2>
             <p className="section-sub">The full story — what I build, where I've been, where I'm going.</p>
@@ -261,4 +379,4 @@ const About = AboutSection;
 const ProfileMetaPanel = () => null;
 const AboutBlock = () => null;
 
-Object.assign(window, { Nav, Hero, About, AboutSection, ProfileCard, ProfileMetaPanel, AboutBlock });
+Object.assign(window, { Nav, Hero, About, AboutSection, WhatIBuild, ResearchDirection, NowSection, ProfileCard, ProfileMetaPanel, AboutBlock });

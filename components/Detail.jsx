@@ -3,6 +3,48 @@
 function DetailBody({ item, kind, onLightbox }) {
   if (!item) return null;
 
+  /* ── Selected Work detail ── */
+  if (kind === 'selected-work') {
+    return (
+      <>
+        <h2>{item.title}</h2>
+        <p className="modal-sub">{item.impact}</p>
+        <dl className="modal-kv">
+          {item.date && (<><dt>Date</dt><dd>{item.date}</dd></>)}
+          {item.tag  && (<><dt>Status</dt><dd>{item.tag}</dd></>)}
+          {item.category && (<><dt>Domain</dt><dd>{item.category}</dd></>)}
+        </dl>
+
+        <h3>The Problem</h3>
+        <p>{item.problem}</p>
+
+        <h3>What I Built</h3>
+        <p>{item.built}</p>
+
+        {item.tools && item.tools.length > 0 && (
+          <>
+            <h3>Tools & Technologies</h3>
+            <div className="skill-chips" style={{ marginBottom: 14 }}>
+              {item.tools.map(s => <span key={s} className="chip">{s}</span>)}
+            </div>
+          </>
+        )}
+
+        {item.proof && item.proof.length > 0 && (
+          <>
+            <h3>Proof</h3>
+            <div className="modal-links">
+              {item.proof.map((p, i) => p.href
+                ? <a key={i} className="btn" href={p.href} target="_blank" rel="noopener"><Icon name="external" size={12} /> {p.label}</a>
+                : <span key={i} className="btn" style={{ cursor: 'default', opacity: 0.6 }}>{p.label} — {p.kind}</span>
+              )}
+            </div>
+          </>
+        )}
+      </>
+    );
+  }
+
   if (kind === 'research' || kind === 'project') {
     return (
       <>
