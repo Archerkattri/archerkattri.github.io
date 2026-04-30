@@ -1,5 +1,8 @@
 // Journey section — hover-synced vertical timeline + world map
-const { useState, useEffect } = React;
+import { useState, useEffect } from "react";
+import * as d3 from "d3";
+import { feature } from "topojson-client";
+import { JOURNEY_EVENTS } from "./Timeline";
 
 const COUNTRY_INFO = {
   US: {
@@ -32,14 +35,14 @@ function JourneyMapSVG({ activeCountry, onCountryEnter }) {
   useEffect(() => {
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(r => r.json())
-      .then(w => setGeo(topojson.feature(w, w.objects.countries).features))
+      .then(w => setGeo(feature(w, w.objects.countries).features))
       .catch(() => {});
   }, []);
 
   const W = 700, H = 330;
 
-  if (!geo || typeof d3 === 'undefined') {
-    return <div className="wmap-loading">{!geo ? 'Loading map…' : 'Loading libraries…'}</div>;
+  if (!geo) {
+    return <div className="wmap-loading">Loading map…</div>;
   }
 
   const proj = d3.geoNaturalEarth1().scale(122).translate([W / 2, H / 2 + 8]);
@@ -75,7 +78,7 @@ function JourneyMapSVG({ activeCountry, onCountryEnter }) {
 }
 
 function JourneySection() {
-  const events = window.JOURNEY_EVENTS || [];
+  const events = JOURNEY_EVENTS || [];
   const [activeIdx, setActiveIdx] = useState(
     Math.max(0, events.findIndex(e => e.title === 'GaussianFeels'))
   );
@@ -168,4 +171,4 @@ function JourneySection() {
   );
 }
 
-Object.assign(window, { JourneyMap: JourneyMapSVG, JourneySection });
+export { JourneyMapSVG as JourneyMap, JourneySection };

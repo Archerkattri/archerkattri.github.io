@@ -1,5 +1,6 @@
 // Sections — Selected Work, Research, Experience, Credentials, Education, Journey, Gallery, Contact
-const { useState, useEffect, useRef, useCallback } = React;
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Icon } from "./Modal";
 
 /* ── Text scramble ── */
 function useScramble(text) {
@@ -478,9 +479,6 @@ function ContactSection({ data }) {
   );
 }
 
-Object.assign(window, {
-  SelectedWorkSection, ResearchSection, ExperienceSection,
-  CredentialsSection, EducationSection, SkillsBlock, GallerySection, ContactSection,
-  // keep old names for Detail.jsx compat
-  ProjectsSection: SelectedWorkSection, AwardsSection: CredentialsSection,
-});
+
+
+export { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationSection, SkillsBlock, GallerySection, ContactSection };
