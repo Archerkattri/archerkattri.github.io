@@ -1,5 +1,6 @@
 // Journey section — hover-synced vertical timeline + world map
-const { useState, useEffect } = React;
+import { useState, useEffect } from "react";
+import { JOURNEY_EVENTS } from "./Timeline";
 
 const COUNTRY_INFO = {
   US: {
@@ -75,7 +76,7 @@ function JourneyMapSVG({ activeCountry, onCountryEnter }) {
 }
 
 function JourneySection() {
-  const events = window.JOURNEY_EVENTS || [];
+  const events = JOURNEY_EVENTS || [];
   const [activeIdx, setActiveIdx] = useState(
     Math.max(0, events.findIndex(e => e.title === 'GaussianFeels'))
   );
@@ -168,4 +169,4 @@ function JourneySection() {
   );
 }
 
-Object.assign(window, { JourneyMap: JourneyMapSVG, JourneySection });
+export { JourneyMapSVG as JourneyMap, JourneySection };
