@@ -1,7 +1,5 @@
 // Journey section — hover-synced vertical timeline + world map
 import { useState, useEffect } from "react";
-import * as d3 from "d3";
-import { feature } from "topojson-client";
 import { JOURNEY_EVENTS } from "./Timeline";
 
 const COUNTRY_INFO = {
@@ -35,14 +33,14 @@ function JourneyMapSVG({ activeCountry, onCountryEnter }) {
   useEffect(() => {
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(r => r.json())
-      .then(w => setGeo(feature(w, w.objects.countries).features))
+      .then(w => setGeo(topojson.feature(w, w.objects.countries).features))
       .catch(() => {});
   }, []);
 
   const W = 700, H = 330;
 
-  if (!geo) {
-    return <div className="wmap-loading">Loading map…</div>;
+  if (!geo || typeof d3 === 'undefined') {
+    return <div className="wmap-loading">{!geo ? 'Loading map…' : 'Loading libraries…'}</div>;
   }
 
   const proj = d3.geoNaturalEarth1().scale(122).translate([W / 2, H / 2 + 8]);
