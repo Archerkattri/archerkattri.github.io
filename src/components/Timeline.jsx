@@ -49,4 +49,4 @@ function JourneyTimeline({ events, activeIndex, onChange }) {
   );
 }
 
-Object.assign(window, { JOURNEY_EVENTS, JourneyTimeline });
+export { JOURNEY_EVENTS, JourneyTimeline };
