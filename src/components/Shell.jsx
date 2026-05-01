@@ -307,16 +307,16 @@ function NowSection({ data }) {
         </div>
         <div className="now-wrap">
           <div className="now-main reveal">
-            <p>Currently working on <strong>visuo-tactile SLAM</strong>, <strong>object-level 3D reconstruction</strong>, and robotic perception systems for manipulation at Seoul National University's Soft Robotics & Bionics Lab.</p>
-            <p>Starting a Ph.D. at the University of Central Florida in August 2026 as an ORCGS Doctoral Fellow.</p>
+            <p>Currently completing an M.S. in Mechanical Engineering at Seoul National University's Soft Robotics & Bionics Lab, working on <strong>visuo-tactile SLAM</strong>, <strong>object-level 3D reconstruction</strong>, and dexterous in-hand manipulation as part of a government-funded humanoid robot programme.</p>
+            <p>Starting a Ph.D. at the University of Central Florida in August 2026 as an <strong>ORCGS Doctoral Fellow</strong>. Open to collaborations, internships, and research discussions in robot perception, 3D vision, SLAM, and applied ML.</p>
           </div>
           <div className="now-open">
             <div className="now-open-label">Open to</div>
             {[
-              'Research collaborations',
-              'Robotics / AI internships',
-              'Ph.D. research discussions',
-              'Roles in robot perception, 3D vision & SLAM',
+              'Robotics / AI research collaborations',
+              'Internships in robot perception or 3D vision',
+              'Ph.D.-adjacent research discussions',
+              'Roles in SLAM, applied ML & robot manipulation',
             ].map((item, i) => (
               <div key={i} className="now-open-item">
                 <span className="now-dot">◆</span>{item}

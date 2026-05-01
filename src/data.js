@@ -128,18 +128,19 @@ export const PORTFOLIO_DATA = {
         "My contribution spanned the full navigation stack: sensor fusion, localisation filters, feature extraction, and the ROS plumbing that ties it all together."
       ],
       contributions: [
-        "Developed a full ROS-based navigation stack: path planning and obstacle-avoidance algorithms.",
-        "Applied CNN-based feature extraction and point cloud generation from fused LiDAR–camera data.",
-        "Integrated and configured Arduino and Raspberry Pi microcontrollers for robust ROS communication and real-time control.",
-        "Implemented computer vision techniques (edge detection, landmark identification) to build real-time 3D environment maps.",
-        "Implemented a 2D histogram localisation filter and a 1D Kalman filter tracker using probabilistic motion models."
+        "Developed a full ROS-based navigation stack: path planning and obstacle-avoidance algorithms for a quad-wheel robot in GPS-denied environments.",
+        "Applied CNN-based feature extraction and point cloud generation from fused VLP-16 LiDAR–Raspberry Pi camera data.",
+        "Integrated VectorNav IMU, Emlid RTK GPS (for ground truth), and Vicon/OptiTrack motion capture for localisation evaluation.",
+        "Configured Arduino Mega and Raspberry Pi for robust ROS communication and real-time motor control.",
+        "Implemented a 2D histogram localisation filter and a 1D Kalman filter tracker using probabilistic motion models.",
+        "Applied computer vision techniques (edge detection, landmark identification) for real-time 3D environment mapping."
       ],
-      tools: ["ROS", "Python", "C++", "OpenCV", "LiDAR", "Velodyne", "Arduino", "Raspberry Pi", "CNN"],
+      tools: ["ROS", "Python", "C++", "OpenCV", "VLP-16 LiDAR", "VectorNav IMU", "Emlid RTK GPS", "Vicon/OptiTrack", "Arduino", "Raspberry Pi", "CNN"],
       outcomes: [
-        "Real-time 3D environment mapping from fused LiDAR-camera data.",
-        "Improved tracking accuracy via probabilistic localisation filters."
+        "Real-time 3D environment mapping from fused VLP-16 LiDAR–camera data.",
+        "Improved tracking accuracy via 2D histogram localisation filter and 1D Kalman tracker."
       ],
-      gallery: [{ src: "assets/images/robotics-mechatronics.png", caption: "Quad-wheel robot platform with Velodyne LiDAR" }],
+      gallery: [{ src: "assets/images/robotics-mechatronics.png", caption: "Quad-wheel robot platform with VLP-16 LiDAR" }],
       video: "assets/videos/eod-robot.mp4",
       links: []
     },
@@ -669,11 +670,46 @@ export const PORTFOLIO_DATA = {
   skills: {
     "SLAM & 3D Reconstruction": ["3D Gaussian Splatting", "Visuo-Tactile SLAM", "Neural Point Cloud SLAM", "Object-Centric Gaussian Mapping", "RGB-D Reconstruction", "SfM", "Theseus SE(3) optimisation", "TUM-RGBD & Replica benchmarking"],
     "Deep Learning & AI": ["PyTorch", "CUDA (custom kernels)", "TensorFlow", "Multimodal Learning", "Differentiable Rendering", "CNN / RNN / CNN-GRU / ViT", "Ollama", "Genesis"],
-    "Robotics & Middleware": ["ROS", "OpenCV", "Open3D", "Sensor Fusion", "Real-time Inference", "Path Planning", "NVIDIA Omniverse → UR5e + Allegro Hand"],
+    "Robotics & Middleware": ["ROS", "OpenCV", "Open3D", "COCO API", "Sensor Fusion", "Real-time Inference", "Path Planning", "NVIDIA Omniverse → UR5e + Allegro Hand"],
     "Hardware & Sensors": ["DIGIT Tactile", "RGB/RGB-D Cameras", "LiDAR + Camera Fusion", "VectorNav IMU", "Emlid RTK GPS", "UR5e", "Allegro Hand", "Raspberry Pi / Teensy / Arduino", "Vicon / OptiTrack", "3D Modelling & Printing", "Machine Shop"],
-    "Programming": ["Python", "C / C++", "CUDA", "MATLAB", "Arduino", "LaTeX", "HTML", "Django", "MySQL", "VHDL"],
-    "Software & Tools": ["NVIDIA Omniverse", "SOLIDWORKS", "Blender", "KiCAD", "Linux (Ubuntu)", "Git/GitHub", "Jupyter", "Anaconda", "React.js", "Flask"]
+    "Programming": ["Python", "C / C++", "CUDA", "MATLAB", "Maple", "Arduino", "LaTeX", "HTML", "Django", "MySQL", "VHDL"],
+    "Software & Tools": ["NVIDIA Omniverse", "SOLIDWORKS", "Blender", "KiCAD", "Linux (Ubuntu)", "Git/GitHub", "Jupyter", "Anaconda", "React.js", "Flask", "Matplotlib", "Scikit-learn", "PowerShell"]
   },
+
+  coursework: {
+    'Robotics & Control': [
+      'Topics in Control and Automation (SNU)', 'Mechatronics & Microcontrollers (Villanova)',
+      'Dynamic Systems I (Villanova)', 'Mechanical Systems Control (Yonsei)',
+      'Mechanical Vibrations (Yonsei)', 'UPenn Robotics Specialisation (Coursera)',
+    ],
+    'AI & Vision': [
+      'Deep Learning (SNU)', 'Precision Metrology & Vision Inspection (SNU)',
+      'NVIDIA Computer Vision Nanodegree', 'Computer Programming for ME (Villanova)',
+    ],
+    'Mechanical & Design': [
+      'Smart Materials & Design (SNU)', 'Capstone Design I & II (Villanova)',
+      'Manufacturing Engineering (Villanova)', 'Mechanics of Materials (Villanova)',
+      'Intro to CAD — SOLIDWORKS (Villanova)', 'Heat Transfer (Yonsei)', 'Fluid Mechanics (Yonsei)',
+    ],
+  },
+
+  leadership: [
+    { role: 'Secretary', org: 'Villanova CubeSat Club', date: 'May 2021 — May 2023', note: 'Community engagement in space science and CubeSat technology.' },
+    { role: 'Representative & Head of Special Events', org: "Villanova International Students' Organisation (VISO)", date: 'Aug 2020 — Aug 2022', note: 'Connected international and domestic students; organised welcome events and social programmes.' },
+    { role: 'Member', org: 'Society of Asian Scientists & Engineers (SASE)', date: 'May 2021 — Aug 2022', note: '' },
+    { role: 'Member', org: 'American Society of Mechanical Engineers (ASME)', date: 'May 2021 — Aug 2022', note: '' },
+  ],
+
+  archive: [
+    { title: 'Arduino Puzzle Box', date: '2022', note: 'Randomised solution algorithm, glitter-spray penalty for wrong inputs. Mechatronics coursework.' },
+    { title: 'Beetle-Bot — Combat Robot', date: '2021', note: '3rd place, Villanova Mechatronics. Four-member team build from scratch.' },
+    { title: 'Wi-Fi Drone', date: '2021', note: 'Custom stability control firmware; end-to-end build.' },
+    { title: 'Swarm Drone Coordination', date: '2021', note: 'Multi-drone communication and synchronisation algorithms.' },
+    { title: 'Servo Robotic Arm', date: '2021', note: 'Pick-and-place operations; 4-DOF servo arm.' },
+    { title: '3D Printer Build', date: '2021', note: 'Full hardware assembly, firmware configuration, slicer setup from scratch.' },
+    { title: 'Basketball Outcome Prediction', date: '2020', note: 'ML fundamentals; Python; 3-person team.' },
+    { title: 'ICE Assistive Device', date: '2020', note: '3rd place, College of Engineering ICE Competition. Wearable for visually impaired users.' },
+  ],
 
   gallery: [
     { src: "assets/images/robotics-mechatronics.png", caption: "Quad-wheel research robot · LiDAR + vision SLAM · Villanova, 2023-24", tag: "research" },

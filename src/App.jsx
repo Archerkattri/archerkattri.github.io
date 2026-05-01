@@ -3,7 +3,7 @@ import { PORTFOLIO_DATA } from './data';
 import { Modal, Lightbox } from './components/Modal';
 import { DetailBody } from './components/Detail';
 import { Nav, Hero, WhatIBuild, ResearchDirection, NowSection } from './components/Shell';
-import { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationSection, SkillsBlock, GallerySection, ContactSection } from './components/Sections';
+import { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection, ArchiveSection } from './components/Sections';
 import { JourneySection } from './components/WorldMap';
 
 function ReadingProgress() {
@@ -66,7 +66,7 @@ export default function App() {
     <Nav active={active} onSetActive={setActive} theme={theme} onToggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} />
     <Hero data={data} /><WhatIBuild /><SelectedWorkSection onOpen={openDetail} /><ResearchDirection />
     <ExperienceSection data={data} onOpen={openDetail} /><NowSection data={data} /><CredentialsSection />
-    <EducationSection data={data} /><SkillsBlock data={data} /><JourneySection /><GallerySection data={data} onLightbox={setLightbox} /><ContactSection data={data} />
+    <EducationWithCoursework data={data} /><SkillsBlock data={data} /><LeadershipSection data={data} /><ArchiveSection data={data} /><JourneySection /><GallerySection data={data} onLightbox={setLightbox} /><ContactSection data={data} />
     <footer className="footer"><div className="container" style={{ display: 'flex', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}><span>© {new Date().getFullYear()} Krishi Attri · All work shown is authored or co-authored as noted.</span><span>Built with React · ♥ for robots</span></div></footer>
     <Modal open={!!modalItem} onClose={closeDetail} kicker={kickerFor(modalKind)} sourceRect={sourceRect}><DetailBody item={modalItem} kind={modalKind} onLightbox={setLightbox} /></Modal>
     <Lightbox item={lightbox} onClose={() => setLightbox(null)} />
