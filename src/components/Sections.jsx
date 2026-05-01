@@ -156,6 +156,15 @@ function WorkCard({ item, onOpen }) {
 
 function SelectedWorkSection({ onOpen }) {
   const [filter, setFilter] = useState('all');
+  const gridRef = useRef(null);
+  useEffect(() => {
+    if (!gridRef.current) return;
+    const cards = gridRef.current.querySelectorAll('.wk-card');
+    cards.forEach((card, i) => {
+      card.classList.remove('in');
+      setTimeout(() => card.classList.add('in'), i * 60);
+    });
+  }, [filter]);
   const filtered = filter === 'all'
     ? SELECTED_WORK
     : filter === 'research'
@@ -179,7 +188,7 @@ function SelectedWorkSection({ onOpen }) {
             </button>
           ))}
         </div>
-        <div className="wk-grid">
+        <div className="wk-grid" ref={gridRef}>
           {filtered.map(item => (
             <WorkCard key={item.id} item={item} onOpen={(it, rect) => onOpen(it, 'selected-work', rect)} />
           ))}
