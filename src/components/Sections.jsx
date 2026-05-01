@@ -61,8 +61,8 @@ const SELECTED_WORK = [
     date: 'Aug 2023 — May 2024',
     tag: 'Undergraduate research',
     problem: 'Autonomous navigation in GPS-denied environments (indoors, underground, urban canyons) with a real outdoor robot platform.',
-    built: 'A ROS-based navigation stack using LiDAR–camera fusion, CNN feature extraction, 2D histogram localisation filter, and a 1D Kalman tracker.',
-    tools: ['ROS', 'Python', 'C++', 'OpenCV', 'Velodyne LiDAR', 'Arduino', 'Raspberry Pi'],
+    built: 'ROS navigation stack using VLP-16 LiDAR–camera fusion, CNN feature extraction, 2D histogram localisation filter, and 1D Kalman tracker. Sensors: VectorNav IMU, Emlid RTK GPS, Vicon/OptiTrack ground truth.',
+    tools: ['ROS', 'Python', 'C++', 'OpenCV', 'VLP-16 LiDAR', 'VectorNav IMU', 'Emlid RTK GPS', 'Vicon/OptiTrack', 'Arduino', 'Raspberry Pi'],
     proof: [{ label: 'Demo video', kind: 'video' }],
   },
   {
@@ -481,4 +481,119 @@ function ContactSection({ data }) {
 
 
 
-export { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationSection, SkillsBlock, GallerySection, ContactSection };
+/* ─────────────────────────────────────────────────────────
+   EDUCATION — with coursework
+───────────────────────────────────────────────────────── */
+function EducationWithCoursework({ data }) {
+  return (
+    <section id="education" data-screen-label="Education">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ EDUCATION</div>
+          <div>
+            <h2 className="section-title">Four schools,<br /><em style={{ fontStyle: 'italic' }}>three continents.</em></h2>
+            <p className="section-sub">Villanova · Yonsei (exchange) · Seoul National · UCF (incoming).</p>
+          </div>
+        </div>
+        <div className="edu-grid">
+          {data.education.map(e => (
+            <div key={e.id} className="edu-card">
+              <span className={"status " + e.status}>{e.status}</span>
+              <div className="degree">{e.degree}</div>
+              <div className="school">{e.school}</div>
+              <div className="loc">{e.location}</div>
+              <div className="note">{e.note}</div>
+              <div className="date">{e.date}</div>
+            </div>
+          ))}
+        </div>
+        {data.coursework && (
+          <div style={{ marginTop: 56 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: 'var(--fg-soft)', textTransform: 'uppercase', marginBottom: 24 }}>
+              Relevant Coursework
+            </div>
+            <div className="cred-grid">
+              {Object.entries(data.coursework).map(([group, courses]) => (
+                <div key={group} className="cred-group reveal">
+                  <div className="cred-group-label">{group}</div>
+                  <div className="skill-chips" style={{ marginTop: 10, gap: 6 }}>
+                    {courses.map(c => <span key={c} className="chip" style={{ fontSize: 12 }}>{c}</span>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   LEADERSHIP & ACTIVITIES
+───────────────────────────────────────────────────────── */
+function LeadershipSection({ data }) {
+  if (!data.leadership || data.leadership.length === 0) return null;
+  return (
+    <section id="leadership">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ LEADERSHIP</div>
+          <div>
+            <h2 className="section-title">Beyond<br /><em style={{ fontStyle: 'italic' }}>the lab.</em></h2>
+            <p className="section-sub">Campus leadership and professional organisations at Villanova.</p>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gap: 2 }}>
+          {data.leadership.map((item, i) => (
+            <div key={i} className="tl-row reveal" style={{ '--i': i, cursor: 'default', gridTemplateColumns: '200px 1fr' }}>
+              <div className="date">{item.date}</div>
+              <div className="main">
+                <h3 style={{ fontSize: 18, marginBottom: 2 }}>{item.role}</h3>
+                <div className="org">{item.org}</div>
+                {item.note && <div className="sum" style={{ marginTop: 6 }}>{item.note}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────
+   ADDITIONAL BUILDS / ARCHIVE
+───────────────────────────────────────────────────────── */
+function ArchiveSection({ data }) {
+  if (!data.archive || data.archive.length === 0) return null;
+  return (
+    <section id="archive">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ ARCHIVE</div>
+          <div>
+            <h2 className="section-title">Earlier<br /><em style={{ fontStyle: 'italic' }}>builds.</em></h2>
+            <p className="section-sub">Smaller projects, coursework builds, and personal experiments — the trail of making things.</p>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 1 }}>
+          {data.archive.map((item, i) => (
+            <div key={i} className="reveal" style={{
+              '--i': i,
+              padding: '16px 20px',
+              borderTop: '1px solid var(--line)',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, marginBottom: 6 }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: 14, color: 'var(--fg)' }}>{item.title}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-soft)', whiteSpace: 'nowrap' }}>{item.date}</span>
+              </div>
+              {item.note && <div style={{ fontSize: 13, color: 'var(--fg-muted)', lineHeight: 1.5 }}>{item.note}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection, ArchiveSection };
