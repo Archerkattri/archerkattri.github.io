@@ -39,6 +39,25 @@ export default function App() {
     document.querySelectorAll('section').forEach(s => obs.observe(s));
     return () => obs.disconnect();
   }, []);
+  useEffect(() => {
+    const run = () => {
+      const els = document.querySelectorAll('.reveal, .section-head, .card, .tl-row, .edu-card, .wib-card, .wk-card, .cred-group');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const el = e.target;
+            const i = parseInt(el.style.getPropertyValue('--i') || '0');
+            setTimeout(() => { el.classList.add('in'); obs.unobserve(el); }, i * 80);
+          }
+        });
+      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.04 });
+      els.forEach(el => { if (!el.classList.contains('in')) obs.observe(el); });
+      return obs;
+    };
+    const obs = run();
+    const t = setTimeout(run, 900);
+    return () => { obs.disconnect(); clearTimeout(t); };
+  }, []);
   const openDetail = (item, kind, rect) => { setModalItem(item); setModalKind(kind); setSourceRect(rect || null); };
   const closeDetail = () => { setModalItem(null); setModalKind(null); setSourceRect(null); };
   const kickerFor = k => ({ research:'Research · Detail','selected-work':'Selected Work · Detail',project:'Project · Detail',experience:'Experience · Detail',award:'Award · Detail' }[k] || 'Detail');
