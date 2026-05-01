@@ -239,7 +239,4 @@ function DetailBody({ item, kind, onLightbox }) {
   return null;
 }
 
-Object.assign(window, { DetailBody });
-
-
 export { DetailBody };
