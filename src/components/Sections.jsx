@@ -39,7 +39,7 @@ const SELECTED_WORK = [
     problem: 'Robots lose reliable object geometry under occlusion during contact-rich manipulation. Vision alone fails; tactile alone is too sparse.',
     built: 'An online visuo-tactile SLAM system built around an explicit object-centric 3D Gaussian Splatting map — fusing RGB-D, DIGIT tactile sensing, and hand proprioception in real time.',
     tools: ['3D Gaussian Splatting', 'PyTorch', 'CUDA', 'Theseus SE(3)', 'UR5e', 'Allegro Hand', 'DIGIT', 'ROS'],
-    proof: [{ label: 'Thesis work', kind: 'thesis' }, { label: 'Reconstruction results', kind: 'results' }],
+    proof: [{ label: 'Companion site', href: 'https://krishiattrisnu.github.io', kind: 'website' }, { label: 'Reconstruction results', kind: 'results' }],
   },
   {
     id: 'popslam',
