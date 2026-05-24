@@ -2524,3 +2524,28 @@ section.in-view::before { transform: scaleX(1); }
   letter-spacing: 0.08em;
   margin: 14px 0 18px;
 }
+
+/* picture elements inherit the original image styles */
+picture { display: contents; }
+
+/* Lazy images: subtle fade-in once loaded (no extra JS needed) */
+img { background: var(--bg-hush); }
+
+/* ===== Reduced motion: honor user preference ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Make reveal classes always visible (skip the fade-up entrance) */
+  .reveal, .section-head, .card, .tl-row, .edu-card, .wib-card, .wk-card, .cred-group, .rd-bullet, .jv2-event {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* Disable hover transforms that nudge */
+  .card:hover, .wk-card:hover, .wib-card:hover, .edu-card:hover, .tline-card:hover { transform: none !important; }
+  /* Stop the hero scroll-line scanning + pulse-dot + cursor blink */
+  .hv2-scroll-line::after, .hero-photo::after, .pc-badge-dot, .hv2-cursor, .card.featured { animation: none !important; }
+}

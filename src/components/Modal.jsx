@@ -114,12 +114,18 @@ function Lightbox({ item, onClose }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [item, onClose]);
   if (!item) return null;
+  const webp = !item.video ? item.src.replace(/\.(jpe?g|png)$/i, '.webp') : null;
   return (
     <div className="lightbox open" onClick={onClose}>
       <button className="lb-close" onClick={onClose} aria-label="Close"><Icon name="close" size={18} /></button>
       {item.video
         ? <video src={item.src} controls autoPlay style={{ maxHeight: '90vh', maxWidth: '100%' }} />
-        : <img src={item.src} alt={item.caption || ''} />
+        : (
+          <picture>
+            {webp && webp !== item.src && <source srcSet={webp} type="image/webp" />}
+            <img src={item.src} alt={item.caption || ''} decoding="async" />
+          </picture>
+        )
       }
       {item.caption && <div className="lb-cap">{item.caption}</div>}
     </div>
