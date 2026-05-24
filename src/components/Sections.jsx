@@ -85,7 +85,7 @@ const SELECTED_WORK = [
     date: 'Aug 2023 — May 2024',
     tag: 'Hardware · Award',
     problem: 'An agrochemical company needed a device to lift growing plants repeatably into a 3D imaging rig without damaging them, within strict size constraints.',
-    built: 'Led a multidisciplinary team through actuator selection, motion-system design (belts, pulleys, drive gears), wiring, waterproofing, and a stabilising plant platform.',
+    built: 'Sponsored by FMC Corporation. Led a multidisciplinary team through actuator selection, motion-system design (belts, pulleys, drive gears), wiring, waterproofing, and a stabilising plant platform.',
     tools: ['SOLIDWORKS', 'Actuator design', 'Motion systems', 'Project management'],
     proof: [{ label: 'Award certificate', href: 'assets/docs/Capstone.pdf', kind: 'pdf' }, { label: 'Demo video', kind: 'video' }],
   },
@@ -424,6 +424,21 @@ function SkillsBlock({ data }) {
 /* ─────────────────────────────────────────────────────────
    GALLERY
 ───────────────────────────────────────────────────────── */
+function toWebp(src) {
+  // Swap the file extension for .webp; works for .jpg / .jpeg / .png
+  return src.replace(/\.(jpe?g|png)$/i, '.webp');
+}
+
+function GalleryImg({ src, alt }) {
+  const webp = toWebp(src);
+  return (
+    <picture>
+      {webp !== src && <source srcSet={webp} type="image/webp" />}
+      <img src={src} alt={alt || ''} loading="lazy" decoding="async" />
+    </picture>
+  );
+}
+
 function GallerySection({ data, onLightbox }) {
   const layoutClasses = ['tall', '', 'wide', '', '', 'tall', 'wide', '', '', ''];
   return (
@@ -439,16 +454,16 @@ function GallerySection({ data, onLightbox }) {
         <div className="gallery">
           {data.gallery.map((g, i) => (
             <div key={i} className={"gal-item " + (layoutClasses[i] || '')} onClick={() => onLightbox(g)}>
-              <img src={g.src} alt={g.caption} loading="lazy" />
+              <GalleryImg src={g.src} alt={g.caption} />
               <div className="cap">{g.caption}</div>
             </div>
           ))}
           <div className="gal-item wide" onClick={() => onLightbox({ src: 'assets/videos/silo-internship.mp4', caption: 'Silo automation · Area2Farms · Summer 2023', video: true })}>
-            <video src="assets/videos/silo-internship.mp4" muted loop playsInline preload="metadata" />
+            <video src="assets/videos/silo-internship.mp4" muted loop playsInline preload="none" />
             <div className="cap">▶ Silo internship · Area2Farms</div>
           </div>
           <div className="gal-item" onClick={() => onLightbox({ src: 'assets/videos/eod-robot.mp4', caption: 'EOD Robot · undergraduate research', video: true })}>
-            <video src="assets/videos/eod-robot.mp4" muted loop playsInline preload="metadata" />
+            <video src="assets/videos/eod-robot.mp4" muted loop playsInline preload="none" />
             <div className="cap">▶ EOD Robot · research</div>
           </div>
         </div>
@@ -456,6 +471,7 @@ function GallerySection({ data, onLightbox }) {
     </section>
   );
 }
+
 
 /* ─────────────────────────────────────────────────────────
    CONTACT

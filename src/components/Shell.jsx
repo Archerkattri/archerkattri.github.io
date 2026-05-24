@@ -55,13 +55,17 @@ function HeroCanvas() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return; // honor reduced-motion preference
     const ctx = canvas.getContext('2d');
-    let animId, nodes, W, H;
+    let animId = 0, nodes, W = 0, H = 0;
+    let running = true;
     const setup = () => {
-      const dpr = Math.min(devicePixelRatio, 2);
+      const dpr = Math.min(devicePixelRatio || 1, 2);
       const r = canvas.getBoundingClientRect();
       W = r.width; H = r.height;
-      canvas.width = W * dpr; canvas.height = H * dpr;
+      canvas.width = Math.max(1, W * dpr);
+      canvas.height = Math.max(1, H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = Math.min(55, Math.floor(W * H / 14000));
       nodes = Array.from({ length: n }, () => ({
@@ -71,19 +75,22 @@ function HeroCanvas() {
       }));
     };
     const tick = () => {
+      if (!running) { animId = 0; return; }
       ctx.clearRect(0, 0, W, H);
       const dark = document.documentElement.getAttribute('data-theme') === 'dark';
       const c = dark ? '237,234,224' : '14,16,20';
-      nodes.forEach(n => {
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
         n.x += n.vx; n.y += n.vy;
         if (n.x < 0 || n.x > W) n.vx *= -1;
         if (n.y < 0 || n.y > H) n.vy *= -1;
-      });
+      }
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 145) {
+          const d2 = dx * dx + dy * dy;
+          if (d2 < 21025 /* 145^2 */) {
+            const d = Math.sqrt(d2);
             ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y);
             ctx.strokeStyle = `rgba(${c},${.07 * (1 - d / 145)})`; ctx.lineWidth = .55; ctx.stroke();
           }
@@ -93,9 +100,35 @@ function HeroCanvas() {
       }
       animId = requestAnimationFrame(tick);
     };
-    setup(); tick();
+    const start = () => { if (!animId && running) { animId = requestAnimationFrame(tick); } };
+    const stop = () => { if (animId) { cancelAnimationFrame(animId); animId = 0; } };
+
+    setup();
+    start();
+
+    // Pause when off-screen
+    const io = new IntersectionObserver(([e]) => {
+      running = e.isIntersecting;
+      if (running) start(); else stop();
+    }, { threshold: 0 });
+    io.observe(canvas);
+
+    // Pause when tab is hidden
+    const onVis = () => {
+      const hidden = document.hidden;
+      running = !hidden && running;
+      if (!hidden && !animId) start();
+      if (hidden) stop();
+    };
+    document.addEventListener('visibilitychange', onVis);
+
     const ro = new ResizeObserver(setup); ro.observe(canvas);
-    return () => { cancelAnimationFrame(animId); ro.disconnect(); };
+    return () => {
+      stop();
+      ro.disconnect();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVis);
+    };
   }, []);
   return <canvas ref={ref} className="hero-canvas" aria-hidden="true" />;
 }
@@ -108,7 +141,11 @@ function ProfileCard({ data }) {
     <aside className="pc-wrap">
       {data.profile.headshot && (
         <div className="pc-photo-wrap">
-          <img src={data.profile.headshot} alt="Krishi Attri" className="pc-photo" />
+          <picture>
+            <source srcSet="assets/images/headshot-sm.webp" type="image/webp" />
+            <img src={data.profile.headshot} alt="Krishi Attri" className="pc-photo"
+                 width="320" height="412" fetchpriority="high" decoding="async" />
+          </picture>
         </div>
       )}
       <dl className="pc-meta">

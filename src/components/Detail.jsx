@@ -2,6 +2,20 @@ import { Icon } from "./Modal";
 
 // Detail renderer for the modal — research/project/experience/award
 
+function toWebp(src) {
+  return src.replace(/\.(jpe?g|png)$/i, '.webp');
+}
+
+function PicImg({ src, alt, style, loading = 'lazy' }) {
+  const webp = toWebp(src);
+  return (
+    <picture>
+      {webp !== src && <source srcSet={webp} type="image/webp" />}
+      <img src={src} alt={alt || ''} style={style} loading={loading} decoding="async" />
+    </picture>
+  );
+}
+
 function DetailBody({ item, kind, onLightbox }) {
   if (!item) return null;
 
@@ -64,7 +78,7 @@ function DetailBody({ item, kind, onLightbox }) {
         {item.hero && (
           <div className="modal-hero" style={{ cursor: onLightbox ? 'zoom-in' : 'default' }}
             onClick={() => onLightbox && onLightbox({ src: item.hero, caption: item.title })}>
-            <img src={item.hero} alt={item.title} />
+            <PicImg src={item.hero} alt={item.title} />
           </div>
         )}
 
@@ -107,7 +121,7 @@ function DetailBody({ item, kind, onLightbox }) {
               <figure key={i}
                 onClick={() => onLightbox && onLightbox(g)}
                 style={{ cursor: onLightbox ? 'zoom-in' : 'default' }}>
-                <img src={g.src} alt={g.caption} loading="lazy" />
+                <PicImg src={g.src} alt={g.caption} />
                 {g.caption && <figcaption>{g.caption}</figcaption>}
               </figure>
             ))}
@@ -184,7 +198,7 @@ function DetailBody({ item, kind, onLightbox }) {
             <figure
               onClick={() => onLightbox && onLightbox({ src: item.image, caption: item.title })}
               style={{ cursor: onLightbox ? 'zoom-in' : 'default' }}>
-              <img src={item.image} alt={item.title}
+              <PicImg src={item.image} alt={item.title}
                 style={{ maxHeight: 520, objectFit: 'contain', background: 'var(--bg-hush)' }} />
             </figure>
           </div></>
@@ -198,7 +212,7 @@ function DetailBody({ item, kind, onLightbox }) {
               <figure key={i}
                 onClick={() => onLightbox && onLightbox(g)}
                 style={{ cursor: onLightbox ? 'zoom-in' : 'default' }}>
-                <img src={g.src} alt={g.caption}
+                <PicImg src={g.src} alt={g.caption}
                   style={{ maxHeight: 420, objectFit: 'contain', background: 'var(--bg-hush)' }} />
                 {g.caption && <figcaption>{g.caption}</figcaption>}
               </figure>
