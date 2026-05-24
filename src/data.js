@@ -140,7 +140,7 @@ export const PORTFOLIO_DATA = {
         "Real-time 3D environment mapping from fused VLP-16 LiDAR–camera data.",
         "Improved tracking accuracy via 2D histogram localisation filter and 1D Kalman tracker."
       ],
-      gallery: [{ src: "assets/images/robotics-mechatronics.png", caption: "Quad-wheel robot platform with VLP-16 LiDAR" }],
+      gallery: [{ src: "assets/images/robotics-mechatronics.jpg", caption: "Quad-wheel robot platform with VLP-16 LiDAR" }],
       video: "assets/videos/eod-robot.mp4",
       links: []
     },
@@ -203,7 +203,7 @@ export const PORTFOLIO_DATA = {
       category: "hardware",
       summary: "Industry-sponsored senior capstone. Led a multidisciplinary team through the full design-to-prototype lifecycle of a plant-lifting mechanism for automated 3D imaging.",
       overview: [
-        "Sponsored by a major agrochemical company. The brief: build a device that can lift growing plants reliably and repeatably into a 3D imaging rig, under strict size constraints, without damaging the plant.",
+        "Sponsored by FMC Corporation. The brief: build a device that can lift growing plants reliably and repeatably into a 3D imaging rig, under strict size constraints, without damaging the plant.",
         "I led a multidisciplinary team through actuator selection, motion-system design, wiring, waterproofing, and the plant-contact platform."
       ],
       contributions: [
@@ -240,7 +240,7 @@ export const PORTFOLIO_DATA = {
       tools: ["Robotics hardware", "Teleoperation"],
       outcomes: [],
       video: "assets/videos/eod-robot.mp4",
-      gallery: [{ src: "assets/images/robotics-mechatronics.png", caption: "Quad-wheel robot platform used in related GNSS-denied work" }],
+      gallery: [{ src: "assets/images/robotics-mechatronics.jpg", caption: "Quad-wheel robot platform used in related GNSS-denied work" }],
       links: []
     },
     {
@@ -517,7 +517,7 @@ export const PORTFOLIO_DATA = {
       title: "ORCGS Doctoral Fellowship",
       org: "University of Central Florida",
       date: "Incoming, Aug 2026",
-      summary: "Awarded the ORCGS Doctoral Fellowship in support of Ph.D. studies at UCF's Rehabilitation Engineering & Assistive Device Lab.",
+      summary: "Awarded the ORCGS Doctoral Fellowship in support of Ph.D. studies at UCF's Rehabilitation Engineering & Assistive Device Lab (REAL) under Prof. Hwan Choi.",
       kind: "Fellowship"
     },
     {
@@ -583,8 +583,8 @@ export const PORTFOLIO_DATA = {
       id: "gre",
       title: "GRE General Test",
       org: "Educational Testing Service (ETS)",
-      date: "2024",
-      summary: "GRE General Test official score report. Verified credential via ETS blockchain authentication.",
+      date: "Sept 2023",
+      summary: "Verbal 153 (56th pctile) · Quantitative 166 (80th pctile) · Analytical Writing 4.0 (56th pctile). Verified credential via ETS blockchain authentication.",
       kind: "Test Score",
       pdf: "assets/docs/GRE_Report.pdf",
       links: [{ label: "Verify credential (ETS blockchain)", href: "https://achievements.gre.org/77c3e028-a305-4538-bf7e-9a1081c40c83#gs.d2gjah" }]
@@ -635,7 +635,7 @@ export const PORTFOLIO_DATA = {
       school: "University of Central Florida",
       location: "Orlando, FL, USA",
       date: "Aug 2026 (Expected Start)",
-      note: "ORCGS Doctoral Fellow · Rehabilitation Engineering & Assistive Device Lab",
+      note: "ORCGS Doctoral Fellow · Rehabilitation Engineering & Assistive Device Lab (REAL) · Advisor: Prof. Hwan Choi",
       status: "incoming"
     },
     {
@@ -712,7 +712,7 @@ export const PORTFOLIO_DATA = {
   ],
 
   gallery: [
-    { src: "assets/images/robotics-mechatronics.png", caption: "Quad-wheel research robot · LiDAR + vision SLAM · Villanova, 2023-24", tag: "research" },
+    { src: "assets/images/robotics-mechatronics.jpg", caption: "Quad-wheel research robot · LiDAR + vision SLAM · Villanova, 2023-24", tag: "research" },
     { src: "assets/images/silo.jpg", caption: "Vertical farming rack · Area2Farms · Summer 2023", tag: "internship" },
     { src: "assets/images/silo-circuit.jpg", caption: "Custom control circuit · Silo automation · Summer 2023", tag: "internship" },
     { src: "assets/images/aerial-robot.jpg", caption: "Custom carbon-fibre aerial platform", tag: "research" },
