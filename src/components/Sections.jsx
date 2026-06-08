@@ -266,7 +266,7 @@ function ResearchSection({ data, onOpen }) {
             <p className="section-sub">Thesis work, papers, and open-source research tools — with results. Click any card for methodology, contributions, and outcomes.</p>
           </div>
         </div>
-        <div className="pub-callout">
+        <div className="pub-callout sub-anchor" id="research-pubs">
           <div className="pub-callout-head">Publications &amp; preprints</div>
           <div className="pub-row">
             <div>
@@ -716,12 +716,50 @@ function ProjectCard({ item, onOpen }) {
   );
 }
 
-function PersonalProjectsSection({ data, onOpen }) {
+// Projects classified as personal/own work (the rest fall under School Projects).
+const PERSONAL_IDS = new Set(['hicache', 'splatreg', 'mathlas', 'cv-app', 'wifi-drone', 'swarm', 'robotic-arm', '3d-printer', 'lego-car']);
+
+function RepoCard({ repo }) {
+  return (
+    <a className="repo-card" href={repo.url} target="_blank" rel="noopener">
+      <div className="repo-card-top">
+        <span className="repo-name"><Icon name="github" size={12} /> {repo.name}</span>
+        <span className="repo-open">↗</span>
+      </div>
+      {repo.desc && <p className="repo-desc">{repo.desc}</p>}
+      {repo.lang && <span className="repo-lang"><span className="repo-dot" />{repo.lang}</span>}
+    </a>
+  );
+}
+
+function ProjectSubgrid({ items, onOpen, initial = 6 }) {
   const [expanded, setExpanded] = useState(false);
-  const projects = (data.projects || []).filter(p => !p.hidden);
-  const INITIAL = 6;
-  const shown = expanded ? projects : projects.slice(0, INITIAL);
-  if (projects.length === 0) return null;
+  const shown = expanded ? items : items.slice(0, initial);
+  if (items.length === 0) return null;
+  return (
+    <>
+      <div className="cards">
+        {shown.map(p => (
+          <ProjectCard key={p.id} item={p} onOpen={(rect) => onOpen(p, 'project', rect)} />
+        ))}
+      </div>
+      {items.length > initial && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 28 }}>
+          <button className="btn" onClick={() => setExpanded(e => !e)} aria-expanded={expanded}>
+            {expanded ? 'Show fewer' : `View all ${items.length}`}<span className="arrow">{expanded ? ' ↑' : ' ↓'}</span>
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
+
+function ProjectsSection({ data, onOpen }) {
+  const all = (data.projects || []).filter(p => !p.hidden);
+  const personal = all.filter(p => PERSONAL_IDS.has(p.id));
+  const school = all.filter(p => !PERSONAL_IDS.has(p.id));
+  const repos = data.githubRepos || [];
+  const [showRepos, setShowRepos] = useState(false);
   return (
     <section id="projects" data-screen-label="Projects">
       <div className="container">
@@ -729,25 +767,41 @@ function PersonalProjectsSection({ data, onOpen }) {
           <div className="section-num">§ PROJECTS</div>
           <div>
             <h2 className="section-title">Projects &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>builds.</em></h2>
-            <p className="section-sub">Full-stack apps, capstone, hardware builds, and course experiments. Click any card for the full story.</p>
+            <p className="section-sub">Personal work and open-source repositories, plus academic and course projects. Click any card for the full story.</p>
           </div>
         </div>
-        <div className="cards">
-          {shown.map(p => (
-            <ProjectCard key={p.id} item={p} onOpen={(rect) => onOpen(p, 'project', rect)} />
-          ))}
-        </div>
-        {projects.length > INITIAL && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
-            <button className="btn" onClick={() => setExpanded(e => !e)} aria-expanded={expanded}>
-              {expanded ? 'Show fewer' : `View all ${projects.length} projects`}
-              <span className="arrow">{expanded ? ' ↑' : ' ↓'}</span>
-            </button>
+
+        <div id="projects-personal" className="sub-anchor proj-subsection">
+          <div className="proj-sub-head">
+            <h3 className="proj-sub-title">Personal Projects</h3>
+            <a className="proj-sub-link" href="https://github.com/Archerkattri" target="_blank" rel="noopener">
+              <Icon name="github" size={13} /> All repositories <span className="arrow">↗</span>
+            </a>
           </div>
-        )}
+          <ProjectSubgrid items={personal} onOpen={onOpen} initial={6} />
+          {repos.length > 0 && (
+            <div className="repo-block">
+              <button className="repo-toggle" onClick={() => setShowRepos(s => !s)} aria-expanded={showRepos}>
+                {showRepos ? '− Hide repositories' : `+ ${repos.length} more open-source repositories`}
+              </button>
+              {showRepos && (
+                <div className="repo-grid">
+                  {repos.map(r => <RepoCard key={r.name} repo={r} />)}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div id="projects-school" className="sub-anchor proj-subsection">
+          <div className="proj-sub-head">
+            <h3 className="proj-sub-title">School Projects</h3>
+          </div>
+          <ProjectSubgrid items={school} onOpen={onOpen} initial={6} />
+        </div>
       </div>
     </section>
   );
 }
 
-export { ResearchSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection };
+export { ResearchSection, ProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection };
