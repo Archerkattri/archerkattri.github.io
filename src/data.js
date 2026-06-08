@@ -8,6 +8,7 @@ export const PORTFOLIO_DATA = {
       "I build perception systems for robots that have to see, feel, and reconstruct the world in real time — often with most of the object hidden.",
       "My current work at Seoul National University's Soft Robotics & Bionics Laboratory focuses on online 3D reconstruction and pose tracking for in-hand manipulation. I develop visuo-tactile SLAM systems built around explicit 3D Gaussian Splatting maps, fusing RGB-D vision, DIGIT tactile sensing, and hand proprioception into a shared object-centric representation.",
       "This runs on real hardware: UR5e arms, Allegro Hands, NVIDIA Omniverse simulation pipelines, and GPU-accelerated CUDA kernels. I care about the full stack — from the sensor bring-up through to the algorithm that closes the loop.",
+      "Alongside the perception stack, I build and release open-source research tools: HiCache++, a training-free DMD velocity-cache that accelerates the diffusion- and flow-based image-to-3D models my reconstruction pipeline depends on; splatreg, a 3D Gaussian-Splatting registration library; and mathlas, a formal-math MCP toolkit for AI agents.",
       "Before graduate research, I spent four years at Villanova University studying mechanical engineering with a minor in mechatronics, with an exchange year at Yonsei University. Along the way I've built drones, combat robots, agricultural automation rigs, and a 1st-place capstone prototype."
     ],
     headshot: "assets/images/headshot-sm.png",
@@ -24,7 +25,7 @@ export const PORTFOLIO_DATA = {
     {
       id: "gaussianfeels",
       title: "GaussianFeels",
-      subtitle: "Real-Time Multimodal 3D Reconstruction with Tactile-Enhanced Gaussian Splatting",
+      subtitle: "Object-Centric Gaussian SLAM for Visuo-Tactile In-Hand Manipulation",
       role: "M.S. Thesis · Advisor: Prof. Yong-Lae Park",
       org: "Soft Robotics & Bionics Lab, Seoul National University",
       date: "Dec 2024 — Present",
@@ -38,26 +39,28 @@ export const PORTFOLIO_DATA = {
         "Designed the system around four integrated components: multimodal sensor ingestion, an object-centric Gaussian map with contact-aware management, a pose tracker embedded in the SLAM loop (GT, GT-init, full SLAM modes), and a parallel manipulation branch for frame-0 shape completion.",
         "Implemented contact-aware Gaussian population management: multimodal spawning, direct contact-point insertion, tactile-region density boosting, and selective freezing to preserve contact-critical geometry.",
         "Designed an occlusion-aware training objective that dynamically reweights RGB, depth, and tactile supervision based on hand-induced occlusion.",
-        "Built the pose tracker as a Theseus-based SE(3) optimiser combining tactile-aware frame-0 seeding, image-space depth sampling, a frozen-map SDF residual, and an ICP prior between consecutive depth observations.",
+        "Built the pose tracker as a multi-residual Levenberg–Marquardt SE(3) optimiser over a frozen Gaussian-density SDF — photometric, depth-SDF, tactile-SDF, tactile-normal, and one-sided non-penetration residuals with an analytic Jacobian read through gsplat, plus tactile-aware frame-0 seeding and an ICP prior between consecutive depth observations.",
         "Integrated a frame-0 shape-completion bootstrap with Hunyuan3D-2-mini: an orientation-variant 3D prior is aligned to frame-0 observations, then progressively replaced by measured geometry."
       ],
-      tools: ["3D Gaussian Splatting", "PyTorch", "CUDA", "Theseus", "NVIDIA Omniverse", "UR5e", "Allegro Hand", "DIGIT Tactile", "ROS", "Open3D"],
+      tools: ["3D Gaussian Splatting", "PyTorch", "CUDA", "gsplat", "Levenberg–Marquardt SE(3)", "Hunyuan3D", "NVIDIA Omniverse", "UR5e", "Allegro Hand", "DIGIT Tactile", "ROS", "Open3D"],
       programme: {
-        title: "Humanoid Robot Programme",
+        title: "“Alchemist” Humanoid Robot Project",
         subtitle: "Visuo-Tactile SLAM & In-Hand Manipulation Integration",
         org: "Soft Robotics & Bionics Lab, Seoul National University",
-        date: "Sept 2024 — July 2026",
-        tag: "Government-funded",
-        description: "GaussianFeels is developed as an integral module within a multi-year government-funded humanoid robot programme at SRBL. Phase 1 concluded in 2024; Phase 2 — full-scale humanoid prototype — is ongoing. My role is to bring GaussianFeels from research prototype to deployable on-robot perception system, bridging visuo-tactile SLAM and dexterous in-hand manipulation for the Phase 2 humanoid.",
+        date: "Sept 2024 — Aug 2026",
+        tag: "Government-funded (MOTIE)",
+        description: "GaussianFeels is developed as an integral module within the “Alchemist” Project — Korea's national high-risk, high-reward R&D programme (MOTIE). Phase 1 concluded in 2024; Phase 2 — the full-scale humanoid prototype (2024–2026) — is ongoing. My role is to bring GaussianFeels from research prototype to deployable on-robot perception system, bridging visuo-tactile SLAM and dexterous in-hand manipulation for the Phase 2 humanoid.",
         tools: ["UR5e", "Allegro Hand", "DIGIT Tactile Sensor", "NVIDIA Omniverse", "ROS", "CUDA"]
       },
       outcomes: [
-        "Evaluated on the FeelSight benchmark family — simulation, real-world robot rollouts, and occlusion-focused episodes.",
-        "Metrics span reconstruction quality, pose-tracking accuracy, and occlusion robustness.",
-        "Deployed as part of the lab's Phase 2 full-scale humanoid prototype."
+        "Median ADD-S of 0.84 mm (simulation) and 3.4 mm (real) at ≈28 / ≈23.5 FPS on a single RTX 5090.",
+        "Retains 94% of simulation reconstruction F-score@5 mm on real hardware (0.95 → 0.89) versus 80% for NeuralFeels.",
+        "Matches or exceeds the model-free NeuralFeels baseline at ≈7.6× the frame rate with no supplied CAD model.",
+        "Evaluated on the FeelSight benchmark family (14-object sweep) — simulation, real-world rollouts, and occlusion-focused episodes — benchmarked against NeuralFeels and V-HOP.",
+        "Developed as part of the lab's Phase 2 “Alchemist” full-scale humanoid prototype."
       ],
       gallery: [],
-      links: []
+      links: [{ label: "Companion site", href: "https://krishiattrisnu.github.io" }]
     },
     {
       id: "popslam",
@@ -90,20 +93,20 @@ export const PORTFOLIO_DATA = {
     {
       id: "humanoid",
       hidden: true,
-      title: "Humanoid Robot Programme",
+      title: "“Alchemist” Humanoid Robot Project",
       subtitle: "Visuo-Tactile SLAM & In-Hand Manipulation Integration",
       role: "Graduate Research Student",
       org: "Soft Robotics & Bionics Lab, Seoul National University",
-      date: "Sept 2024 — July 2026",
-      tag: "Government-funded",
-      summary: "Integrating visuo-tactile SLAM and dexterous manipulation modules into a multi-year government-funded humanoid robot programme.",
+      date: "Sept 2024 — Aug 2026",
+      tag: "Government-funded (MOTIE)",
+      summary: "Integrating visuo-tactile SLAM and dexterous manipulation modules into the “Alchemist” Project — Korea's national high-risk, high-reward humanoid-robot R&D programme (MOTIE).",
       overview: [
-        "A multi-year, government-funded humanoid robot programme at the Soft Robotics & Bionics Lab. Phase 1 concluded in 2024; Phase 2 — the full-scale humanoid prototype — is ongoing.",
+        "The “Alchemist” Project is Korea's national high-risk, high-reward R&D programme (MOTIE), hosted at the Soft Robotics & Bionics Lab. Phase 1 concluded in 2024; Phase 2 — the full-scale humanoid prototype (2024–2026) — is ongoing.",
         "My role is to bring perception systems from research prototypes into deployable modules on the Phase 2 robot."
       ],
       contributions: [
-        "Integrate visuo-tactile SLAM and dexterous in-hand manipulation into the Phase 2 full-scale humanoid prototype.",
-        "Coordinate with cross-disciplinary engineering teams across hardware, software, and control to meet integration milestones.",
+        "Leading integration of visuo-tactile SLAM and dexterous in-hand manipulation into the Phase 2 full-scale humanoid prototype.",
+        "Coordinating cross-disciplinary engineering teams across hardware, software, and control to hit quarterly integration milestones.",
         "Bridge research code (GaussianFeels, PoP-SLAM) to on-robot deployment."
       ],
       tools: ["UR5e", "Allegro Hand", "DIGIT Tactile Sensor", "NVIDIA Omniverse", "ROS", "CUDA"],
@@ -113,6 +116,95 @@ export const PORTFOLIO_DATA = {
       ],
       gallery: [],
       links: []
+    },
+    {
+      id: "hicache",
+      title: "HiCache++",
+      subtitle: "Training-Free DMD Velocity-Cache for Diffusion & Flow-Based 3D Generation",
+      role: "Author · Open-source research",
+      org: "Independent",
+      date: "2026",
+      tag: "Open source",
+      summary: "A model-agnostic, training-free DMD / exponential velocity-cache that skips redundant denoising compute in diffusion and flow samplers while preserving output fidelity — directly accelerating the image-to-3D priors that seed the GaussianFeels reconstruction branch.",
+      overview: [
+        "Diffusion- and flow-based image-to-3D models spend most of their compute re-deriving smoothly-varying intermediate features. HiCache++ predicts those features from a short history using a Dynamic Mode Decomposition (exponential) basis, skipping redundant denoising steps without retraining or fidelity loss.",
+        "It extends the lossless skip range of the prior HiCache (Hermite) and TaylorSeer feature-caching lines, and is released as a family of open-source repositories."
+      ],
+      contributions: [
+        "Designed a model-agnostic, training-free DMD / exponential velocity-cache that holds reconstruction F-score where the polynomial basis collapses (0.86 vs 0.74 at skip-interval 5 on Hunyuan3D-2.1).",
+        "Built and benchmarked acceleration across six-plus image-to-3D and generative backbones — Hunyuan3D-2 mini, Hunyuan3D-2.1, TRELLIS v1 and TRELLIS.2-4B, Meta SAM 3D Objects, Fast-SAM3D, and DiT-XL/2 — against the HiCache and TaylorSeer baselines.",
+        "Released as open-source repositories (Python; MIT / BSD); directly accelerates the Hunyuan3D image-to-3D prior used by the GaussianFeels frame-0 reconstruction branch."
+      ],
+      tools: ["Python", "PyTorch", "CUDA", "Diffusion Models", "Flow Matching", "Hunyuan3D", "TRELLIS", "DMD"],
+      outcomes: [
+        "Holds F-score 0.86 vs 0.74 (polynomial basis) at skip-interval 5 on Hunyuan3D-2.1.",
+        "Extends the lossless skip range of the HiCache (Hermite) and TaylorSeer lines.",
+        "Open-source; accelerates the image-to-3D prior in GaussianFeels."
+      ],
+      gallery: [],
+      links: [
+        { label: "PyPI (hicache-pp)", href: "https://pypi.org/project/hicache-pp/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" }
+      ]
+    },
+    {
+      id: "splatreg",
+      title: "splatreg",
+      subtitle: "SE(3)/Sim(3) Registration & Merging for 3D Gaussian Splatting",
+      role: "Author · Open-source research",
+      org: "Independent",
+      date: "2026",
+      tag: "Open source",
+      summary: "A pure-PyTorch library that registers and merges native 3D Gaussian-Splatting scans into one SE(3)/Sim(3) frame via a closed-form-Jacobian Gaussian-SDF residual.",
+      overview: [
+        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that discards the splat structure. splatreg registers natively on the Gaussian representation using a Gaussian-SDF residual with a closed-form Jacobian, and adds the Sim(3) scale degree of freedom that rigid baselines lack."
+      ],
+      contributions: [
+        "Implemented closed-form-Jacobian Gaussian-SDF registration over SE(3) and Sim(3) directly on native 3DGS scans.",
+        "Matched GeoTransformer on official 3DMatch (91.5% recall) while adding the Sim(3) scale DoF it lacks.",
+        "Reached ADD-S AUC 0.995 on YCB object pose at ≈17 ms per registration."
+      ],
+      tools: ["Python", "PyTorch", "3D Gaussian Splatting", "SE(3)/Sim(3)", "ICP", "GeoTransformer", "3DMatch", "YCB"],
+      outcomes: [
+        "91.5% recall on official 3DMatch — matching GeoTransformer, plus a Sim(3) scale DoF.",
+        "ADD-S AUC 0.995 on YCB object pose at ≈17 ms.",
+        "Released open-source (pure PyTorch)."
+      ],
+      gallery: [],
+      links: [
+        { label: "PyPI (splatreg)", href: "https://pypi.org/project/splatreg/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/splatreg" }
+      ]
+    },
+    {
+      id: "mathlas",
+      title: "mathlas",
+      subtitle: "Airtight-Math MCP Toolkit for AI Agents",
+      role: "Author · Open-source research",
+      org: "Independent",
+      date: "2026",
+      tag: "Open source",
+      summary: "An “airtight-math” MCP toolkit of 13 LLM-free, data-returning tools that give AI agents large-scale theorem search, constant & sequence identification, and Lean-kernel formal verification.",
+      overview: [
+        "Language models are unreliable at exact mathematics. mathlas exposes 13 deterministic, LLM-free tools over the Model Context Protocol so agents can search theorems, identify constants and integer sequences, and formally verify results — returning data, never prose.",
+        "A self-augmenting retrieval loop lets the toolkit improve its own recall over time."
+      ],
+      contributions: [
+        "Built a 1.6M-document theorem search (R@10 0.998) plus PSLQ/OEIS constant & sequence identification and Lean-kernel formal verification at a 0% false-positive rate.",
+        "Designed a self-augmenting retrieval loop that surpasses TheoremSearch (59% vs 45% Hit@20).",
+        "Packaged the toolkit as an MCP server (13 LLM-free, data-returning tools) for drop-in use by AI agents."
+      ],
+      tools: ["Python", "MCP", "Lean 4", "PSLQ", "OEIS", "mpmath", "Qwen3 embeddings", "BM25"],
+      outcomes: [
+        "Theorem search R@10 0.998 over 1.6M documents.",
+        "Self-augmenting retrieval beats TheoremSearch (59% vs 45% Hit@20).",
+        "Lean-kernel verification at a 0% false-positive rate."
+      ],
+      gallery: [],
+      links: [
+        { label: "PyPI (mathlas-mcp)", href: "https://pypi.org/project/mathlas-mcp/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/mathlas" }
+      ]
     },
     {
       id: "gnss-denied",
@@ -426,13 +518,13 @@ export const PORTFOLIO_DATA = {
       title: "Graduate Research Student",
       org: "Soft Robotics & Bionics Laboratory, Seoul National University",
       location: "Seoul, South Korea",
-      date: "Sept 2024 — July 2026",
-      summary: "GSFS Scholar. Leading GaussianFeels thesis work; co-developed PoP-SLAM; integrating perception into the lab's Phase 2 humanoid.",
+      date: "Sept 2024 — Aug 2026",
+      summary: "GSFS Scholar. Leading GaussianFeels thesis work; co-developed PoP-SLAM; integrating perception into the lab's Phase 2 “Alchemist” humanoid.",
       bullets: [
-        "Developed GaussianFeels: online visuo-tactile reconstruction and pose-tracking system built around an explicit object-centric 3D Gaussian Splatting map.",
+        "Developed GaussianFeels: online visuo-tactile reconstruction and pose-tracking system on an object-centric 3D Gaussian Splatting map — median ADD-S 0.84 mm sim / 3.4 mm real at ≈28 / ≈23.5 FPS, matching or beating model-free NeuralFeels at ≈7.6× the frame rate with no supplied CAD model.",
         "Co-developed PoP-SLAM: projection-first dense visual SLAM achieving 0.75 cm ATE RMSE on TUM-RGBD at ~4 FPS.",
-        "Integrating visuo-tactile SLAM and dexterous in-hand manipulation modules into the Phase 2 full-scale humanoid prototype.",
-        "Coordinating cross-disciplinary engineering teams to meet hardware-software integration milestones."
+        "Leading integration of visuo-tactile SLAM and dexterous in-hand manipulation into the Phase 2 full-scale humanoid prototype of the “Alchemist” Project (MOTIE, Korea).",
+        "Coordinating cross-disciplinary engineering teams to meet quarterly hardware-software integration milestones."
       ]
     },
     {
@@ -643,7 +735,7 @@ export const PORTFOLIO_DATA = {
       degree: "M.S., Mechanical Engineering",
       school: "Seoul National University",
       location: "Seoul, South Korea",
-      date: "Sept 2024 — July 2026 (Expected)",
+      date: "Sept 2024 — June 2026 (Expected)",
       note: "GSFS Scholar · Soft Robotics & Bionics Laboratory · Advisor: Prof. Yong-Lae Park",
       status: "current"
     },
@@ -668,8 +760,10 @@ export const PORTFOLIO_DATA = {
   ],
 
   skills: {
-    "SLAM & 3D Reconstruction": ["3D Gaussian Splatting", "Visuo-Tactile SLAM", "Neural Point Cloud SLAM", "Object-Centric Gaussian Mapping", "RGB-D Reconstruction", "SfM", "Theseus SE(3) optimisation", "TUM-RGBD & Replica benchmarking"],
-    "Deep Learning & AI": ["PyTorch", "CUDA (custom kernels)", "TensorFlow", "Multimodal Learning", "Differentiable Rendering", "CNN / RNN / CNN-GRU / ViT", "Ollama", "Genesis"],
+    "SLAM & 3D Reconstruction": ["3D Gaussian Splatting", "Visuo-Tactile SLAM", "Neural Point Cloud SLAM", "Object-Centric Gaussian Mapping", "RGB-D Reconstruction", "SfM", "Levenberg–Marquardt SE(3)", "gsplat", "Point / Gaussian-splat registration (SE(3)/Sim(3))", "GeoTransformer · FPFH+RANSAC · ICP", "TUM-RGBD & Replica benchmarking"],
+    "Deep Learning & AI": ["PyTorch", "CUDA (custom kernels)", "TensorFlow", "Multimodal Learning", "Differentiable Rendering", "CNN / RNN / CNN-GRU / ViT", "Reproducible ML pipelines", "Ollama", "Genesis"],
+    "Generative 3D & Diffusion Acceleration": ["HiCache++ (DMD velocity-cache)", "HiCache (Hermite)", "TaylorSeer", "Hunyuan3D-2 / 2.1", "TRELLIS v1 / v2", "Meta SAM 3D", "Fast-SAM3D", "DiT", "Image-to-3D", "DMD / Prony / Matrix-Pencil"],
+    "AI Agents, Retrieval & Formal Methods": ["MCP tool & server dev (mathlas)", "Dense & hybrid retrieval (Qwen3 · BM25 · RRF)", "Lean 4 kernel", "PSLQ", "OEIS", "mpmath (high-precision)", "FunSearch / program synthesis"],
     "Robotics & Middleware": ["ROS", "OpenCV", "Open3D", "COCO API", "Sensor Fusion", "Real-time Inference", "Path Planning", "NVIDIA Omniverse → UR5e + Allegro Hand"],
     "Hardware & Sensors": ["DIGIT Tactile", "RGB/RGB-D Cameras", "LiDAR + Camera Fusion", "VectorNav IMU", "Emlid RTK GPS", "UR5e", "Allegro Hand", "Raspberry Pi / Teensy / Arduino", "Vicon / OptiTrack", "3D Modelling & Printing", "Machine Shop"],
     "Programming": ["Python", "C / C++", "CUDA", "MATLAB", "Maple", "Arduino", "LaTeX", "HTML", "Django", "MySQL", "VHDL"],
