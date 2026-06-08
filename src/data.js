@@ -118,95 +118,6 @@ export const PORTFOLIO_DATA = {
       links: []
     },
     {
-      id: "hicache",
-      title: "HiCache++",
-      subtitle: "Training-Free DMD Velocity-Cache for Diffusion & Flow-Based 3D Generation",
-      role: "Author · Open-source research",
-      org: "Independent",
-      date: "2026",
-      tag: "Open source",
-      summary: "A model-agnostic, training-free DMD / exponential velocity-cache that skips redundant denoising compute in diffusion and flow samplers while preserving output fidelity — directly accelerating the image-to-3D priors that seed the GaussianFeels reconstruction branch.",
-      overview: [
-        "Diffusion- and flow-based image-to-3D models spend most of their compute re-deriving smoothly-varying intermediate features. HiCache++ predicts those features from a short history using a Dynamic Mode Decomposition (exponential) basis, skipping redundant denoising steps without retraining or fidelity loss.",
-        "It extends the lossless skip range of the prior HiCache (Hermite) and TaylorSeer feature-caching lines, and is released as a family of open-source repositories."
-      ],
-      contributions: [
-        "Designed a model-agnostic, training-free DMD / exponential velocity-cache that holds reconstruction F-score where the polynomial basis collapses (0.86 vs 0.74 at skip-interval 5 on Hunyuan3D-2.1).",
-        "Built and benchmarked acceleration across six-plus image-to-3D and generative backbones — Hunyuan3D-2 mini, Hunyuan3D-2.1, TRELLIS v1 and TRELLIS.2-4B, Meta SAM 3D Objects, Fast-SAM3D, and DiT-XL/2 — against the HiCache and TaylorSeer baselines.",
-        "Released as open-source repositories (Python; MIT / BSD); directly accelerates the Hunyuan3D image-to-3D prior used by the GaussianFeels frame-0 reconstruction branch."
-      ],
-      tools: ["Python", "PyTorch", "CUDA", "Diffusion Models", "Flow Matching", "Hunyuan3D", "TRELLIS", "DMD"],
-      outcomes: [
-        "Holds F-score 0.86 vs 0.74 (polynomial basis) at skip-interval 5 on Hunyuan3D-2.1.",
-        "Extends the lossless skip range of the HiCache (Hermite) and TaylorSeer lines.",
-        "Open-source; accelerates the image-to-3D prior in GaussianFeels."
-      ],
-      gallery: [],
-      links: [
-        { label: "PyPI (hicache-pp)", href: "https://pypi.org/project/hicache-pp/" },
-        { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" }
-      ]
-    },
-    {
-      id: "splatreg",
-      title: "splatreg",
-      subtitle: "SE(3)/Sim(3) Registration & Merging for 3D Gaussian Splatting",
-      role: "Author · Open-source research",
-      org: "Independent",
-      date: "2026",
-      tag: "Open source",
-      summary: "A pure-PyTorch library that registers and merges native 3D Gaussian-Splatting scans into one SE(3)/Sim(3) frame via a closed-form-Jacobian Gaussian-SDF residual.",
-      overview: [
-        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that discards the splat structure. splatreg registers natively on the Gaussian representation using a Gaussian-SDF residual with a closed-form Jacobian, and adds the Sim(3) scale degree of freedom that rigid baselines lack."
-      ],
-      contributions: [
-        "Implemented closed-form-Jacobian Gaussian-SDF registration over SE(3) and Sim(3) directly on native 3DGS scans.",
-        "Matched GeoTransformer on official 3DMatch (91.5% recall) while adding the Sim(3) scale DoF it lacks.",
-        "Reached ADD-S AUC 0.995 on YCB object pose at ≈17 ms per registration."
-      ],
-      tools: ["Python", "PyTorch", "3D Gaussian Splatting", "SE(3)/Sim(3)", "ICP", "GeoTransformer", "3DMatch", "YCB"],
-      outcomes: [
-        "91.5% recall on official 3DMatch — matching GeoTransformer, plus a Sim(3) scale DoF.",
-        "ADD-S AUC 0.995 on YCB object pose at ≈17 ms.",
-        "Released open-source (pure PyTorch)."
-      ],
-      gallery: [],
-      links: [
-        { label: "PyPI (splatreg)", href: "https://pypi.org/project/splatreg/" },
-        { label: "GitHub", href: "https://github.com/Archerkattri/splatreg" }
-      ]
-    },
-    {
-      id: "mathlas",
-      title: "mathlas",
-      subtitle: "Airtight-Math MCP Toolkit for AI Agents",
-      role: "Author · Open-source research",
-      org: "Independent",
-      date: "2026",
-      tag: "Open source",
-      summary: "An “airtight-math” MCP toolkit of 13 LLM-free, data-returning tools that give AI agents large-scale theorem search, constant & sequence identification, and Lean-kernel formal verification.",
-      overview: [
-        "Language models are unreliable at exact mathematics. mathlas exposes 13 deterministic, LLM-free tools over the Model Context Protocol so agents can search theorems, identify constants and integer sequences, and formally verify results — returning data, never prose.",
-        "A self-augmenting retrieval loop lets the toolkit improve its own recall over time."
-      ],
-      contributions: [
-        "Built a 1.6M-document theorem search (R@10 0.998) plus PSLQ/OEIS constant & sequence identification and Lean-kernel formal verification at a 0% false-positive rate.",
-        "Designed a self-augmenting retrieval loop that surpasses TheoremSearch (59% vs 45% Hit@20).",
-        "Packaged the toolkit as an MCP server (13 LLM-free, data-returning tools) for drop-in use by AI agents."
-      ],
-      tools: ["Python", "MCP", "Lean 4", "PSLQ", "OEIS", "mpmath", "Qwen3 embeddings", "BM25"],
-      outcomes: [
-        "Theorem search R@10 0.998 over 1.6M documents.",
-        "Self-augmenting retrieval beats TheoremSearch (59% vs 45% Hit@20).",
-        "Lean-kernel verification at a 0% false-positive rate."
-      ],
-      gallery: [],
-      links: [
-        { label: "PyPI (mathlas-mcp)", href: "https://pypi.org/project/mathlas-mcp/" },
-        { label: "GitHub", href: "https://github.com/Archerkattri/mathlas" }
-      ]
-    },
-    {
       id: "gnss-denied",
       title: "Autonomous Localisation in GNSS-Denied Environments",
       subtitle: "SLAM via LiDAR–Camera Fusion for a Quad-Wheel Robot",
@@ -262,6 +173,98 @@ export const PORTFOLIO_DATA = {
   ],
 
   projects: [
+    {
+      id: "hicache",
+      title: "HiCache++",
+      subtitle: "Training-Free DMD Velocity-Cache for Diffusion & Flow-Based 3D Generation",
+      role: "Author · Open-source research",
+      org: "Independent",
+      date: "2026",
+      tag: "Open source",
+      category: "software",
+      summary: "A model-agnostic, training-free DMD / exponential velocity-cache that skips redundant denoising compute in diffusion and flow samplers while preserving output fidelity — directly accelerating the image-to-3D priors that seed the GaussianFeels reconstruction branch.",
+      overview: [
+        "Diffusion- and flow-based image-to-3D models spend most of their compute re-deriving smoothly-varying intermediate features. HiCache++ predicts those features from a short history using a Dynamic Mode Decomposition (exponential) basis, skipping redundant denoising steps without retraining or fidelity loss.",
+        "It extends the lossless skip range of the prior HiCache (Hermite) and TaylorSeer feature-caching lines, and is released as a family of open-source repositories."
+      ],
+      contributions: [
+        "Designed a model-agnostic, training-free DMD / exponential velocity-cache that holds reconstruction F-score where the polynomial basis collapses (0.86 vs 0.74 at skip-interval 5 on Hunyuan3D-2.1).",
+        "Built and benchmarked acceleration across six-plus image-to-3D and generative backbones — Hunyuan3D-2 mini, Hunyuan3D-2.1, TRELLIS v1 and TRELLIS.2-4B, Meta SAM 3D Objects, Fast-SAM3D, and DiT-XL/2 — against the HiCache and TaylorSeer baselines.",
+        "Released as open-source repositories (Python; MIT / BSD); directly accelerates the Hunyuan3D image-to-3D prior used by the GaussianFeels frame-0 reconstruction branch."
+      ],
+      tools: ["Python", "PyTorch", "CUDA", "Diffusion Models", "Flow Matching", "Hunyuan3D", "TRELLIS", "DMD"],
+      outcomes: [
+        "Holds F-score 0.86 vs 0.74 (polynomial basis) at skip-interval 5 on Hunyuan3D-2.1.",
+        "Extends the lossless skip range of the HiCache (Hermite) and TaylorSeer lines.",
+        "Open-source; accelerates the image-to-3D prior in GaussianFeels."
+      ],
+      gallery: [],
+      links: [
+        { label: "PyPI (hicache-pp)", href: "https://pypi.org/project/hicache-pp/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" }
+      ]
+    },
+    {
+      id: "splatreg",
+      title: "splatreg",
+      subtitle: "SE(3)/Sim(3) Registration & Merging for 3D Gaussian Splatting",
+      role: "Author · Open-source research",
+      org: "Independent",
+      date: "2026",
+      tag: "Open source",
+      category: "software",
+      summary: "A pure-PyTorch library that registers and merges native 3D Gaussian-Splatting scans into one SE(3)/Sim(3) frame via a closed-form-Jacobian Gaussian-SDF residual.",
+      overview: [
+        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that discards the splat structure. splatreg registers natively on the Gaussian representation using a Gaussian-SDF residual with a closed-form Jacobian, and adds the Sim(3) scale degree of freedom that rigid baselines lack."
+      ],
+      contributions: [
+        "Implemented closed-form-Jacobian Gaussian-SDF registration over SE(3) and Sim(3) directly on native 3DGS scans.",
+        "Matched GeoTransformer on official 3DMatch (91.5% recall) while adding the Sim(3) scale DoF it lacks.",
+        "Reached ADD-S AUC 0.995 on YCB object pose at ≈17 ms per registration."
+      ],
+      tools: ["Python", "PyTorch", "3D Gaussian Splatting", "SE(3)/Sim(3)", "ICP", "GeoTransformer", "3DMatch", "YCB"],
+      outcomes: [
+        "91.5% recall on official 3DMatch — matching GeoTransformer, plus a Sim(3) scale DoF.",
+        "ADD-S AUC 0.995 on YCB object pose at ≈17 ms.",
+        "Released open-source (pure PyTorch)."
+      ],
+      gallery: [],
+      links: [
+        { label: "PyPI (splatreg)", href: "https://pypi.org/project/splatreg/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/splatreg" }
+      ]
+    },
+    {
+      id: "mathlas",
+      title: "mathlas",
+      subtitle: "Airtight-Math MCP Toolkit for AI Agents",
+      role: "Author · Open-source research",
+      org: "Independent",
+      date: "2026",
+      tag: "Open source",
+      category: "software",
+      summary: "An “airtight-math” MCP toolkit of 13 LLM-free, data-returning tools that give AI agents large-scale theorem search, constant & sequence identification, and Lean-kernel formal verification.",
+      overview: [
+        "Language models are unreliable at exact mathematics. mathlas exposes 13 deterministic, LLM-free tools over the Model Context Protocol so agents can search theorems, identify constants and integer sequences, and formally verify results — returning data, never prose.",
+        "A self-augmenting retrieval loop lets the toolkit improve its own recall over time."
+      ],
+      contributions: [
+        "Built a 1.6M-document theorem search (R@10 0.998) plus PSLQ/OEIS constant & sequence identification and Lean-kernel formal verification at a 0% false-positive rate.",
+        "Designed a self-augmenting retrieval loop that surpasses TheoremSearch (59% vs 45% Hit@20).",
+        "Packaged the toolkit as an MCP server (13 LLM-free, data-returning tools) for drop-in use by AI agents."
+      ],
+      tools: ["Python", "MCP", "Lean 4", "PSLQ", "OEIS", "mpmath", "Qwen3 embeddings", "BM25"],
+      outcomes: [
+        "Theorem search R@10 0.998 over 1.6M documents.",
+        "Self-augmenting retrieval beats TheoremSearch (59% vs 45% Hit@20).",
+        "Lean-kernel verification at a 0% false-positive rate."
+      ],
+      gallery: [],
+      links: [
+        { label: "PyPI (mathlas-mcp)", href: "https://pypi.org/project/mathlas-mcp/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/mathlas" }
+      ]
+    },
     {
       id: "cv-app",
       title: "Computer Vision Object Detection Web App",
