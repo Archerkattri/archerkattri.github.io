@@ -172,7 +172,7 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
     { n: '03', label: 'Research',   id: 'research' },
     { n: '04', label: 'Projects',   id: 'projects' },
     { n: '05', label: 'Experience', id: 'experience' },
-    { n: '06', label: 'Background', id: 'education', members: ['education', 'skills', 'credentials', 'leadership', 'journey', 'gallery'] },
+    { n: '06', label: 'Background', id: 'education', members: ['education', 'skills', 'credentials', 'leadership', 'gallery'] },
     { n: '07', label: 'Contact',    id: 'contact' },
   ];
   return (

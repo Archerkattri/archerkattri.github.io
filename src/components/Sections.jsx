@@ -1,4 +1,4 @@
-// Sections — Selected Work, Research, Experience, Credentials, Education, Journey, Gallery, Contact
+// Sections — Research, Projects, Experience, Credentials, Education, Skills, Gallery, Contact
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Icon } from "./Modal";
 
