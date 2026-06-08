@@ -3,7 +3,7 @@ import { PORTFOLIO_DATA } from './data';
 import { Modal, Lightbox } from './components/Modal';
 import { DetailBody } from './components/Detail';
 import { Nav, Hero, WhatIBuild, ResearchDirection, NowSection } from './components/Shell';
-import { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection, ArchiveSection } from './components/Sections';
+import { SelectedWorkSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection } from './components/Sections';
 
 const JourneySection = lazy(() => import('./components/WorldMap').then(m => ({ default: m.JourneySection })));
 
@@ -40,7 +40,7 @@ export default function App() {
 
   // Single consolidated observer for nav-active section tracking + section .in-view + element reveal
   useEffect(() => {
-    const navIds = new Set(['home','what-i-build','selected-work','research-direction','experience','credentials','contact']);
+    const navIds = new Set(['home','what-i-build','selected-work','research-direction','experience','personal-projects','credentials','contact']);
 
     const navObs = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); }),
@@ -97,8 +97,8 @@ export default function App() {
     <ReadingProgress /><div className="bp-grid" aria-hidden="true" />
     <Nav active={active} onSetActive={setActive} theme={theme} onToggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} />
     <Hero data={data} /><WhatIBuild /><SelectedWorkSection onOpen={openDetail} /><ResearchDirection />
-    <ExperienceSection data={data} onOpen={openDetail} /><NowSection data={data} /><CredentialsSection />
-    <EducationWithCoursework data={data} /><SkillsBlock data={data} /><LeadershipSection data={data} /><ArchiveSection data={data} />
+    <ExperienceSection data={data} onOpen={openDetail} /><PersonalProjectsSection data={data} onOpen={openDetail} /><NowSection data={data} /><CredentialsSection />
+    <EducationWithCoursework data={data} /><SkillsBlock data={data} /><LeadershipSection data={data} />
     <Suspense fallback={<section style={{ minHeight: 400 }} aria-hidden="true" />}>
       <JourneySection />
     </Suspense>

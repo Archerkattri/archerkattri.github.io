@@ -9,9 +9,9 @@
   --fg-soft: #7A7D85;
   --line: rgba(14,16,20,0.12);
   --line-soft: rgba(14,16,20,0.07);
-  --accent: oklch(0.58 0.13 55);
-  --accent-soft: oklch(0.58 0.13 55 / 0.12);
-  --accent-ink: oklch(0.32 0.09 55);
+  --accent: oklch(0.56 0.11 200);
+  --accent-soft: oklch(0.56 0.11 200 / 0.12);
+  --accent-ink: oklch(0.40 0.10 200);
   --grid-dot: rgba(14,16,20,0.10);
   --shadow-sm: 0 1px 2px rgba(14,16,20,0.04);
   --shadow-md: 0 6px 24px rgba(14,16,20,0.08);
@@ -30,9 +30,9 @@
   --fg-soft: #6A6E77;
   --line: rgba(237,234,224,0.12);
   --line-soft: rgba(237,234,224,0.06);
-  --accent: oklch(0.72 0.13 55);
-  --accent-soft: oklch(0.72 0.13 55 / 0.16);
-  --accent-ink: oklch(0.82 0.12 55);
+  --accent: oklch(0.74 0.11 200);
+  --accent-soft: oklch(0.74 0.11 200 / 0.16);
+  --accent-ink: oklch(0.83 0.10 200);
   --grid-dot: rgba(237,234,224,0.10);
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
   --shadow-md: 0 6px 24px rgba(0,0,0,0.5);
@@ -480,8 +480,8 @@ section { padding: 120px 0; position: relative; }
   top: 14px; right: 14px;
   width: 10px; height: 10px;
   border-radius: 50%;
-  background: oklch(0.7 0.18 28);
-  box-shadow: 0 0 0 4px oklch(0.7 0.18 28 / 0.25);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
   animation: pulse-dot 2s ease-in-out infinite;
 }
 @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }

@@ -172,8 +172,9 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
     ['03', 'Work',        'selected-work'],
     ['04', 'Direction',   'research-direction'],
     ['05', 'Experience',  'experience'],
-    ['06', 'Credentials', 'credentials'],
-    ['07', 'Contact',     'contact'],
+    ['06', 'Projects',    'personal-projects'],
+    ['07', 'Credentials', 'credentials'],
+    ['08', 'Contact',     'contact'],
   ];
   return (
     <nav className="nav" role="navigation">
