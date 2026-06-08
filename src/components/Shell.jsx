@@ -167,14 +167,13 @@ function ProfileCard({ data }) {
 function Nav({ active, onSetActive, theme, onToggleTheme }) {
   const [open, setOpen] = useState(false);
   const links = [
-    ['01', 'Home',        'home'],
-    ['02', 'What I Build','what-i-build'],
-    ['03', 'Work',        'selected-work'],
-    ['04', 'Direction',   'research-direction'],
-    ['05', 'Experience',  'experience'],
-    ['06', 'Projects',    'personal-projects'],
-    ['07', 'Credentials', 'credentials'],
-    ['08', 'Contact',     'contact'],
+    { n: '01', label: 'Home',       id: 'home' },
+    { n: '02', label: 'About',      id: 'about' },
+    { n: '03', label: 'Research',   id: 'research' },
+    { n: '04', label: 'Projects',   id: 'projects' },
+    { n: '05', label: 'Experience', id: 'experience' },
+    { n: '06', label: 'Background', id: 'education', members: ['education', 'skills', 'credentials', 'leadership', 'journey', 'gallery'] },
+    { n: '07', label: 'Contact',    id: 'contact' },
   ];
   return (
     <nav className="nav" role="navigation">
@@ -184,11 +183,14 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
           <span className="brand-label">Krishi Attri</span>
         </a>
         <div className={"nav-links" + (open ? " open" : "")}>
-          {links.map(([n, label, id]) => (
-            <a key={id} href={`#${id}`} className={active === id ? 'active' : ''} onClick={() => setOpen(false)}>
-              <span style={{ color: 'var(--fg-soft)', marginRight: 6 }}>{n}</span>{label}
-            </a>
-          ))}
+          {links.map(({ n, label, id, members }) => {
+            const isActive = active === id || (members && members.includes(active));
+            return (
+              <a key={id} href={`#${id}`} className={isActive ? 'active' : ''} onClick={() => setOpen(false)}>
+                <span style={{ color: 'var(--fg-soft)', marginRight: 6 }}>{n}</span>{label}
+              </a>
+            );
+          })}
         </div>
         <div className="nav-actions">
           <button className="icon-btn" onClick={onToggleTheme} aria-label="Toggle theme">
@@ -226,11 +228,21 @@ function Hero({ data }) {
             <h1 className="hv2-title">Krishi<br /><em>Attri</em></h1>
             <p className="hv2-tagline">Robotics Researcher · 3D Perception · Visuo-Tactile SLAM · Applied AI</p>
             <p className="hv2-short">Building perception systems for real-world robots. I work across visuo-tactile SLAM, 3D reconstruction, Gaussian Splatting, robotic manipulation, generative-3D acceleration, and applied AI systems.</p>
+            <div className="hv2-status">
+              <span className="dot-live" /> Open to research collaborations &amp; internships
+            </div>
             <div className="hv2-cta">
-              <a className="btn primary" href="#selected-work">View Selected Work <span className="arrow">→</span></a>
+              <a className="btn primary" href="#research">View Research <span className="arrow">→</span></a>
               <a className="btn" href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><Icon name="download" size={13} /> CV.pdf</a>
-              <a className="btn" href="#research-direction">Research Direction</a>
+              <a className="btn" href="#projects">Projects</a>
               <a className="btn" href={`mailto:${data.profile.contact.email}`}><Icon name="mail" size={13} /> Contact</a>
+            </div>
+            <div className="hv2-links">
+              <a href={`mailto:${data.profile.contact.email}`}><Icon name="mail" size={13} /> Email</a>
+              <a href={data.profile.contact.github} target="_blank" rel="noopener"><Icon name="github" size={13} /> GitHub</a>
+              <a href={data.profile.contact.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" size={13} /> LinkedIn</a>
+              <a href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><Icon name="download" size={13} /> CV</a>
+              {/* Google Scholar / ORCID — add link here when available */}
             </div>
           </div>
           <div className="hv2-right">
@@ -370,17 +382,17 @@ function NowSection({ data }) {
   );
 }
 
-/* ── About (kept for scroll target compatibility) ── */
+/* ── About / Research Focus (merged: bio + domains) ── */
 function AboutSection({ data }) {
   const p = data.profile;
   return (
-    <section id="about" data-screen-label="About" style={{ paddingBottom: 40 }}>
+    <section id="about" data-screen-label="About">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ ABOUT</div>
           <div>
-            <h2 className="section-title">Research engineer<br /><em style={{ color: 'var(--accent-ink)' }}>who ships.</em></h2>
-            <p className="section-sub">The full story — what I build, where I've been, where I'm going.</p>
+            <h2 className="section-title">What I build &amp;<br /><em style={{ color: 'var(--accent-ink)' }}>why it matters.</em></h2>
+            <p className="section-sub">Perception systems for real-world robots — visuo-tactile SLAM, 3D reconstruction, and applied AI, from sensor bring-up to deployable modules.</p>
           </div>
         </div>
         <div className="about-v2">
@@ -394,11 +406,11 @@ function AboutSection({ data }) {
               <li>Visuo-Tactile SLAM</li>
               <li>In-hand manipulation</li>
               <li>RGB-D reconstruction</li>
-              <li>Neural point cloud SLAM</li>
+              <li>Generative-3D acceleration</li>
             </ul>
             <div className="ava-divider" />
             <div className="ava-head">Advisor</div>
-            <div className="ava-block">Prof. Yong-Lae Park<br />Soft Robotics & Bionics Lab</div>
+            <div className="ava-block">Prof. Yong-Lae Park<br />Soft Robotics &amp; Bionics Lab</div>
             <div className="ava-divider" />
             <div className="ava-head">Incoming</div>
             <div className="ava-block">Ph.D. @ UCF · Aug 2026<br />ORCGS Doctoral Fellow</div>
@@ -408,6 +420,18 @@ function AboutSection({ data }) {
               <a href={p.contact.github} target="_blank" rel="noopener"><Icon name="github" size={12} /> GitHub</a>
             </div>
           </aside>
+        </div>
+        <div className="wib-grid" style={{ marginTop: 56 }}>
+          {BUILD_CARDS.map((c, i) => (
+            <div key={i} className="wib-card reveal" style={{ '--i': i }}>
+              <div className="wib-icon">{c.icon}</div>
+              <h3 className="wib-title">{c.title}</h3>
+              <p className="wib-body">{c.body}</p>
+              <div className="wib-tags">
+                {c.tags.map(t => <span key={t} className="chip">{t}</span>)}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -420,4 +444,4 @@ const AboutBlock = () => null;
 
 
 
-export { Nav, Hero, WhatIBuild, ResearchDirection, NowSection };
+export { Nav, Hero, AboutSection };
