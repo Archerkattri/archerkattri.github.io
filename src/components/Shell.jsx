@@ -168,13 +168,38 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
   const [open, setOpen] = useState(false);
   const links = [
     { n: '01', label: 'Home',       id: 'home' },
-    { n: '02', label: 'About',      id: 'about' },
-    { n: '03', label: 'Research',   id: 'research' },
-    { n: '04', label: 'Projects',   id: 'projects' },
+    { n: '02', label: 'About',      id: 'about', sub: [
+      { label: 'Bio', id: 'about' },
+      { label: 'What I build', id: 'about-domains' },
+    ] },
+    { n: '03', label: 'Research',   id: 'research', sub: [
+      { label: 'Publications', id: 'research-pubs' },
+      { label: 'Projects & tools', id: 'research' },
+    ] },
+    { n: '04', label: 'Projects',   id: 'projects', sub: [
+      { label: 'Personal Projects', id: 'projects-personal' },
+      { label: 'School Projects', id: 'projects-school' },
+    ] },
     { n: '05', label: 'Experience', id: 'experience' },
-    { n: '06', label: 'Background', id: 'education', members: ['education', 'skills', 'credentials', 'leadership', 'gallery'] },
-    { n: '07', label: 'Contact',    id: 'contact' },
+    { n: '06', label: 'Background', id: 'education', members: ['education', 'skills', 'credentials', 'leadership', 'gallery'], sub: [
+      { label: 'Education', id: 'education' },
+      { label: 'Skills', id: 'skills' },
+      { label: 'Credentials', id: 'credentials' },
+      { label: 'Leadership', id: 'leadership' },
+      { label: 'Gallery', id: 'gallery' },
+    ] },
+    { n: '07', label: 'Contact',    id: 'contact', sub: [
+      { label: 'Email', href: 'mailto:krishiattriwork@gmail.com', ext: true },
+      { label: 'GitHub', href: 'https://github.com/Archerkattri', ext: true },
+      { label: 'LinkedIn', href: 'https://linkedin.com/in/krishi-attri15', ext: true },
+      { label: 'CV (PDF)', href: 'assets/docs/Krishi_Attri_CV.pdf', ext: true },
+    ] },
   ];
+  const Wire = () => (
+    <svg className="nav-sub-wire" width="22" height="12" viewBox="0 0 22 12" aria-hidden="true">
+      <path d="M0 6 C 7 2, 10 10, 22 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
   return (
     <nav className="nav" role="navigation">
       <div className="nav-inner">
@@ -183,12 +208,29 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
           <span className="brand-label">Krishi Attri</span>
         </a>
         <div className={"nav-links" + (open ? " open" : "")}>
-          {links.map(({ n, label, id, members }) => {
+          {links.map(({ n, label, id, members, sub }) => {
             const isActive = active === id || (members && members.includes(active));
             return (
-              <a key={id} href={`#${id}`} className={isActive ? 'active' : ''} onClick={() => setOpen(false)}>
-                <span style={{ color: 'var(--fg-soft)', marginRight: 6 }}>{n}</span>{label}
-              </a>
+              <div key={id} className={"nav-item" + (sub ? " has-sub" : "")}>
+                <a href={`#${id}`} className={isActive ? 'active' : ''} onClick={() => setOpen(false)}>
+                  <span className="nav-num">{n}</span>{label}
+                </a>
+                {sub && (
+                  <div className="nav-sub">
+                    <span className="nav-sub-trunk" aria-hidden="true" />
+                    {sub.map((s, i) => (
+                      <a key={s.id || s.href} className="nav-sub-item" style={{ '--si': i }}
+                         href={s.href || `#${s.id}`}
+                         {...(s.ext ? { target: '_blank', rel: 'noopener' } : {})}
+                         onClick={() => setOpen(false)}>
+                        <span className="nav-sub-node" aria-hidden="true" />
+                        <Wire />
+                        <span className="nav-sub-label">{s.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
@@ -421,7 +463,7 @@ function AboutSection({ data }) {
             </div>
           </aside>
         </div>
-        <div className="wib-grid" style={{ marginTop: 56 }}>
+        <div className="wib-grid sub-anchor" id="about-domains" style={{ marginTop: 56 }}>
           {BUILD_CARDS.map((c, i) => (
             <div key={i} className="wib-card reveal" style={{ '--i': i }}>
               <div className="wib-icon">{c.icon}</div>

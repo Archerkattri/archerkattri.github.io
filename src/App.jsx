@@ -3,7 +3,7 @@ import { PORTFOLIO_DATA } from './data';
 import { Modal, Lightbox } from './components/Modal';
 import { DetailBody } from './components/Detail';
 import { Nav, Hero, AboutSection } from './components/Shell';
-import { ResearchSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection } from './components/Sections';
+import { ResearchSection, ProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection } from './components/Sections';
 
 function ReadingProgress() {
   const [pct, setPct] = useState(0);
@@ -96,7 +96,7 @@ export default function App() {
     <Nav active={active} onSetActive={setActive} theme={theme} onToggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} />
     <Hero data={data} /><AboutSection data={data} />
     <ResearchSection data={data} onOpen={openDetail} />
-    <PersonalProjectsSection data={data} onOpen={openDetail} />
+    <ProjectsSection data={data} onOpen={openDetail} />
     <ExperienceSection data={data} onOpen={openDetail} />
     <EducationWithCoursework data={data} /><SkillsBlock data={data} /><CredentialsSection /><LeadershipSection data={data} />
     <GallerySection data={data} onLightbox={setLightbox} /><ContactSection data={data} />
