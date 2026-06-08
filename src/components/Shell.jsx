@@ -224,7 +224,7 @@ function Hero({ data }) {
             </p>
             <h1 className="hv2-title">Krishi<br /><em>Attri</em></h1>
             <p className="hv2-tagline">Robotics Researcher · 3D Perception · Visuo-Tactile SLAM · Applied AI</p>
-            <p className="hv2-short">Building perception systems for real-world robots. I work across visuo-tactile SLAM, 3D reconstruction, Gaussian Splatting, robotic manipulation, and applied AI systems.</p>
+            <p className="hv2-short">Building perception systems for real-world robots. I work across visuo-tactile SLAM, 3D reconstruction, Gaussian Splatting, robotic manipulation, generative-3D acceleration, and applied AI systems.</p>
             <div className="hv2-cta">
               <a className="btn primary" href="#selected-work">View Selected Work <span className="arrow">→</span></a>
               <a className="btn" href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><Icon name="download" size={13} /> CV.pdf</a>
@@ -261,9 +261,9 @@ const BUILD_CARDS = [
   },
   {
     icon: '◎',
-    title: 'Applied AI Systems',
-    body: 'Full-stack ML pipelines, CV detection systems, deep-learned gesture recognition, and production-style models benchmarked on real hardware.',
-    tags: ['PyTorch', 'CUDA', 'Computer Vision', 'Deep Learning'],
+    title: 'Applied AI & Open Source',
+    body: 'Full-stack ML pipelines, CV detection systems, and open-source research tools — including training-free diffusion/flow acceleration (HiCache++) for image-to-3D and 3D Gaussian-Splat registration (splatreg).',
+    tags: ['PyTorch', 'CUDA', 'Diffusion Models', 'Image-to-3D', 'Open Source'],
   },
 ];
 
@@ -344,7 +344,7 @@ function NowSection({ data }) {
         </div>
         <div className="now-wrap">
           <div className="now-main reveal">
-            <p>Currently completing an M.S. in Mechanical Engineering at Seoul National University's Soft Robotics & Bionics Lab, working on <strong>visuo-tactile SLAM</strong>, <strong>object-level 3D reconstruction</strong>, and dexterous in-hand manipulation as part of a government-funded humanoid robot programme.</p>
+            <p>Currently completing an M.S. in Mechanical Engineering at Seoul National University's Soft Robotics & Bionics Lab, working on <strong>visuo-tactile SLAM</strong>, <strong>object-level 3D reconstruction</strong>, and dexterous in-hand manipulation as part of the government-funded <strong>“Alchemist” humanoid robot programme</strong> (MOTIE, Korea).</p>
             <p>Starting a Ph.D. at the University of Central Florida in August 2026 as an <strong>ORCGS Doctoral Fellow</strong>. Open to collaborations, internships, and research discussions in robot perception, 3D vision, SLAM, and applied ML.</p>
           </div>
           <div className="now-open">
