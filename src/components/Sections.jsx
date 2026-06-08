@@ -653,4 +653,65 @@ function ArchiveSection({ data }) {
   );
 }
 
-export { SelectedWorkSection, ExperienceSection, CredentialsSection, EducationSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection, ArchiveSection };
+/* ─────────────────────────────────────────────────────────
+   PERSONAL PROJECTS — card grid with "view all" expansion
+───────────────────────────────────────────────────────── */
+function ProjectCard({ item, onOpen }) {
+  const scr = useScramble(item.title);
+  const meta = item.tools && item.tools.length ? item.tools.slice(0, 3).join(' · ') : '';
+  return (
+    <article className="card" tabIndex="0"
+      onClick={(e) => onOpen(e.currentTarget.getBoundingClientRect())}
+      onKeyDown={(e) => e.key === 'Enter' && onOpen()}
+      onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
+      <div className="card-meta">
+        <span>{item.date}</span>
+        {item.category && <span className="tag">{item.category}</span>}
+      </div>
+      <h3 className="card-title">{scr.display}</h3>
+      {item.subtitle && <div className="card-sub">{item.subtitle}</div>}
+      <p className="card-summary">{item.summary}</p>
+      <div className="card-foot">
+        <span style={{ color: 'var(--fg-soft)', fontSize: 12, fontFamily: 'var(--font-mono)' }}>{meta}</span>
+        <span className="open">Open</span>
+      </div>
+    </article>
+  );
+}
+
+function PersonalProjectsSection({ data, onOpen }) {
+  const [expanded, setExpanded] = useState(false);
+  const featuredIds = new Set(['cv-app', 'capstone', 'silo']); // already highlighted in Selected Work
+  const projects = (data.projects || []).filter(p => !featuredIds.has(p.id) && !p.hidden);
+  const INITIAL = 6;
+  const shown = expanded ? projects : projects.slice(0, INITIAL);
+  if (projects.length === 0) return null;
+  return (
+    <section id="personal-projects" data-screen-label="Projects">
+      <div className="container">
+        <div className="section-head">
+          <div className="section-num">§ PROJECTS</div>
+          <div>
+            <h2 className="section-title">Personal<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>projects.</em></h2>
+            <p className="section-sub">Hardware builds, course projects, and experiments beyond the lab. Click any card for the full story.</p>
+          </div>
+        </div>
+        <div className="cards">
+          {shown.map(p => (
+            <ProjectCard key={p.id} item={p} onOpen={(rect) => onOpen(p, 'project', rect)} />
+          ))}
+        </div>
+        {projects.length > INITIAL && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
+            <button className="btn" onClick={() => setExpanded(e => !e)} aria-expanded={expanded}>
+              {expanded ? 'Show fewer' : `View all ${projects.length} projects`}
+              <span className="arrow">{expanded ? ' ↑' : ' ↓'}</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+export { SelectedWorkSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection, ArchiveSection };
