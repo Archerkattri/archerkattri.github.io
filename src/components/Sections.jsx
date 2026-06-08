@@ -257,13 +257,30 @@ function ResearchCard({ item, onOpen, featured }) {
 function ResearchSection({ data, onOpen }) {
   const visible = data.research.filter(r => !r.hidden);
   return (
-    <section id="research" data-screen-label="04 Research">
+    <section id="research" data-screen-label="Research">
       <div className="container">
         <div className="section-head">
-          <div className="section-num">§ 03 / RESEARCH</div>
+          <div className="section-num">§ RESEARCH</div>
           <div>
-            <h2 className="section-title">Lab work &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>publications.</em></h2>
-            <p className="section-sub">Full write-ups for each research project. Click any card for methodology, contributions, and outcomes.</p>
+            <h2 className="section-title">Research &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>publications.</em></h2>
+            <p className="section-sub">Thesis work, papers, and open-source research tools — with results. Click any card for methodology, contributions, and outcomes.</p>
+          </div>
+        </div>
+        <div className="pub-callout">
+          <div className="pub-callout-head">Publications &amp; preprints</div>
+          <div className="pub-row">
+            <div>
+              <div className="pub-title">PoP-SLAM: Point Cloud Projection for SLAM</div>
+              <div className="pub-meta">S. Jung, K. Attri, J. Marchand, M. L. Paolicchi · 2024</div>
+            </div>
+            <a className="btn" href="assets/docs/PoP_SLAM_Paper.pdf" target="_blank" rel="noopener"><Icon name="external" size={12} /> PDF</a>
+          </div>
+          <div className="pub-row">
+            <div>
+              <div className="pub-title">GaussianFeels: Object-Centric Gaussian SLAM for Visuo-Tactile In-Hand Manipulation</div>
+              <div className="pub-meta">M.S. Thesis · Seoul National University · in progress, 2026</div>
+            </div>
+            <span className="tag">In progress</span>
           </div>
         </div>
         <div className="cards">
@@ -286,7 +303,7 @@ function ExperienceSection({ data, onOpen }) {
     <section id="experience" data-screen-label="05 Experience">
       <div className="container">
         <div className="section-head">
-          <div className="section-num">§ 05 / EXPERIENCE</div>
+          <div className="section-num">§ EXPERIENCE</div>
           <div>
             <h2 className="section-title">Where I've<br /><em style={{ fontStyle: 'italic' }}>worked.</em></h2>
             <p className="section-sub">Research, industry, and campus roles — most recent first.</p>
@@ -356,6 +373,15 @@ const CREDENTIAL_GROUPS = [
       { title: 'GSFS Government Science Fellowship', kind: 'Seoul National University', note: '2024 — 2026' },
     ],
   },
+  {
+    group: 'Awards & Honors',
+    items: [
+      { title: "Dean's List", kind: 'Villanova University', note: 'Fall 2020 · Spring 2021' },
+      { title: 'Capstone — 1st Place, Most Innovative Solution', kind: 'Villanova Capstone Showcase', note: 'May 2024' },
+      { title: 'ICE Competition — 3rd Place', kind: 'Villanova College of Engineering', note: 'Dec 2020' },
+      { title: 'Beetle-Bot — 3rd Place', kind: 'Villanova Mechatronics', note: 'Dec 2021' },
+    ],
+  },
 ];
 
 function CredentialsSection() {
@@ -363,7 +389,7 @@ function CredentialsSection() {
     <section id="credentials" data-screen-label="07 Credentials">
       <div className="container">
         <div className="section-head">
-          <div className="section-num">§ 06 / PROOF & CREDENTIALS</div>
+          <div className="section-num">§ PROOF & CREDENTIALS</div>
           <div>
             <h2 className="section-title">Receipts &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>credentials.</em></h2>
             <p className="section-sub">Academic docs, research output, certifications, and fellowships — all in one place.</p>
@@ -531,6 +557,17 @@ function ContactSection({ data }) {
             <a href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><div><div className="label">Curriculum Vitae</div><div className="val">Krishi_Attri_CV.pdf</div></div><Icon name="download" size={15} /></a>
           </div>
         </div>
+        <div className="now-open" style={{ marginTop: 44, maxWidth: 760 }}>
+          <div className="now-open-label">Open to</div>
+          {[
+            'Robotics / AI research collaborations',
+            'Internships in robot perception or 3D vision',
+            'Ph.D.-adjacent research discussions',
+            'Roles in SLAM, applied ML & robot manipulation',
+          ].map((item, i) => (
+            <div key={i} className="now-open-item"><span className="now-dot">◆</span>{item}</div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -681,19 +718,18 @@ function ProjectCard({ item, onOpen }) {
 
 function PersonalProjectsSection({ data, onOpen }) {
   const [expanded, setExpanded] = useState(false);
-  const featuredIds = new Set(['cv-app', 'capstone', 'silo']); // already highlighted in Selected Work
-  const projects = (data.projects || []).filter(p => !featuredIds.has(p.id) && !p.hidden);
+  const projects = (data.projects || []).filter(p => !p.hidden);
   const INITIAL = 6;
   const shown = expanded ? projects : projects.slice(0, INITIAL);
   if (projects.length === 0) return null;
   return (
-    <section id="personal-projects" data-screen-label="Projects">
+    <section id="projects" data-screen-label="Projects">
       <div className="container">
         <div className="section-head">
           <div className="section-num">§ PROJECTS</div>
           <div>
-            <h2 className="section-title">Personal<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>projects.</em></h2>
-            <p className="section-sub">Hardware builds, course projects, and experiments beyond the lab. Click any card for the full story.</p>
+            <h2 className="section-title">Projects &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>builds.</em></h2>
+            <p className="section-sub">Full-stack apps, capstone, hardware builds, and course experiments. Click any card for the full story.</p>
           </div>
         </div>
         <div className="cards">
@@ -714,4 +750,4 @@ function PersonalProjectsSection({ data, onOpen }) {
   );
 }
 
-export { SelectedWorkSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection, ArchiveSection };
+export { ResearchSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection };
