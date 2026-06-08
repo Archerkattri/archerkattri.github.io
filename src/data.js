@@ -515,6 +515,25 @@ export const PORTFOLIO_DATA = {
     }
   ],
 
+  // Additional public repositories (HiCache/HiCache++ acceleration family + misc),
+  // surfaced compactly under Personal Projects → "All repositories".
+  githubRepos: [
+    { name: "hunyuan2.1-plus-plus", lang: "Python", url: "https://github.com/Archerkattri/hunyuan2.1-plus-plus", desc: "HiCache++ (DMD) acceleration for Hunyuan3D-2.1 — lossless at larger intervals." },
+    { name: "hunyuan2.1-plus", lang: "Python", url: "https://github.com/Archerkattri/hunyuan2.1-plus", desc: "HiCache (Hermite) acceleration for Hunyuan3D-2.1 image-to-3D." },
+    { name: "hunyuan2-plus-plus", lang: "Python", url: "https://github.com/Archerkattri/hunyuan2-plus-plus", desc: "HiCache++ (DMD) acceleration for Hunyuan3D-2 mini — exactly lossless at i5." },
+    { name: "hunyuan2-plus", lang: "Python", url: "https://github.com/Archerkattri/hunyuan2-plus", desc: "HiCache (Hermite) acceleration for Hunyuan3D-2 mini." },
+    { name: "hermit-trellis2-plus-plus", lang: "Python", url: "https://github.com/Archerkattri/hermit-trellis2-plus-plus", desc: "HiCache++ (DMD) carved-hybrid acceleration for TRELLIS.2-4B." },
+    { name: "hermit-trellis2", lang: "Python", url: "https://github.com/Archerkattri/hermit-trellis2", desc: "HiCache (Hermite) carved-hybrid acceleration for TRELLIS.2-4B." },
+    { name: "faster-trellis-plus-plus", lang: "Jupyter Notebook", url: "https://github.com/Archerkattri/faster-trellis-plus-plus", desc: "HiCache++ (DMD) carved-hybrid acceleration for TRELLIS v1." },
+    { name: "faster-trellis", lang: "Python", url: "https://github.com/Archerkattri/faster-trellis", desc: "HiCache (Hermite) carved-hybrid acceleration for TRELLIS v1." },
+    { name: "fast-trellis2", lang: "Python", url: "https://github.com/Archerkattri/fast-trellis2", desc: "TaylorSeer (Fast) baseline acceleration for TRELLIS.2-4B." },
+    { name: "sam3d-plus-plus", lang: "Python", url: "https://github.com/Archerkattri/sam3d-plus-plus", desc: "HiCache++ (DMD) acceleration for SAM 3D Objects — lossless to i6." },
+    { name: "sam3d-plus", lang: "Python", url: "https://github.com/Archerkattri/sam3d-plus", desc: "HiCache (Hermite) acceleration for Meta SAM 3D Objects." },
+    { name: "fastsam3d-plus-plus", lang: "Python", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", desc: "HiCache++ (DMD) acceleration for Fast-SAM3D." },
+    { name: "fastsam3d-plus", lang: "Python", url: "https://github.com/Archerkattri/fastsam3d-plus", desc: "HiCache (Hermite) acceleration for Fast-SAM3D." },
+    { name: "benbi", lang: "", url: "https://github.com/Archerkattri/benbi", desc: "Experimental repository." }
+  ],
+
   experience: [
     {
       id: "snu-grad",
