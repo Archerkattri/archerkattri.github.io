@@ -102,7 +102,7 @@ function JourneySection() {
     <section id="journey" data-screen-label="Journey">
       <div className="container">
         <div className="section-head">
-          <div className="section-num">§ 02.b / JOURNEY</div>
+          <div className="section-num">§ JOURNEY</div>
           <div>
             <h2 className="section-title">The path,<br /><span style={{ fontStyle: 'italic' }}>mapped.</span></h2>
             <p className="section-sub">Every milestone — degrees, labs, internships, competitions. Hover to explore.</p>
