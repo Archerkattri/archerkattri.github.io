@@ -1,11 +1,9 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { PORTFOLIO_DATA } from './data';
 import { Modal, Lightbox } from './components/Modal';
 import { DetailBody } from './components/Detail';
 import { Nav, Hero, AboutSection } from './components/Shell';
 import { ResearchSection, PersonalProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection } from './components/Sections';
-
-const JourneySection = lazy(() => import('./components/WorldMap').then(m => ({ default: m.JourneySection })));
 
 function ReadingProgress() {
   const [pct, setPct] = useState(0);
@@ -40,7 +38,7 @@ export default function App() {
 
   // Single consolidated observer for nav-active section tracking + section .in-view + element reveal
   useEffect(() => {
-    const navIds = new Set(['home','about','research','projects','experience','education','skills','credentials','leadership','journey','gallery','contact']);
+    const navIds = new Set(['home','about','research','projects','experience','education','skills','credentials','leadership','gallery','contact']);
 
     const navObs = new IntersectionObserver(
       entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); }),
@@ -82,7 +80,7 @@ export default function App() {
       });
     };
     observeReveals();
-    // Catch any late-mounted nodes (lazy-loaded JourneySection)
+    // Catch any late-mounted nodes (e.g. expanded project cards)
     const mo = new MutationObserver(() => observeReveals());
     mo.observe(document.body, { childList: true, subtree: true });
 
@@ -101,9 +99,6 @@ export default function App() {
     <PersonalProjectsSection data={data} onOpen={openDetail} />
     <ExperienceSection data={data} onOpen={openDetail} />
     <EducationWithCoursework data={data} /><SkillsBlock data={data} /><CredentialsSection /><LeadershipSection data={data} />
-    <Suspense fallback={<section style={{ minHeight: 400 }} aria-hidden="true" />}>
-      <JourneySection />
-    </Suspense>
     <GallerySection data={data} onLightbox={setLightbox} /><ContactSection data={data} />
     <footer className="footer"><div className="container" style={{ display: 'flex', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}><span>© {new Date().getFullYear()} Krishi Attri · All work shown is authored or co-authored as noted.</span><span>Built with React · ♥ for robots</span></div></footer>
     <Modal open={!!modalItem} onClose={closeDetail} kicker={kickerFor(modalKind)} sourceRect={sourceRect}><DetailBody item={modalItem} kind={modalKind} onLightbox={setLightbox} /></Modal>
