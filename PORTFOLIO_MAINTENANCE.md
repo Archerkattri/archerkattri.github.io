@@ -3,7 +3,8 @@
 ## Core Principle
 - The homepage sells **Krishi Attri** (research identity, direction, proof of work).
 - No single project should become the whole brand.
-- Keep homepage concise; deep technical details belong in modals or dedicated external pages.
+- Keep homepage concise; deep technical details belong in inline expanders ("Method & results") or dedicated external pages.
+- Design system: dark instrument-panel editorial — one ink, one amber accent, Fraunces/Hanken Grotesk/Spline Sans Mono. Committed dark theme (no toggle).
 
 ---
 
@@ -24,9 +25,9 @@ Use when making any content update:
 
 ---
 
-## 2) Rules for Selected Work Cards
+## 2) Rules for Research & Software Cards
 
-Add to **Selected Work** only if it has clear substance and proof.
+Add to **Research** or **Software** only if it has clear substance and proof.
 
 Required fields (minimum):
 1. **Problem**
@@ -91,9 +92,9 @@ Each item should include:
 
 1. Collect source updates (CV, publications, results, awards, role changes).
 2. Decide placement: homepage highlight / modal-only / archive.
-3. Update `src/data.js` (profile, research, experience, skills, coursework, leadership, archive).
-4. Update `src/components/Sections.jsx` if selected-work cards change.
-5. Proof pass: every selected-work item needs Problem / Built / Tools / Proof.
+3. Update `src/data.js` (profile, research, software, experience, education, honors, skills, archive).
+4. Update `src/components/Sections.jsx` only if section layout changes.
+5. Proof pass: every research/software item needs a real result (benchmark, package, paper, artifact).
 6. Design consistency pass: card length, chip style, section balance.
 7. Run `npm run build && npm run preview` and check pre-push checklist.
 8. Push to `main` → verify GitHub Actions deployment succeeds.
@@ -128,19 +129,20 @@ Do **not** add to homepage:
 
 | Content | File |
 |---|---|
-| Profile text, tagline | `src/data.js` → `profile` |
-| Selected work cards | `src/components/Sections.jsx` → `SELECTED_WORK` |
-| Project detail modals | `src/data.js` → `research` / `projects` |
+| Profile text, headline, hero meta | `src/data.js` → `profile` |
+| Research entries (incl. GaussianFeels stats) | `src/data.js` → `research` |
+| Publications list | `src/data.js` → `publications` |
+| Software libraries (pip installs, stats, links) | `src/data.js` → `software` |
+| HiCache++ adapter repo cluster | `src/data.js` → `adapters` |
 | Experience timeline | `src/data.js` → `experience` |
-| Credentials & awards | `src/data.js` → `awards` |
-| Education | `src/data.js` → `education` |
-| Coursework | `src/data.js` → `coursework` |
+| Education / honors / document links | `src/data.js` → `education` / `honors` / `documents` |
 | Skills | `src/data.js` → `skills` |
-| Leadership | `src/data.js` → `leadership` |
-| Archive builds | `src/data.js` → `archive` |
+| Earlier builds | `src/data.js` → `archive` |
+| Field-log gallery | `src/data.js` → `gallery`, `galleryVideos` |
+| Section UI | `src/components/Sections.jsx` (sections) · `src/components/Shell.jsx` (nav/hero) |
 | Documents (CV, papers) | `public/assets/docs/` |
 | Images | `public/assets/images/` |
-| OG / meta tags | `index.html` |
+| OG / meta tags / fonts / JSON-LD | `index.html` |
 | SEO | `sitemap.xml`, `robots.txt` |
 
 ---
@@ -149,11 +151,11 @@ Do **not** add to homepage:
 
 - [ ] Homepage loads and headshot displays.
 - [ ] Navigation hash links scroll correctly.
-- [ ] Modals open and close correctly.
+- [ ] "Method & results" expanders and the HiCache++ adapter cluster open/close.
+- [ ] pip-install copy buttons copy the right command.
 - [ ] CV/Resume/PDF links open correctly.
 - [ ] No console errors.
-- [ ] Mobile layout checked (small viewport).
-- [ ] Dark mode works.
+- [ ] Mobile layout checked (small viewport, burger menu).
 - [ ] GitHub Pages deployment succeeds.
 
 ```bash

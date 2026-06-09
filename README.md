@@ -21,21 +21,18 @@ Live site: **https://archerkattri.github.io**
 ```
 archerkattri.github.io/
 ├── src/
-│   ├── App.jsx              # Root component, layout, modal wiring
-│   ├── data.js              # All portfolio content (profile, research, projects, skills…)
-│   ├── styles.css           # All styles
+│   ├── App.jsx              # Root component, section composition, scroll observers
+│   ├── data.js              # All portfolio content (profile, research, software, experience…)
+│   ├── styles.css           # All styles (dark instrument-panel editorial design system)
 │   └── components/
-│       ├── Shell.jsx        # Nav, Hero, WhatIBuild, ResearchDirection, NowSection
-│       ├── Sections.jsx     # All page sections (SelectedWork, Experience, Education, Skills…)
-│       ├── Detail.jsx       # Modal body renderer
-│       ├── Modal.jsx        # Modal + Lightbox primitives
-│       └── WorldMap.jsx     # Journey / map section
+│       ├── Shell.jsx        # Icon, Nav, Hero
+│       └── Sections.jsx     # Research, Software, Experience, Background, FieldLog, Contact
 ├── public/
 │   └── assets/
 │       ├── docs/            # CV, Resume, papers, certificates (PDFs)
 │       ├── images/          # Headshot, project photos, OG image
 │       └── videos/          # Project demo videos
-├── index.html               # HTML entry point (meta tags, OG tags here)
+├── index.html               # HTML entry point (meta tags, OG tags, fonts, JSON-LD)
 ├── vite.config.js
 ├── package.json
 └── .github/workflows/deploy.yml
@@ -46,16 +43,14 @@ archerkattri.github.io/
 ## Updating Content
 
 **All text content lives in `src/data.js`.** Edit that file to update:
-- Profile headline, tagline, about text
-- Research projects (`research` array)
-- Selected work cards (`components/Sections.jsx` → `SELECTED_WORK`)
+- Profile headline, kicker, hero meta (`profile`)
+- Research entries and publications (`research`, `publications`)
+- Software libraries — names, pip installs, stats, links (`software`, `adapters`)
 - Experience timeline (`experience` array)
-- Awards and credentials (`awards` array)
-- Education (`education` array)
+- Education, honors, document links (`education`, `honors`, `documents`)
 - Skills (`skills` object)
-- Coursework (`coursework` object)
-- Leadership (`leadership` array)
-- Archive builds (`archive` array)
+- Earlier builds (`archive` array)
+- Field-log gallery (`gallery`, `galleryVideos`)
 
 **Section UI** lives in `src/components/Shell.jsx` and `src/components/Sections.jsx`.
 

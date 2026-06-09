@@ -13,11 +13,9 @@ export default defineConfig({
       output: {
         manualChunks: (id) => {
           if (id.includes('node_modules')) {
-            if (id.includes('d3') || id.includes('topojson')) return 'map';
             if (id.includes('react')) return 'react';
             return 'vendor';
           }
-          if (id.includes('/components/WorldMap') || id.includes('/components/Timeline')) return 'map';
         },
       },
     },

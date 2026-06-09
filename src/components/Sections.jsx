@@ -1,807 +1,389 @@
-// Sections — Research, Projects, Experience, Credentials, Education, Skills, Gallery, Contact
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Icon } from "./Modal";
+// Sections — Research, Software, Experience, Background, Field log, Contact, Footer
+import { useState } from "react";
+import { Icon, Crosshairs } from "./Shell";
 
-/* ── Text scramble ── */
-function useScramble(text) {
-  const [display, setDisplay] = useState(text);
-  const ivRef = useRef(null);
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  const start = useCallback(() => {
-    clearInterval(ivRef.current);
-    let frame = 0, total = 16;
-    ivRef.current = setInterval(() => {
-      frame++;
-      setDisplay(text.split('').map((c, i) => {
-        if (' ./-'.includes(c)) return c;
-        if (i < text.length * (frame / total)) return c;
-        return chars[Math.floor(Math.random() * chars.length)];
-      }).join(''));
-      if (frame >= total) { clearInterval(ivRef.current); setDisplay(text); }
-    }, 38);
-  }, [text]);
-  const stop = useCallback(() => { clearInterval(ivRef.current); setDisplay(text); }, [text]);
-  return { display, onMouseEnter: start, onMouseLeave: stop };
-}
-
-/* ─────────────────────────────────────────────────────────
-   SELECTED WORK — top 6 works, new card format
-───────────────────────────────────────────────────────── */
-
-const SELECTED_WORK = [
-  {
-    id: 'gaussianfeels',
-    title: 'GaussianFeels',
-    impact: 'Real-time visuo-tactile 3D reconstruction for in-hand manipulation — 0.84 mm ADD-S at ~7.6× NeuralFeels speed, no CAD model.',
-    category: 'robotics',
-    date: 'Dec 2024 — Present',
-    tag: 'M.S. Thesis · Active',
-    problem: 'Robots lose reliable object geometry under occlusion during contact-rich manipulation. Vision alone fails; tactile alone is too sparse.',
-    built: 'An online visuo-tactile SLAM system built around an explicit object-centric 3D Gaussian Splatting map — fusing RGB-D, DIGIT tactile sensing, and hand proprioception, with a Levenberg–Marquardt SE(3) tracker over a frozen Gaussian-density SDF (analytic Jacobian through gsplat).',
-    tools: ['3D Gaussian Splatting', 'PyTorch', 'CUDA', 'gsplat', 'UR5e', 'Allegro Hand', 'DIGIT', 'ROS'],
-    proof: [{ label: 'Companion site', href: 'https://krishiattrisnu.github.io', kind: 'website' }, { label: 'FeelSight benchmark (14 objects)', kind: 'results' }],
-  },
-  {
-    id: 'hicache',
-    title: 'HiCache++',
-    impact: 'Training-free diffusion/flow acceleration — holds 0.86 F-score where the polynomial baseline drops to 0.74.',
-    category: 'ai',
-    date: '2026',
-    tag: 'Open source · PyPI',
-    problem: 'Diffusion- and flow-based image-to-3D models burn most of their compute re-deriving smoothly-varying features step after step.',
-    built: 'A model-agnostic, training-free DMD / exponential velocity-cache that skips redundant denoising compute while staying near-lossless — benchmarked across 6+ image-to-3D and generative backbones (Hunyuan3D, TRELLIS, SAM 3D, DiT).',
-    tools: ['Python', 'PyTorch', 'CUDA', 'Diffusion Models', 'Hunyuan3D', 'TRELLIS', 'DMD'],
-    proof: [{ label: 'PyPI', href: 'https://pypi.org/project/hicache-pp/', kind: 'package' }, { label: 'GitHub', href: 'https://github.com/Archerkattri/hicache-plus-plus', kind: 'github' }],
-  },
-  {
-    id: 'splatreg',
-    title: 'splatreg',
-    impact: '3D Gaussian-Splat registration matching GeoTransformer (91.5% recall) with an added Sim(3) scale DoF.',
-    category: 'robotics',
-    date: '2026',
-    tag: 'Open source · PyPI',
-    problem: 'Aligning independent 3D Gaussian-Splatting scans usually means falling back to point-cloud methods that discard the splat structure and the scale degree of freedom.',
-    built: 'A pure-PyTorch library that registers and merges native 3DGS scans into one SE(3)/Sim(3) frame via a closed-form-Jacobian Gaussian-SDF residual; ADD-S AUC 0.995 on YCB object pose at ≈17 ms.',
-    tools: ['Python', 'PyTorch', '3D Gaussian Splatting', 'SE(3)/Sim(3)', 'GeoTransformer', '3DMatch', 'YCB'],
-    proof: [{ label: 'PyPI', href: 'https://pypi.org/project/splatreg/', kind: 'package' }, { label: 'GitHub', href: 'https://github.com/Archerkattri/splatreg', kind: 'github' }],
-  },
-  {
-    id: 'popslam',
-    title: 'PoP-SLAM',
-    impact: 'Dense visual SLAM achieving 0.75 cm ATE RMSE at ~4 FPS on a consumer GPU.',
-    category: 'robotics',
-    date: 'Sept — Dec 2024',
-    tag: 'Published',
-    problem: 'Neural point cloud SLAM is bottlenecked by per-pixel nearest-neighbor queries, making it too slow for consumer hardware.',
-    built: 'A projection-first rendering pipeline: project the neural point cloud onto the image plane via vectorised GPU matrix multiplication, mask by depth consistency, and render — no volumetric queries.',
-    tools: ['PyTorch', 'CUDA', 'Open3D', 'TUM-RGBD', 'Replica', 'RTX 4070'],
-    proof: [{ label: 'PoP-SLAM Paper (PDF)', href: 'assets/docs/PoP_SLAM_Paper.pdf', kind: 'paper' }],
-  },
-  {
-    id: 'gnss-denied',
-    title: 'GNSS-Denied SLAM',
-    impact: 'Full autonomous navigation stack for a quad-wheel robot — no GPS.',
-    category: 'robotics',
-    date: 'Aug 2023 — May 2024',
-    tag: 'Undergraduate research',
-    problem: 'Autonomous navigation in GPS-denied environments (indoors, underground, urban canyons) with a real outdoor robot platform.',
-    built: 'ROS navigation stack using VLP-16 LiDAR–camera fusion, CNN feature extraction, 2D histogram localisation filter, and 1D Kalman tracker. Sensors: VectorNav IMU, Emlid RTK GPS, Vicon/OptiTrack ground truth.',
-    tools: ['ROS', 'Python', 'C++', 'OpenCV', 'VLP-16 LiDAR', 'VectorNav IMU', 'Emlid RTK GPS', 'Vicon/OptiTrack', 'Arduino', 'Raspberry Pi'],
-    proof: [{ label: 'Demo video', kind: 'video' }],
-  },
-  {
-    id: 'cv-app',
-    title: 'CV Object Detection App',
-    impact: 'Full-stack benchmarking platform comparing 5 detection models on COCO.',
-    category: 'ai',
-    date: 'Summer 2024',
-    tag: 'Software',
-    problem: 'No easy way to compare multiple CV detection models side-by-side on real images and video in a single interface.',
-    built: 'A React + Flask web app for real-time image and video object detection, benchmarking Faster R-CNN, Mask R-CNN, RetinaNet, Keypoint R-CNN, and SSDlite.',
-    tools: ['Python', 'PyTorch', 'TensorFlow', 'React', 'Flask', 'COCO API'],
-    proof: [{ label: 'GitHub', href: 'https://github.com/Archerkattri/computervisionproj', kind: 'github' }],
-  },
-  {
-    id: 'capstone',
-    title: 'Plant Lifting Device',
-    impact: '1st Place, Most Innovative Solution — Villanova Capstone 2024.',
-    category: 'hardware',
-    date: 'Aug 2023 — May 2024',
-    tag: 'Hardware · Award',
-    problem: 'An agrochemical company needed a device to lift growing plants repeatably into a 3D imaging rig without damaging them, within strict size constraints.',
-    built: 'Sponsored by FMC Corporation. Led a multidisciplinary team through actuator selection, motion-system design (belts, pulleys, drive gears), wiring, waterproofing, and a stabilising plant platform.',
-    tools: ['SOLIDWORKS', 'Actuator design', 'Motion systems', 'Project management'],
-    proof: [{ label: 'Award certificate', href: 'assets/docs/Capstone.pdf', kind: 'pdf' }, { label: 'Demo video', kind: 'video' }],
-  },
-  {
-    id: 'silo',
-    title: 'SILO — Indoor Farm Automation',
-    impact: 'Automation tooling for a vertical farming supply chain at Area2Farms.',
-    category: 'hardware',
-    date: 'June — Aug 2023',
-    tag: 'Internship',
-    problem: 'Vertical farming operations lacked automated precision control for drop/lift/grip cycles, requiring manual intervention at scale.',
-    built: 'Extruded-aluminium automation tooling with pneumatics and custom control circuits; programmed Arduino and Raspberry Pi systems for precision indoor farm robotics.',
-    tools: ['Arduino', 'Raspberry Pi', 'Pneumatics', 'Irrigation systems'],
-    proof: [{ label: 'Internship video', kind: 'video' }],
-  },
-];
-
-const ROLE_FILTERS = [
-  { key: 'all',      label: 'All Work' },
-  { key: 'robotics', label: 'Robotics' },
-  { key: 'ai',       label: 'AI / ML' },
-  { key: 'hardware', label: 'Hardware' },
-  { key: 'research', label: 'Research' },
-];
-
-function WorkCard({ item, onOpen }) {
-  const scr = useScramble(item.title);
+/* ── shared section header ── */
+function SectionHead({ index, label, title, em, sub }) {
   return (
-    <article className="wk-card" tabIndex="0"
-      onClick={(e) => onOpen(item, e.currentTarget.getBoundingClientRect())}
-      onKeyDown={(e) => e.key === 'Enter' && onOpen(item)}
-      onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
-      <div className="wk-meta">
-        <span className="wk-date">{item.date}</span>
-        <span className="tag">{item.tag}</span>
+    <div className="sec-head reveal">
+      <div className="sec-index">
+        <span className="sec-n">{index}</span>
+        <span className="sec-label">{label}</span>
+        <span className="sec-rule" aria-hidden="true" />
       </div>
-      <h3 className="wk-title">{scr.display}</h3>
-      <p className="wk-impact">{item.impact}</p>
-      <div className="wk-divider" />
-      <div className="wk-row">
-        <span className="wk-field">Problem</span>
-        <span className="wk-val">{item.problem}</span>
-      </div>
-      <div className="wk-row">
-        <span className="wk-field">Built</span>
-        <span className="wk-val">{item.built}</span>
-      </div>
-      <div className="wk-tools">
-        {item.tools.slice(0, 5).map(t => <span key={t} className="chip">{t}</span>)}
-        {item.tools.length > 5 && <span className="chip chip-more">+{item.tools.length - 5}</span>}
-      </div>
-      <div className="wk-foot">
-        <div className="wk-proof">
-          {item.proof.map((p, i) => (
-            <span key={i} className="wk-proof-item">
-              {p.href
-                ? <a href={p.href} target="_blank" rel="noopener" onClick={e => e.stopPropagation()}>{p.label} ↗</a>
-                : <span>{p.label}</span>
-              }
-            </span>
-          ))}
-        </div>
-        <span className="open">Open →</span>
-      </div>
-    </article>
+      <h2 className="sec-title">
+        {title} {em && <em>{em}</em>}
+      </h2>
+      {sub && <p className="sec-sub">{sub}</p>}
+    </div>
   );
 }
 
-function SelectedWorkSection({ onOpen }) {
-  const [filter, setFilter] = useState('all');
-  const gridRef = useRef(null);
-  useEffect(() => {
-    if (!gridRef.current) return;
-    const cards = gridRef.current.querySelectorAll('.wk-card');
-    cards.forEach((card, i) => {
-      card.classList.remove('in');
-      setTimeout(() => card.classList.add('in'), i * 60);
-    });
-  }, [filter]);
-  const filtered = filter === 'all'
-    ? SELECTED_WORK
-    : filter === 'research'
-      ? SELECTED_WORK.filter(w => w.tag.toLowerCase().includes('research') || w.tag.toLowerCase().includes('thesis') || w.tag.toLowerCase().includes('published'))
-      : SELECTED_WORK.filter(w => w.category === filter);
-
+function ExtLinks({ links }) {
   return (
-    <section id="selected-work" data-screen-label="03 Selected Work">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ 02 / SELECTED WORK</div>
-          <div>
-            <h2 className="section-title">Things I've<br /><em style={{ color: 'var(--accent-ink)' }}>built & shipped.</em></h2>
-            <p className="section-sub">Top works across robotics, AI, and hardware. Each one with a real problem, a real build, and real proof.</p>
-          </div>
-        </div>
-        <div className="filter-row">
-          {ROLE_FILTERS.map(({ key, label }) => (
-            <button key={key} className={"filter-btn" + (filter === key ? ' active' : '')} onClick={() => setFilter(key)}>
-              {label}
-            </button>
-          ))}
-        </div>
-        <div className="wk-grid" ref={gridRef}>
-          {filtered.map(item => (
-            <WorkCard key={item.id} item={item} onOpen={(it, rect) => onOpen(it, 'selected-work', rect)} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <div className="ext-links">
+      {links.map(l => (
+        <a key={l.label} href={l.href} target="_blank" rel="noopener">
+          {l.label} <Icon name="external" size={10} />
+        </a>
+      ))}
+    </div>
   );
 }
 
-/* ─────────────────────────────────────────────────────────
-   RESEARCH SECTION (detailed papers/lab work)
-───────────────────────────────────────────────────────── */
-function ResearchCard({ item, onOpen, featured }) {
-  const scr = useScramble(item.title);
+function StatRow({ stats }) {
   return (
-    <article className={"card" + (featured ? " featured" : "")} tabIndex="0"
-      onClick={(e) => onOpen(e.currentTarget.getBoundingClientRect())}
-      onKeyDown={(e) => e.key === 'Enter' && onOpen()}
-      onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
-      <div className="card-meta">
-        <span>{item.date}</span>
-        <span className="tag">{item.tag}</span>
-      </div>
-      <h3 className="card-title">{scr.display}</h3>
-      <div className="card-sub">{item.subtitle}</div>
-      <p className="card-summary">{item.summary}</p>
-      {item.programme && (
-        <div className="card-programme">
-          <span className="cp-dot">◆</span>
-          <span>{item.programme.title}</span>
-          <span className="cp-tag">{item.programme.tag}</span>
+    <div className="stat-row">
+      {stats.map((s, i) => (
+        <div key={i} className="stat">
+          <span className="stat-v">{s.value}{s.unit ? <small> {s.unit}</small> : null}</span>
+          <span className="stat-l">{s.label}</span>
         </div>
-      )}
-      <div className="card-foot">
-        <span>{item.org}</span>
-        <span className="open">Read more</span>
-      </div>
-    </article>
+      ))}
+    </div>
   );
 }
 
-function ResearchSection({ data, onOpen }) {
-  const visible = data.research.filter(r => !r.hidden);
+/* ──────────────── 01 / RESEARCH ──────────────── */
+function ResearchCard({ item }) {
   return (
-    <section id="research" data-screen-label="Research">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ RESEARCH</div>
-          <div>
-            <h2 className="section-title">Research &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>publications.</em></h2>
-            <p className="section-sub">Thesis work, papers, and open-source research tools — with results. Click any card for methodology, contributions, and outcomes.</p>
-          </div>
+    <article className={"sheet reveal" + (item.flagship ? " flagship" : "")}>
+      <Crosshairs />
+      <header className="sheet-head">
+        <div>
+          <h3 className="sheet-title">{item.title}</h3>
+          <p className="sheet-subtitle">{item.subtitle}</p>
         </div>
-        <div className="pub-callout sub-anchor" id="research-pubs">
-          <div className="pub-callout-head">Publications &amp; preprints</div>
-          <div className="pub-row">
-            <div>
-              <div className="pub-title">PoP-SLAM: Point Cloud Projection for SLAM</div>
-              <div className="pub-meta">S. Jung, K. Attri, J. Marchand, M. L. Paolicchi · 2024</div>
-            </div>
-            <a className="btn" href="assets/docs/PoP_SLAM_Paper.pdf" target="_blank" rel="noopener"><Icon name="external" size={12} /> PDF</a>
-          </div>
-          <div className="pub-row">
-            <div>
-              <div className="pub-title">GaussianFeels: Object-Centric Gaussian SLAM for Visuo-Tactile In-Hand Manipulation</div>
-              <div className="pub-meta">M.S. Thesis · Seoul National University · in progress, 2026</div>
-            </div>
-            <span className="tag">In progress</span>
-          </div>
+        <div className="sheet-meta">
+          <span className="pill">{item.tag}</span>
+          <span className="sheet-date">{item.date}</span>
         </div>
-        <div className="cards">
-          {visible.map((r, i) => (
-            <ResearchCard key={r.id} item={r}
-              onOpen={(rect) => onOpen(r, 'research', rect)}
-              featured={i === 0} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   EXPERIENCE
-───────────────────────────────────────────────────────── */
-function ExperienceSection({ data, onOpen }) {
-  return (
-    <section id="experience" data-screen-label="05 Experience">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ EXPERIENCE</div>
-          <div>
-            <h2 className="section-title">Where I've<br /><em style={{ fontStyle: 'italic' }}>worked.</em></h2>
-            <p className="section-sub">Research, industry, and campus roles — most recent first.</p>
-          </div>
-        </div>
-        <div className="timeline">
-          {data.experience.map(e => (
-            <div key={e.id} className="tl-row" tabIndex="0"
-              onClick={(ev) => onOpen(e, 'experience', ev.currentTarget.getBoundingClientRect())}
-              onKeyDown={(ev) => ev.key === 'Enter' && onOpen(e, 'experience')}>
-              <div className="date">{e.date}</div>
-              <div className="main">
-                <h3>{e.title}</h3>
-                <div className="org">{e.org} · <span style={{ color: 'var(--fg-soft)' }}>{e.location}</span></div>
-                <div className="sum">{e.summary}</div>
-              </div>
-              <div className="more">open →</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   PROOF & CREDENTIALS
-───────────────────────────────────────────────────────── */
-const CREDENTIAL_GROUPS = [
-  {
-    group: 'Academic',
-    items: [
-      { title: 'Curriculum Vitae', href: 'assets/docs/Krishi_Attri_CV.pdf', kind: 'PDF' },
-      { title: 'Resume', href: 'assets/docs/Krishi_Attri_Resume.pdf', kind: 'PDF' },
-      { title: 'GRE Score Report', href: 'assets/docs/GRE_Report.pdf', kind: 'PDF', note: 'ETS blockchain verified' },
-      { title: 'SNU Host Invitation Letter', href: 'assets/docs/SNU_Host_Letter.pdf', kind: 'PDF' },
-    ],
-  },
-  {
-    group: 'Research',
-    items: [
-      { title: 'PoP-SLAM Paper', href: 'assets/docs/PoP_SLAM_Paper.pdf', kind: 'Paper' },
-      { title: 'Capstone Award Certificate', href: 'assets/docs/Capstone.pdf', kind: 'PDF', note: '1st Place, Most Innovative Solution' },
-      { title: 'CIEE Internship Certificate', href: 'assets/docs/CIEE_Internship_Certificate.pdf', kind: 'PDF' },
-    ],
-  },
-  {
-    group: 'Open Source',
-    items: [
-      { title: 'HiCache++', href: 'https://github.com/Archerkattri/hicache-plus-plus', kind: 'GitHub · PyPI: hicache-pp', note: 'Training-free diffusion/flow acceleration' },
-      { title: 'splatreg', href: 'https://github.com/Archerkattri/splatreg', kind: 'GitHub · PyPI: splatreg', note: 'SE(3)/Sim(3) 3DGS registration & merge' },
-      { title: 'mathlas', href: 'https://github.com/Archerkattri/mathlas', kind: 'GitHub · PyPI: mathlas-mcp', note: 'Airtight-math MCP toolkit (13 tools)' },
-    ],
-  },
-  {
-    group: 'Certifications',
-    items: [
-      { title: 'NVIDIA Computer Vision Nanodegree', kind: 'Udacity × NVIDIA', note: 'Winter 2024' },
-      { title: 'UPenn Robotics Specialization', kind: 'Coursera × UPenn', note: 'Summer 2021 · 6 courses' },
-      { title: 'K-MOOC Innovative Robot Technologies', href: 'assets/docs/KMOOC_Robotics_Certificate.pdf', kind: 'SNU × K-MOOC', note: 'Aug 2024' },
-    ],
-  },
-  {
-    group: 'Fellowships',
-    items: [
-      { title: 'ORCGS Doctoral Fellowship', kind: 'University of Central Florida', note: 'Incoming, Aug 2026' },
-      { title: 'GSFS Government Science Fellowship', kind: 'Seoul National University', note: '2024 — 2026' },
-    ],
-  },
-  {
-    group: 'Awards & Honors',
-    items: [
-      { title: "Dean's List", kind: 'Villanova University', note: 'Fall 2020 · Spring 2021' },
-      { title: 'Capstone — 1st Place, Most Innovative Solution', kind: 'Villanova Capstone Showcase', note: 'May 2024' },
-      { title: 'ICE Competition — 3rd Place', kind: 'Villanova College of Engineering', note: 'Dec 2020' },
-      { title: 'Beetle-Bot — 3rd Place', kind: 'Villanova Mechatronics', note: 'Dec 2021' },
-    ],
-  },
-];
-
-function CredentialsSection() {
-  return (
-    <section id="credentials" data-screen-label="07 Credentials">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ PROOF & CREDENTIALS</div>
-          <div>
-            <h2 className="section-title">Receipts &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>credentials.</em></h2>
-            <p className="section-sub">Academic docs, research output, certifications, and fellowships — all in one place.</p>
-          </div>
-        </div>
-        <div className="cred-grid">
-          {CREDENTIAL_GROUPS.map(({ group, items }) => (
-            <div key={group} className="cred-group reveal">
-              <div className="cred-group-label">{group}</div>
-              {items.map((item, i) => (
-                <div key={i} className="cred-item">
-                  <div className="cred-left">
-                    <div className="cred-title">{item.title}</div>
-                    <div className="cred-sub">{item.kind}{item.note ? ` · ${item.note}` : ''}</div>
-                  </div>
-                  {item.href && (
-                    <a href={item.href} target="_blank" rel="noopener" className="cred-link" aria-label={`Open ${item.title}`}>
-                      <Icon name="external" size={13} />
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   EDUCATION
-───────────────────────────────────────────────────────── */
-function EducationSection({ data }) {
-  return (
-    <section id="education" data-screen-label="Education">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ EDUCATION</div>
-          <div>
-            <h2 className="section-title">Four schools,<br /><em style={{ fontStyle: 'italic' }}>three continents.</em></h2>
-            <p className="section-sub">Villanova · Yonsei (exchange) · Seoul National · UCF (incoming).</p>
-          </div>
-        </div>
-        <div className="edu-grid">
-          {data.education.map(e => (
-            <div key={e.id} className="edu-card">
-              <span className={"status " + e.status}>{e.status}</span>
-              <div className="degree">{e.degree}</div>
-              <div className="school">{e.school}</div>
-              <div className="loc">{e.location}</div>
-              <div className="note">{e.note}</div>
-              <div className="date">{e.date}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   SKILLS
-───────────────────────────────────────────────────────── */
-function SkillsBlock({ data }) {
-  return (
-    <section id="skills" style={{ paddingTop: 40 }}>
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ STACK</div>
-          <div>
-            <h2 className="section-title">Tools, languages,<br /><em style={{ fontStyle: 'italic' }}>hardware.</em></h2>
-          </div>
-        </div>
-        <div className="skills-grid">
-          {Object.entries(data.skills).map(([k, items]) => (
-            <div key={k} className="skill-group">
-              <h4>{k}</h4>
-              <div className="skill-chips">
-                {items.map(s => <span key={s} className="chip">{s}</span>)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   GALLERY
-───────────────────────────────────────────────────────── */
-function toWebp(src) {
-  // Swap the file extension for .webp; works for .jpg / .jpeg / .png
-  return src.replace(/\.(jpe?g|png)$/i, '.webp');
-}
-
-function GalleryImg({ src, alt }) {
-  const webp = toWebp(src);
-  return (
-    <picture>
-      {webp !== src && <source srcSet={webp} type="image/webp" />}
-      <img src={src} alt={alt || ''} loading="lazy" decoding="async" />
-    </picture>
-  );
-}
-
-function GallerySection({ data, onLightbox }) {
-  const layoutClasses = ['tall', '', 'wide', '', '', 'tall', 'wide', '', '', ''];
-  return (
-    <section id="gallery" data-screen-label="Gallery">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ MEDIA</div>
-          <div>
-            <h2 className="section-title">Media &<br /><em style={{ fontStyle: 'italic' }}>gallery.</em></h2>
-            <p className="section-sub">Research robots, builds, internship work, and moments along the way.</p>
-          </div>
-        </div>
-        <div className="gallery">
-          {data.gallery.map((g, i) => (
-            <div key={i} className={"gal-item " + (layoutClasses[i] || '')} onClick={() => onLightbox(g)}>
-              <GalleryImg src={g.src} alt={g.caption} />
-              <div className="cap">{g.caption}</div>
-            </div>
-          ))}
-          <div className="gal-item wide" onClick={() => onLightbox({ src: 'assets/videos/silo-internship.mp4', caption: 'Silo automation · Area2Farms · Summer 2023', video: true })}>
-            <video src="assets/videos/silo-internship.mp4" muted loop playsInline preload="none" />
-            <div className="cap">▶ Silo internship · Area2Farms</div>
-          </div>
-          <div className="gal-item" onClick={() => onLightbox({ src: 'assets/videos/eod-robot.mp4', caption: 'EOD Robot · undergraduate research', video: true })}>
-            <video src="assets/videos/eod-robot.mp4" muted loop playsInline preload="none" />
-            <div className="cap">▶ EOD Robot · research</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-/* ─────────────────────────────────────────────────────────
-   CONTACT
-───────────────────────────────────────────────────────── */
-function ContactSection({ data }) {
-  const c = data.profile.contact;
-  return (
-    <section id="contact" data-screen-label="09 Contact">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ CONTACT</div>
-          <div>
-            <h2 className="section-title">Let's talk<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>robots.</em></h2>
-            <p className="section-sub">Open to research collaborations, Ph.D.-adjacent discussions, and engineering roles.</p>
-          </div>
-        </div>
-        <div className="contact-wrap">
-          <p className="contact-big">
-            Write to me at<br /><a href={`mailto:${c.email}`}>{c.email}</a>.
-          </p>
-          <div className="contact-list">
-            <a href={`mailto:${c.email}`}><div><div className="label">Email</div><div className="val">{c.email}</div></div><Icon name="mail" size={15} /></a>
-            <a href={c.linkedin} target="_blank" rel="noopener"><div><div className="label">LinkedIn</div><div className="val">linkedin.com/in/krishi-attri15</div></div><Icon name="linkedin" size={15} /></a>
-            <a href={c.github} target="_blank" rel="noopener"><div><div className="label">GitHub</div><div className="val">github.com/Archerkattri</div></div><Icon name="github" size={15} /></a>
-            <a href="assets/docs/Krishi_Attri_CV.pdf" target="_blank"><div><div className="label">Curriculum Vitae</div><div className="val">Krishi_Attri_CV.pdf</div></div><Icon name="download" size={15} /></a>
-          </div>
-        </div>
-        <div className="now-open" style={{ marginTop: 44, maxWidth: 760 }}>
-          <div className="now-open-label">Open to</div>
-          {[
-            'Robotics / AI research collaborations',
-            'Internships in robot perception or 3D vision',
-            'Ph.D.-adjacent research discussions',
-            'Roles in SLAM, applied ML & robot manipulation',
-          ].map((item, i) => (
-            <div key={i} className="now-open-item"><span className="now-dot">◆</span>{item}</div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-
-
-/* ─────────────────────────────────────────────────────────
-   EDUCATION — with coursework
-───────────────────────────────────────────────────────── */
-function EducationWithCoursework({ data }) {
-  return (
-    <section id="education" data-screen-label="Education">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ EDUCATION</div>
-          <div>
-            <h2 className="section-title">Four schools,<br /><em style={{ fontStyle: 'italic' }}>three continents.</em></h2>
-            <p className="section-sub">Villanova · Yonsei (exchange) · Seoul National · UCF (incoming).</p>
-          </div>
-        </div>
-        <div className="edu-grid">
-          {data.education.map(e => (
-            <div key={e.id} className="edu-card">
-              <span className={"status " + e.status}>{e.status}</span>
-              <div className="degree">{e.degree}</div>
-              <div className="school">{e.school}</div>
-              <div className="loc">{e.location}</div>
-              <div className="note">{e.note}</div>
-              <div className="date">{e.date}</div>
-            </div>
-          ))}
-        </div>
-        {data.coursework && (
-          <div style={{ marginTop: 56 }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: 'var(--fg-soft)', textTransform: 'uppercase', marginBottom: 24 }}>
-              Relevant Coursework
-            </div>
-            <div className="cred-grid">
-              {Object.entries(data.coursework).map(([group, courses]) => (
-                <div key={group} className="cred-group reveal">
-                  <div className="cred-group-label">{group}</div>
-                  <div className="skill-chips" style={{ marginTop: 10, gap: 6 }}>
-                    {courses.map(c => <span key={c} className="chip" style={{ fontSize: 12 }}>{c}</span>)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   LEADERSHIP & ACTIVITIES
-───────────────────────────────────────────────────────── */
-function LeadershipSection({ data }) {
-  if (!data.leadership || data.leadership.length === 0) return null;
-  return (
-    <section id="leadership">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ LEADERSHIP</div>
-          <div>
-            <h2 className="section-title">Beyond<br /><em style={{ fontStyle: 'italic' }}>the lab.</em></h2>
-            <p className="section-sub">Campus leadership and professional organisations at Villanova.</p>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gap: 2 }}>
-          {data.leadership.map((item, i) => (
-            <div key={i} className="tl-row reveal" style={{ '--i': i, cursor: 'default', gridTemplateColumns: '200px 1fr' }}>
-              <div className="date">{item.date}</div>
-              <div className="main">
-                <h3 style={{ fontSize: 18, marginBottom: 2 }}>{item.role}</h3>
-                <div className="org">{item.org}</div>
-                {item.note && <div className="sum" style={{ marginTop: 6 }}>{item.note}</div>}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   ADDITIONAL BUILDS / ARCHIVE
-───────────────────────────────────────────────────────── */
-function ArchiveSection({ data }) {
-  if (!data.archive || data.archive.length === 0) return null;
-  return (
-    <section id="archive">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ ARCHIVE</div>
-          <div>
-            <h2 className="section-title">Earlier<br /><em style={{ fontStyle: 'italic' }}>builds.</em></h2>
-            <p className="section-sub">Smaller projects, coursework builds, and personal experiments — the trail of making things.</p>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 1 }}>
-          {data.archive.map((item, i) => (
-            <div key={i} className="reveal" style={{
-              '--i': i,
-              padding: '16px 20px',
-              borderTop: '1px solid var(--line)',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, marginBottom: 6 }}>
-                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 500, fontSize: 14, color: 'var(--fg)' }}>{item.title}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--fg-soft)', whiteSpace: 'nowrap' }}>{item.date}</span>
-              </div>
-              {item.note && <div style={{ fontSize: 13, color: 'var(--fg-muted)', lineHeight: 1.5 }}>{item.note}</div>}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────
-   PERSONAL PROJECTS — card grid with "view all" expansion
-───────────────────────────────────────────────────────── */
-function ProjectCard({ item, onOpen }) {
-  const scr = useScramble(item.title);
-  const meta = item.tools && item.tools.length ? item.tools.slice(0, 3).join(' · ') : '';
-  return (
-    <article className="card" tabIndex="0"
-      onClick={(e) => onOpen(e.currentTarget.getBoundingClientRect())}
-      onKeyDown={(e) => e.key === 'Enter' && onOpen()}
-      onMouseEnter={scr.onMouseEnter} onMouseLeave={scr.onMouseLeave}>
-      <div className="card-meta">
-        <span>{item.date}</span>
-        {item.category && <span className="tag">{item.category}</span>}
-      </div>
-      <h3 className="card-title">{scr.display}</h3>
-      {item.subtitle && <div className="card-sub">{item.subtitle}</div>}
-      <p className="card-summary">{item.summary}</p>
-      <div className="card-foot">
-        <span style={{ color: 'var(--fg-soft)', fontSize: 12, fontFamily: 'var(--font-mono)' }}>{meta}</span>
-        <span className="open">Open</span>
-      </div>
-    </article>
-  );
-}
-
-// Projects classified as personal/own work (the rest fall under School Projects).
-const PERSONAL_IDS = new Set(['hicache', 'splatreg', 'mathlas', 'cv-app', 'wifi-drone', 'swarm', 'robotic-arm', '3d-printer', 'lego-car']);
-
-function RepoCard({ repo }) {
-  return (
-    <a className="repo-card" href={repo.url} target="_blank" rel="noopener">
-      <div className="repo-card-top">
-        <span className="repo-name"><Icon name="github" size={12} /> {repo.name}</span>
-        <span className="repo-open">↗</span>
-      </div>
-      {repo.desc && <p className="repo-desc">{repo.desc}</p>}
-      {repo.lang && <span className="repo-lang"><span className="repo-dot" />{repo.lang}</span>}
-    </a>
-  );
-}
-
-function ProjectSubgrid({ items, onOpen, initial = 6 }) {
-  const [expanded, setExpanded] = useState(false);
-  const shown = expanded ? items : items.slice(0, initial);
-  if (items.length === 0) return null;
-  return (
-    <>
-      <div className="cards">
-        {shown.map(p => (
-          <ProjectCard key={p.id} item={p} onOpen={(rect) => onOpen(p, 'project', rect)} />
-        ))}
-      </div>
-      {items.length > initial && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 28 }}>
-          <button className="btn" onClick={() => setExpanded(e => !e)} aria-expanded={expanded}>
-            {expanded ? 'Show fewer' : `View all ${items.length}`}<span className="arrow">{expanded ? ' ↑' : ' ↓'}</span>
-          </button>
-        </div>
-      )}
-    </>
-  );
-}
-
-function ProjectsSection({ data, onOpen }) {
-  const all = (data.projects || []).filter(p => !p.hidden);
-  const personal = all.filter(p => PERSONAL_IDS.has(p.id));
-  const school = all.filter(p => !PERSONAL_IDS.has(p.id));
-  const repos = data.githubRepos || [];
-  const [showRepos, setShowRepos] = useState(false);
-  return (
-    <section id="projects" data-screen-label="Projects">
-      <div className="container">
-        <div className="section-head">
-          <div className="section-num">§ PROJECTS</div>
-          <div>
-            <h2 className="section-title">Projects &<br /><em style={{ fontStyle: 'italic', color: 'var(--accent-ink)' }}>builds.</em></h2>
-            <p className="section-sub">Personal work and open-source repositories, plus academic and course projects. Click any card for the full story.</p>
-          </div>
-        </div>
-
-        <div id="projects-personal" className="sub-anchor proj-subsection">
-          <div className="proj-sub-head">
-            <h3 className="proj-sub-title">Personal Projects</h3>
-            <a className="proj-sub-link" href="https://github.com/Archerkattri" target="_blank" rel="noopener">
-              <Icon name="github" size={13} /> All repositories <span className="arrow">↗</span>
-            </a>
-          </div>
-          <ProjectSubgrid items={personal} onOpen={onOpen} initial={6} />
-          {repos.length > 0 && (
-            <div className="repo-block">
-              <button className="repo-toggle" onClick={() => setShowRepos(s => !s)} aria-expanded={showRepos}>
-                {showRepos ? '− Hide repositories' : `+ ${repos.length} more open-source repositories`}
-              </button>
-              {showRepos && (
-                <div className="repo-grid">
-                  {repos.map(r => <RepoCard key={r.name} repo={r} />)}
-                </div>
-              )}
+      </header>
+      <p className="sheet-role">{item.role}</p>
+      <p className="sheet-body">{item.summary}</p>
+      {item.stats && <StatRow stats={item.stats} />}
+      {item.details && (
+        <details className="sheet-details">
+          <summary>Method & results<span className="sum-mark" aria-hidden="true">+</span></summary>
+          <ul>
+            {item.details.map((d, i) => <li key={i}>{d}</li>)}
+          </ul>
+          {item.tools && (
+            <div className="chip-row">
+              {item.tools.map(t => <span key={t} className="chip">{t}</span>)}
             </div>
           )}
-        </div>
+        </details>
+      )}
+      <footer className="sheet-foot">
+        {item.links && item.links.length > 0 && <ExtLinks links={item.links} />}
+        {item.note && <span className="sheet-note">{item.note}</span>}
+      </footer>
+    </article>
+  );
+}
 
-        <div id="projects-school" className="sub-anchor proj-subsection">
-          <div className="proj-sub-head">
-            <h3 className="proj-sub-title">School Projects</h3>
-          </div>
-          <ProjectSubgrid items={school} onOpen={onOpen} initial={6} />
+export function ResearchSection({ data }) {
+  const main = data.research.filter(r => !r.compact);
+  const compact = data.research.filter(r => r.compact);
+  return (
+    <section id="research" className="section">
+      <div className="container">
+        <SectionHead index="01" label="Research" title="Perception through" em="occlusion."
+          sub="Thesis work and papers on visuo-tactile SLAM — making robots perceive what their own hands hide." />
+        <div className="sheet-stack">
+          {main.map(r => <ResearchCard key={r.id} item={r} />)}
+        </div>
+        <div className="compact-grid reveal">
+          {compact.map(r => (
+            <div key={r.id} className="compact-row">
+              <div className="compact-head">
+                <h4>{r.title}</h4>
+                <span className="compact-date">{r.date}</span>
+              </div>
+              <p>{r.subtitle}</p>
+              <span className="pill dim">{r.tag}</span>
+            </div>
+          ))}
+        </div>
+        <div className="pub-list reveal" aria-label="Publications">
+          <div className="pub-label">Publications</div>
+          {data.publications.map((p, i) => (
+            <div key={i} className="pub-row">
+              <span className="pub-title">{p.title}</span>
+              <span className="pub-meta">{p.venue} · {p.date}</span>
+              {p.href
+                ? <a className="pub-link" href={p.href} target="_blank" rel="noopener">{p.status} <Icon name="external" size={10} /></a>
+                : <span className="pub-status">{p.status}</span>}
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-export { ResearchSection, ProjectsSection, ExperienceSection, CredentialsSection, EducationWithCoursework, SkillsBlock, GallerySection, ContactSection, LeadershipSection };
+/* ──────────────── 02 / SOFTWARE ──────────────── */
+function InstallLine({ cmd }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    navigator.clipboard?.writeText(cmd).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    });
+  };
+  return (
+    <button className="install" onClick={copy} title="Copy to clipboard">
+      <span className="install-ps1" aria-hidden="true">$</span>
+      <code>{cmd}</code>
+      <span className="install-copy">{copied ? <Icon name="check" size={13} /> : <Icon name="copy" size={13} />}</span>
+    </button>
+  );
+}
+
+function AdapterCluster({ adapters }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="adapters">
+      <button className="adapters-toggle" onClick={() => setOpen(o => !o)} aria-expanded={open}>
+        {open ? "− Hide" : "+ Show"} the 12 per-model adapters
+      </button>
+      {open && (
+        <div className="adapters-grid">
+          {adapters.map(a => (
+            <a key={a.name} href={a.url} target="_blank" rel="noopener" className="adapter">
+              <span className="adapter-name"><Icon name="github" size={11} /> {a.name}</span>
+              <span className="adapter-desc">{a.desc}</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SoftwareCard({ item, adapters }) {
+  return (
+    <article className="sw reveal" id={item.id}>
+      <Crosshairs />
+      <div className="sw-grid">
+        <div className="sw-id">
+          <h3 className="sw-name">{item.name}</h3>
+          <p className="sw-oneliner">{item.oneliner}</p>
+          <InstallLine cmd={item.install} />
+          <p className="sw-spec">{item.spec}</p>
+          <ExtLinks links={item.links} />
+        </div>
+        <div className="sw-body">
+          <p>{item.summary}</p>
+          <dl className="sw-stats">
+            {item.stats.map((s, i) => (
+              <div key={i} className="sw-stat">
+                <dt>{s.label}</dt>
+                <dd>{s.value}</dd>
+              </div>
+            ))}
+          </dl>
+          {item.adaptersNote && <AdapterCluster adapters={adapters} />}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export function SoftwareSection({ data }) {
+  return (
+    <section id="software" className="section">
+      <div className="container">
+        <SectionHead index="02" label="Software" title="Released &" em="installable."
+          sub="Open-source research libraries — each one pip-installable, benchmarked, and in use." />
+        <div className="sw-stack">
+          {data.software.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────── 03 / EXPERIENCE ──────────────── */
+export function ExperienceSection({ data }) {
+  return (
+    <section id="experience" className="section">
+      <div className="container">
+        <SectionHead index="03" label="Experience" title="Lab, field &" em="industry." />
+        <div className="xp-list">
+          {data.experience.map(e => (
+            <div key={e.id} className="xp-row reveal">
+              <div className="xp-date">{e.date}</div>
+              <div className="xp-main">
+                <h3>{e.title}</h3>
+                <div className="xp-org">{e.org} · {e.location}</div>
+                <p className="xp-sum">{e.summary}</p>
+                {e.bullets.length > 0 && (
+                  <ul className="xp-bullets">
+                    {e.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                  </ul>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────── 04 / BACKGROUND ──────────────── */
+export function BackgroundSection({ data }) {
+  return (
+    <section id="background" className="section">
+      <div className="container">
+        <SectionHead index="04" label="Background" title="Four schools," em="three countries." />
+        <div className="edu-grid">
+          {data.education.map(e => (
+            <div key={e.id} className="edu-card reveal">
+              <span className={"status " + e.status}>{e.status}</span>
+              <div className="edu-degree">{e.degree}</div>
+              <div className="edu-school">{e.school}</div>
+              <div className="edu-note">{e.note}</div>
+              <div className="edu-date">{e.date}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-cols">
+          <div className="bg-col reveal">
+            <div className="bg-label">Honors & fellowships</div>
+            {data.honors.map((h, i) => (
+              <div key={i} className="bg-row">
+                <span className="bg-title">{h.title}</span>
+                <span className="bg-meta">{h.org} · {h.date}</span>
+              </div>
+            ))}
+          </div>
+          <div className="bg-col reveal">
+            <div className="bg-label">Documents</div>
+            {data.documents.map((d, i) => (
+              <a key={i} className="bg-row link" href={d.href} target="_blank" rel="noopener">
+                <span className="bg-title">{d.title} <Icon name="external" size={10} /></span>
+                <span className="bg-meta">PDF</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="skills reveal">
+          <div className="bg-label">Stack</div>
+          <div className="skills-grid">
+            {Object.entries(data.skills).map(([group, items]) => (
+              <div key={group} className="skill-group">
+                <h4>{group}</h4>
+                <div className="chip-row">
+                  {items.map(s => <span key={s} className="chip">{s}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="archive reveal">
+          <div className="bg-label">Earlier builds</div>
+          <div className="archive-grid">
+            {data.archive.map((a, i) => (
+              <div key={i} className="archive-row">
+                <div className="archive-head">
+                  {a.href
+                    ? <a href={a.href} target="_blank" rel="noopener">{a.title} <Icon name="external" size={9} /></a>
+                    : <span>{a.title}</span>}
+                  <span className="archive-date">{a.date}</span>
+                </div>
+                <p>{a.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Field log (gallery strip) ── */
+function toWebp(src) {
+  return src.replace(/\.(jpe?g|png)$/i, ".webp");
+}
+
+export function FieldLog({ data }) {
+  return (
+    <section id="fieldlog" className="section fieldlog-sec">
+      <div className="container">
+        <div className="bg-label reveal">Field log — hardware along the way</div>
+      </div>
+      <div className="fieldlog reveal" tabIndex="0" aria-label="Photo log, scrolls horizontally">
+        {data.gallery.map((g, i) => (
+          <figure key={i} className="log-item">
+            <picture>
+              <source srcSet={toWebp(g.src)} type="image/webp" />
+              <img src={g.src} alt={g.caption} loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>{g.caption}</figcaption>
+          </figure>
+        ))}
+        {data.galleryVideos.map((v, i) => (
+          <figure key={"v" + i} className="log-item">
+            <video src={v.src} muted loop playsInline preload="none" controls />
+            <figcaption>▶ {v.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────── 05 / CONTACT ──────────────── */
+export function ContactSection({ data }) {
+  const c = data.profile.contact;
+  return (
+    <section id="contact" className="section">
+      <div className="container">
+        <SectionHead index="05" label="Contact" title="Write" em="first." />
+        <div className="contact-grid">
+          <div className="contact-main reveal">
+            <a className="contact-email" href={`mailto:${c.email}`}>{c.email}</a>
+            <p className="contact-loc">{c.location}</p>
+            <div className="contact-open">
+              <div className="bg-label">Open to</div>
+              {data.openTo.map((o, i) => (
+                <div key={i} className="open-item"><span className="open-dash" aria-hidden="true" />{o}</div>
+              ))}
+            </div>
+          </div>
+          <div className="contact-links reveal">
+            {[
+              { label: "GitHub", val: "github.com/Archerkattri", href: c.github, icon: "github" },
+              { label: "LinkedIn", val: "linkedin.com/in/krishi-attri15", href: c.linkedin, icon: "linkedin" },
+              { label: "Thesis site", val: "krishiattrisnu.github.io", href: c.thesisSite, icon: "external" },
+              { label: "CV", val: "Krishi_Attri_CV.pdf", href: c.cv, icon: "file" },
+            ].map(l => (
+              <a key={l.label} href={l.href} target="_blank" rel="noopener">
+                <span className="cl-label">{l.label}</span>
+                <span className="cl-val">{l.val}</span>
+                <Icon name={l.icon} size={14} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container footer-inner">
+        <span>© {new Date().getFullYear()} Krishi Attri</span>
+        <span className="footer-coords">37.4565° N, 126.9520° E → 28.6024° N, 81.2001° W</span>
+      </div>
+    </footer>
+  );
+}
