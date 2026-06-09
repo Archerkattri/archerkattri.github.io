@@ -196,8 +196,8 @@ function Nav({ active, onSetActive, theme, onToggleTheme }) {
     ] },
   ];
   const Wire = () => (
-    <svg className="nav-sub-wire" width="22" height="12" viewBox="0 0 22 12" aria-hidden="true">
-      <path d="M0 6 C 7 2, 10 10, 22 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <svg className="nav-sub-wire" width="36" height="24" viewBox="0 0 36 24" aria-hidden="true">
+      <path d="M2 12 C 12 4, 16 20, 35 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
   return (
