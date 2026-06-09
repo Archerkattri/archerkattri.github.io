@@ -113,49 +113,53 @@ img { display: block; max-width: 100%; }
 /* ── nav submenus: hover circuit-tree (trunk → hollow nodes → curved wires → labels) ── */
 .nav-item { position: relative; display: inline-flex; }
 .nav-sub {
-  position: absolute; top: calc(100% - 2px); left: -8px;
-  padding-top: 14px; min-width: 198px;
-  opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(4px);
-  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+  position: absolute; top: 100%; left: 2px;
+  padding-top: 15px; min-width: 238px;
+  opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(6px);
+  transition: opacity 0.24s ease, transform 0.24s ease, visibility 0.24s;
   z-index: 60;
 }
 .nav-item.has-sub:hover .nav-sub,
 .nav-item.has-sub:focus-within .nav-sub { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); }
+/* soft, borderless backdrop for readability (no hard box) */
 .nav-sub::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 14px; bottom: 0;
-  background: color-mix(in oklab, var(--bg) 90%, transparent);
-  backdrop-filter: saturate(140%) blur(10px);
-  border: 1px solid var(--line-soft); border-radius: 12px; box-shadow: var(--shadow-md);
+  content: ""; position: absolute; left: -10px; right: -4px; top: 11px; bottom: -10px;
+  background: color-mix(in oklab, var(--bg) 78%, transparent);
+  backdrop-filter: saturate(150%) blur(13px);
+  border-radius: 16px; box-shadow: 0 14px 44px rgba(0,0,0,0.16);
 }
+/* vertical trunk dropping from the menu item */
 .nav-sub-trunk {
-  position: absolute; left: 20px; top: 26px; bottom: 16px; width: 1.5px;
-  background: var(--line); transform: scaleY(0); transform-origin: top;
-  transition: transform 0.35s ease 0.04s;
+  position: absolute; left: 13px; top: 4px; bottom: 24px; width: 2px;
+  background: var(--accent); opacity: 0.5; border-radius: 2px;
+  transform: scaleY(0); transform-origin: top;
+  transition: transform 0.45s cubic-bezier(0.45, 0, 0.2, 1) 0.02s;
 }
 .nav-item.has-sub:hover .nav-sub-trunk,
 .nav-item.has-sub:focus-within .nav-sub-trunk { transform: scaleY(1); }
+/* each branch: node → curved wire → label */
 .nav-sub .nav-sub-item {
-  position: relative; display: flex; align-items: center; gap: 6px;
-  padding: 7px 16px 7px 14px; margin: 0; border-radius: 0; background: none;
-  opacity: 0; transform: translateX(-8px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transition-delay: calc(var(--si) * 70ms + 90ms);
+  position: relative; display: flex; align-items: center; gap: 2px;
+  min-height: 42px; padding: 6px 22px 6px 7px; margin: 0; border-radius: 0; background: none;
+  opacity: 0; transform: translateX(-10px);
+  transition: opacity 0.34s ease, transform 0.34s ease;
+  transition-delay: calc(var(--si) * 80ms + 120ms);
 }
-.nav-sub .nav-sub-item:first-of-type { margin-top: 4px; }
-.nav-sub .nav-sub-item:last-of-type { margin-bottom: 4px; }
 .nav-item.has-sub:hover .nav-sub-item,
 .nav-item.has-sub:focus-within .nav-sub-item { opacity: 1; transform: none; }
 .nav-sub-node {
-  flex: 0 0 auto; width: 9px; height: 9px; border-radius: 50%;
-  border: 1.5px solid var(--accent); background: var(--bg-elev); transition: background 0.2s ease;
+  flex: 0 0 auto; width: 13px; height: 13px; border-radius: 50%;
+  border: 2px solid var(--accent); background: var(--bg); z-index: 1;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-.nav-sub-wire { flex: 0 0 auto; color: var(--fg-soft); }
+.nav-sub-wire { flex: 0 0 auto; color: var(--accent); opacity: 0.55; transition: opacity 0.2s ease; }
 .nav-sub-label {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em;
+  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.01em;
   color: var(--fg-muted); white-space: nowrap; transition: color 0.2s ease;
 }
 .nav-sub .nav-sub-item:hover .nav-sub-label { color: var(--fg); }
-.nav-sub .nav-sub-item:hover .nav-sub-node { background: var(--accent); }
+.nav-sub .nav-sub-item:hover .nav-sub-node { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.nav-sub .nav-sub-item:hover .nav-sub-wire { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .nav-sub, .nav-sub-trunk, .nav-sub .nav-sub-item { transition: none; }
 }
