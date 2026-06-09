@@ -4,7 +4,7 @@
 - The homepage sells **Krishi Attri** (research identity, direction, proof of work).
 - No single project should become the whole brand.
 - Keep homepage concise; deep technical details belong in inline expanders ("Method & results") or dedicated external pages.
-- Design system: dark instrument-panel editorial — one ink, one amber accent, Fraunces/Hanken Grotesk/Spline Sans Mono. Committed dark theme (no toggle).
+- Design system: dark instrument-panel editorial — one ink, one terracotta accent (`--accent: #e28d4f`), Fraunces/Hanken Grotesk/Spline Sans Mono. Committed dark theme (no toggle).
 
 ---
 
