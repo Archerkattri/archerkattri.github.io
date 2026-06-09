@@ -93,7 +93,7 @@ export const PORTFOLIO_DATA = {
       id: "semg",
       compact: true,
       title: "Stretchable sEMG sensing",
-      subtitle: "PDMS + vapour-deposited silver-nanoparticle stretchable electromyography with CNN-GRU/ViT gesture classification. Six-week placement at the SNU Soft Robotics & Bionics Lab that seeded the M.S.",
+      subtitle: "PDMS + vapour-deposited silver-nanoparticle stretchable electromyography with CNN-GRU/ViT gesture classification. Winter research internship at the SNU Soft Robotics & Bionics Lab that seeded the M.S.",
       date: "Jan 2024",
       tag: "Research placement",
     },
@@ -215,8 +215,8 @@ export const PORTFOLIO_DATA = {
       date: "2023 — 2024",
       summary: "SLAM for GNSS-denied navigation with a Ph.D. dissertation project — quad-wheel outdoor robot.",
       bullets: [
-        "Full ROS navigation stack: VLP-16 LiDAR–camera fusion, CNN feature extraction, path planning and obstacle avoidance.",
-        "2D histogram localisation filter + 1D Kalman tracker; VectorNav IMU, RTK GPS, and Vicon/OptiTrack ground truth.",
+        "Full ROS navigation stack: LiDAR–camera fusion with CNN feature extraction and visual odometry; path planning and obstacle avoidance.",
+        "Probabilistic localisation — 2D histogram filter + 1D Kalman tracker; Arduino and Raspberry Pi integration for real-time control.",
       ],
     },
     {
@@ -225,7 +225,7 @@ export const PORTFOLIO_DATA = {
       org: "Soft Robotics & Bionics Lab, Seoul National University",
       location: "Seoul, KR",
       date: "Jan 2024",
-      summary: "Six-week placement: stretchable sEMG sensing with deep-learned gesture recognition (PDMS, AgNP; CNN-GRU/ViT).",
+      summary: "Winter research internship: stretchable sEMG sensing with deep-learned gesture recognition (PDMS, AgNP; CNN-GRU/ViT).",
       bullets: [],
     },
     {
@@ -234,7 +234,7 @@ export const PORTFOLIO_DATA = {
       org: "Area2Farms",
       location: "Arlington, VA",
       date: "Summer 2023",
-      summary: "“Silo” vertical-farming automation: extruded-aluminium tooling, pneumatics, custom control circuits, Arduino/Raspberry Pi.",
+      summary: "“Silo” vertical-farming automation: extruded-aluminium construction, pneumatics, industrial robotics, Arduino/Raspberry Pi, irrigation systems.",
       bullets: [],
     },
     {
@@ -289,6 +289,7 @@ export const PORTFOLIO_DATA = {
     { title: "GSFS Government Science Fellowship", org: "Seoul National University", date: "2024 — 2026" },
     { title: "Capstone 1st Place · Most Innovative Solution", org: "Villanova Capstone Showcase (FMC-sponsored)", date: "2024" },
     { title: "NVIDIA Computer Vision Nanodegree", org: "Udacity × NVIDIA", date: "2024" },
+    { title: "Innovative Robot Technologies Certificate", org: "K-MOOC × Seoul National University", date: "2024" },
     { title: "Robotics Specialization", org: "Coursera × UPenn", date: "2021" },
     { title: "Dean's List", org: "Villanova University", date: "2020 — 2021" },
   ],
