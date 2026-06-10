@@ -132,7 +132,7 @@ export const PORTFOLIO_DATA = {
       id: "splatreg",
       name: "splatreg",
       install: "pip install splatreg",
-      spec: "v1.1.0 · BSD-3-Clause · pure PyTorch",
+      spec: "BSD-3-Clause · pure PyTorch",
       oneliner: "Register Gaussian splats.",
       summary:
         "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges the registered scans into one coherent splat scene, with photometric refinement where geometry alone under-constrains the solution.",
@@ -142,8 +142,8 @@ export const PORTFOLIO_DATA = {
         { value: "5° → 0.36°", label: "photometric refine where geometry under-constrains" },
       ],
       links: [
+        { label: "Docs & guide", href: "https://archerkattri.github.io/splatreg/" },
         { label: "PyPI", href: "https://pypi.org/project/splatreg/" },
-        { label: "Docs", href: "https://archerkattri.github.io/splatreg/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/splatreg" },
         { label: "DOI 10.5281/zenodo.20618389", href: "https://doi.org/10.5281/zenodo.20618389" },
       ],
