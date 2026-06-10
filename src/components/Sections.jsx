@@ -1,7 +1,7 @@
 // Sections — Research, Personal projects, Experience, School,
 // School projects, Gallery, Contact, Footer
 import { useState } from "react";
-import { Icon, Crosshairs } from "./Shell";
+import { Icon } from "./Shell";
 
 /* ── shared section header ──
    `index` doubles as the grid coordinate in map view (e.g. "N1"). */
@@ -50,7 +50,6 @@ function StatRow({ stats }) {
 export function ResearchCard({ item }) {
   return (
     <article className={"sheet" + (item.flagship ? " flagship" : "")}>
-      <Crosshairs />
       <header className="sheet-head">
         <div>
           <h3 className="sheet-title">{item.title}</h3>
@@ -92,7 +91,7 @@ export function ResearchSection({ data }) {
     <section id="research" className="section">
       <div className="container">
         <SectionHead index="01" label="Research" title="Perception through" em="occlusion."
-          sub="Thesis work and papers on visuo-tactile SLAM: making robots perceive what their own hands hide." />
+          sub="SLAM when the easy signal is denied: visuo-tactile perception through the robot's own grasp (M.S. thesis), dense visual SLAM, and GNSS-denied navigation (B.S. thesis research)." />
         <div className="sheet-stack">
           {main.map(r => <ResearchCard key={r.id} item={r} />)}
         </div>
@@ -165,7 +164,6 @@ function AdapterCluster({ adapters }) {
 export function SoftwareCard({ item, adapters, adaptersAction }) {
   return (
     <article className="sw" id={item.id}>
-      <Crosshairs />
       <div className="sw-grid">
         <div className="sw-id">
           <h3 className="sw-name">{item.name}</h3>
@@ -356,7 +354,6 @@ export function SchoolProjectsSection({ data, index = "05", footer = null }) {
           sub="The FMC-sponsored capstone and the earlier hands-on builds from the undergraduate years." />
         <div className="sheet-stack">
           <article className="sheet flagship">
-            <Crosshairs />
             <header className="sheet-head">
               <div>
                 <h3 className="sheet-title">{capstone.title}</h3>
@@ -472,7 +469,6 @@ export function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <span>© {new Date().getFullYear()} Krishi Attri</span>
-        <span className="footer-coords">37.4565° N, 126.9520° E → 28.6024° N, 81.2001° W</span>
       </div>
     </footer>
   );

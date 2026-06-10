@@ -21,15 +21,6 @@ export function Icon({ name, size = 15 }) {
   );
 }
 
-/* corner registration marks for figures/cards */
-export function Crosshairs() {
-  return (
-    <span className="xhairs" aria-hidden="true">
-      <i className="xh tl" /><i className="xh tr" /><i className="xh bl" /><i className="xh br" />
-    </span>
-  );
-}
-
 const NAV_LINKS = [
   { id: "research", n: "01", label: "Research" },
   { id: "personal-projects", n: "02", label: "Personal projects" },
@@ -45,7 +36,6 @@ export function Nav({ active, cv }) {
     <header className="nav">
       <div className="nav-inner">
         <a className="nav-brand" href="#top" onClick={() => setOpen(false)}>
-          <span className="nav-sig" aria-hidden="true" />
           Krishi&nbsp;Attri
         </a>
         <nav className={"nav-links" + (open ? " open" : "")} aria-label="Sections">
@@ -100,7 +90,6 @@ export function Hero({ profile }) {
           </div>
         </div>
         <figure className="hero-fig">
-          <Crosshairs />
           <picture>
             <source srcSet={profile.headshotWebp} type="image/webp" />
             <img src={profile.headshot} alt="Krishi Attri" width="320" height="412"

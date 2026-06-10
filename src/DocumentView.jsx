@@ -16,7 +16,6 @@ export default function DocumentView() {
   return (
     <div className="docview">
       <div className="grain" aria-hidden="true" />
-      <div className="col-rules" aria-hidden="true" />
       <Nav active="" cv={data.profile.contact.cv} />
       <main>
         <Hero profile={data.profile} />

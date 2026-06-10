@@ -19,7 +19,7 @@ export const PORTFOLIO_DATA = {
     ],
     headshot: "assets/images/headshot-sm.png",
     headshotWebp: "assets/images/headshot-sm.webp",
-    figcaption: "Fig. 00 · Krishi Attri · Seoul, 2025",
+    figcaption: "Krishi Attri · Seoul, 2025",
     contact: {
       email: "krishiattriwork@gmail.com",
       github: "https://github.com/Archerkattri",
@@ -94,11 +94,24 @@ export const PORTFOLIO_DATA = {
     },
     {
       id: "gnss-denied",
-      compact: true,
       title: "GNSS-denied SLAM",
-      subtitle: "LiDAR-camera fusion navigation stack for a quad-wheel outdoor robot: ROS path planning, 2D histogram localisation, Kalman tracking. With a Ph.D. dissertation project at Villanova University.",
+      subtitle: "LiDAR-camera fusion navigation for an outdoor robot without GPS",
+      role: "B.S. thesis research · Villanova University",
       date: "2023 – 2024",
-      tag: "Undergraduate research",
+      tag: "B.S. research",
+      summary:
+        "Where GPS fails, the robot must localise itself from what it can see. The main research project of the bachelor's: a full LiDAR-camera fusion navigation stack for a quad-wheel outdoor robot, built alongside a Ph.D. dissertation on autonomous localisation and navigation in GNSS-denied environments at Villanova University.",
+      details: [
+        "Full ROS navigation stack on the quad-wheel platform: path planning and obstacle avoidance running on Arduino and Raspberry Pi for real-time control.",
+        "CNN-based feature extraction and point-cloud generation from fused LiDAR-camera data; visual odometry for motion estimates without GPS.",
+        "Real-time 3D environment mapping with computer-vision landmark identification and edge detection.",
+        "Probabilistic localisation: a 2D histogram filter with a 1D Kalman tracker over probabilistic motion models.",
+      ],
+      tools: ["ROS", "LiDAR", "Visual odometry", "CNN features", "Histogram filter", "Kalman filter", "Arduino", "Raspberry Pi"],
+      links: [
+        { label: "EOD robot (video)", href: "https://drive.google.com/file/d/1j4MmrqF4hBtm72m31q-CMhZi1sH-XFUF/view" },
+        { label: "Drone (video)", href: "https://drive.google.com/file/d/1ZDJsIq9ADl9KiKW8shVL8m0QTG8ocDcO/view" },
+      ],
     },
     {
       id: "semg",
