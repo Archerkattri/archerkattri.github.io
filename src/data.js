@@ -24,11 +24,29 @@ export const PORTFOLIO_DATA = {
       email: "krishiattriwork@gmail.com",
       github: "https://github.com/Archerkattri",
       linkedin: "https://linkedin.com/in/krishi-attri15",
-      thesisSite: "https://krishiattrisnu.github.io",
       cv: "assets/docs/Krishi_Attri_CV.pdf",
       resume: "assets/docs/Krishi_Attri_Resume.pdf",
       siteSource: "https://github.com/Archerkattri/archerkattri.github.io",
       location: "Seoul, South Korea → Orlando, FL (Aug 2026)",
+    },
+    // Hero proof line: the flagship, its two headline numbers, and the
+    // released libraries; every part deep-links into its room (hashes
+    // resolve through grid.js aliases; the cards carry matching ids).
+    proofLine: {
+      flagship: {
+        href: "#gaussianfeels",
+        pre: "GaussianFeels: ",
+        statA: "3.37 mm",
+        mid: " in-hand tracking on real hardware, ",
+        statB: "7.6×",
+        post: " the neural-field baseline.",
+      },
+      libraries: [
+        { label: "splatreg", href: "#splatreg" },
+        { label: "mathlas", href: "#mathlas" },
+        { label: "HiCache++", href: "#hicache-pp" },
+      ],
+      librariesTail: " on PyPI.",
     },
   },
 
@@ -44,6 +62,11 @@ export const PORTFOLIO_DATA = {
       tag: "Thesis · release upcoming",
       summary:
         "When a robot hand grasps an object, it occludes exactly the region it most needs to perceive. GaussianFeels fuses RGB-D vision, DIGIT tactile contact geometry, and hand proprioception into one explicit object-centric 3D Gaussian Splatting map, reconstructing and tracking objects online, through the occlusion, with no CAD model.",
+      media: {
+        video: "assets/videos/gaussianfeels-forming.mp4",
+        poster: "assets/videos/gaussianfeels-forming-poster.jpg",
+        caption: "Live: the Gaussian map forming during in-hand manipulation. Raw camera input · the reconstruction forming · the accumulated map orbiting, tactile contacts in magenta.",
+      },
       stats: [
         { value: "0.83", unit: "mm", label: "median ADD-S · simulation" },
         { value: "3.37", unit: "mm", label: "median ADD-S · real hardware" },
@@ -57,14 +80,11 @@ export const PORTFOLIO_DATA = {
         "A frame-zero branch generates a shape estimate from a single RGB crop with an image-to-3D model, then progressively replaces generated geometry with measured geometry as the episode progresses.",
         "Real time, no CAD model: map and pose modes clear the 25 FPS target; slam mode runs ≈28 FPS in simulation and ≈23.5 FPS on real hardware across the 14-cell FeelSight primary sweep (multi-seed medians).",
         "Sim-to-real is strong reconstruction transfer with a harder real tracking bottleneck: 94% of simulation F-score@5mm is retained on real hardware (0.946 → 0.888), versus 80% for NeuralFeels (0.898 → 0.716).",
-        "Frame-matched against model-free NeuralFeels: more accurate in simulation (0.91 vs 2.51 mm ADD-S), real-hardware parity (3.34 vs 3.42 mm), at ≈7.6× the mean frame rate. The implicit baseline wins only when handed an exact CAD model.",
+        "Frame-matched against model-free NeuralFeels: more accurate in simulation (0.91 vs 2.51 mm ADD-S), real-hardware parity (3.34 vs 3.42 mm), at ≈7.6× the mean frame rate (frame-matched protocol, hence the small shift from the 0.83 / 3.37 mm headline medians). The implicit baseline wins only when handed an exact CAD model.",
         "Paired tactile ablation isolates a domain-dependent finding: tactile improves reconstruction in simulation but degrades it on real hardware (noisy DIGIT depth drags the map), while pose accuracy stays near-neutral in both domains.",
         "Developed inside Korea's national “Alchemist” humanoid programme (MOTIE), bringing visuo-tactile SLAM from research prototype to the Phase-2 full-scale humanoid.",
       ],
       tools: ["3D Gaussian Splatting", "PyTorch", "CUDA", "gsplat", "LM SE(3)", "UR5e", "Allegro Hand", "DIGIT tactile", "NVIDIA Omniverse"],
-      links: [
-        { label: "Thesis site", href: "https://krishiattrisnu.github.io" },
-      ],
       note: "Thesis & code release upcoming, 2026.",
     },
     {
@@ -110,7 +130,7 @@ export const PORTFOLIO_DATA = {
       tools: ["ROS", "LiDAR", "Visual odometry", "CNN features", "Histogram filter", "Kalman filter", "Arduino", "Raspberry Pi"],
       links: [
         { label: "EOD robot (video)", href: "https://drive.google.com/file/d/1j4MmrqF4hBtm72m31q-CMhZi1sH-XFUF/view" },
-        { label: "Drone (video)", href: "https://drive.google.com/file/d/1ZDJsIq9ADl9KiKW8shVL8m0QTG8ocDcO/view" },
+        { label: "Drone (photo)", href: "https://drive.google.com/file/d/1ZDJsIq9ADl9KiKW8shVL8m0QTG8ocDcO/view" },
       ],
     },
     {
@@ -132,7 +152,7 @@ export const PORTFOLIO_DATA = {
     },
     {
       title: "PoP-SLAM: Point Cloud Projection for SLAM",
-      venue: "S. Jung, K. Attri, J. Marchand, M. L. Paolicchi",
+      venue: "S. Jung, K. Attri, J. Marchand, M. L. Paolicchi · course project, SNU",
       date: "2024",
       href: "assets/docs/PoP_SLAM_Paper.pdf",
       status: "PDF",
@@ -248,7 +268,7 @@ export const PORTFOLIO_DATA = {
       ],
       links: [
         { label: "EOD robot (video)", href: "https://drive.google.com/file/d/1j4MmrqF4hBtm72m31q-CMhZi1sH-XFUF/view" },
-        { label: "Drone (video)", href: "https://drive.google.com/file/d/1ZDJsIq9ADl9KiKW8shVL8m0QTG8ocDcO/view" },
+        { label: "Drone (photo)", href: "https://drive.google.com/file/d/1ZDJsIq9ADl9KiKW8shVL8m0QTG8ocDcO/view" },
       ],
     },
     {
@@ -411,8 +431,8 @@ export const PORTFOLIO_DATA = {
     { src: "assets/images/personal-drone.jpg", caption: "Wi-Fi drone · personal build · 2021" },
   ],
   galleryVideos: [
-    { src: "assets/videos/eod-robot.mp4", caption: "EOD robot · undergraduate research" },
-    { src: "assets/videos/silo-internship.mp4", caption: "Silo automation · Area2Farms" },
+    { src: "assets/videos/eod-robot.mp4", poster: "assets/videos/eod-robot-poster.jpg", caption: "EOD robot · undergraduate research" },
+    { src: "assets/videos/silo-internship.mp4", poster: "assets/videos/silo-internship-poster.jpg", caption: "Silo automation · Area2Farms" },
   ],
 
   openTo: [

@@ -8,7 +8,7 @@ import { PORTFOLIO_DATA as D } from "../data";
 import { Icon } from "../components/Shell";
 import {
   SectionHead, ResearchCard, SoftwareCard, XpRow, EarlierRoles,
-  SchoolSection, SchoolProjectsSection, ContactSection,
+  SchoolSection, SchoolProjectsSection, ContactSection, ProofLine,
 } from "../components/Sections";
 import { ROOMS, ROOM_MAP, DIRS } from "./grid";
 
@@ -64,7 +64,6 @@ function HomeRoom({ navigate }) {
     { label: "GitHub", href: c.github, icon: "github", ext: true },
     { label: "Email", href: `mailto:${c.email}`, icon: "mail" },
     { label: "LinkedIn", href: c.linkedin, icon: "linkedin", ext: true },
-    { label: "Thesis site", href: c.thesisSite, icon: "external", ext: true },
     { label: "CV", href: c.cv, icon: "file", ext: true },
   ];
   return (
@@ -77,6 +76,7 @@ function HomeRoom({ navigate }) {
           {p.headlineLines[0]}<br /><em>{p.headlineLines[1]}</em>
         </h1>
         <p className="hero-sub">{p.sub}</p>
+        <ProofLine proof={p.proofLine} />
         <ul className="hero-meta">
           {p.meta.map((m, i) => <li key={i}>{m}</li>)}
         </ul>
@@ -160,11 +160,6 @@ function PublicationsRoom({ navigate }) {
               )}
             </article>
           ))}
-        </div>
-        <div className="ext-links gv-pub-extra">
-          <a href={D.profile.contact.thesisSite} target="_blank" rel="noopener">
-            Thesis site · krishiattrisnu.github.io <Icon name="external" size={10} />
-          </a>
         </div>
         <RoomXRef to="research" dir="s" label="Back south, the research itself" navigate={navigate} />
       </div>
@@ -379,7 +374,7 @@ function GalleryRoom() {
           ))}
           {D.galleryVideos.map((v, i) => (
             <figure key={"v" + i} className="gv-plate">
-              <video src={v.src} muted loop playsInline preload="none" controls />
+              <video src={v.src} poster={v.poster} muted loop playsInline preload="none" controls />
               <figcaption>▶ {v.caption}</figcaption>
             </figure>
           ))}

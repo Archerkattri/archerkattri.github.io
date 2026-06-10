@@ -48,7 +48,7 @@ are deliberately self-explanatory — reading the title tells you what's inside:
 ### Edge buttons (decided & shipped)
 - **Desktop rest state:** a bare arrow chevron (42×42 px plate + a 12 px invisible hit halo via `::after`).
 - **Hover / keyboard `:focus-visible`:** the destination name slides out of the arrow (`max-width` + opacity transition on `.gv-edge-label`). The E button is `row-reverse` so its arrow stays pinned to the screen edge and the label opens inward.
-- **Touch (<760 px):** no hover, so N/S keep a small always-on label (there's room at the top/bottom screen edges); E/W are chevron-only thumb tabs at 58% height (horizontal swipe also moves E/W). This is the documented touch decision — do not add tap-to-reveal.
+- **Touch (<760 px):** no hover, so every edge button carries a small always-on label. N/S sit at the top/bottom screen edges as before; E/W are **docked pill tabs at the bottom corners** (2026-06 audit fix: they used to float unlabeled at mid-screen height over body text), compact wrapped room label, same blurred-plate scrim as the rest of the HUD. Horizontal swipe still moves E/W. Do not add tap-to-reveal.
 - Full room names always live in `aria-label`, never truncated.
 
 ### Home room (decided & shipped)
@@ -65,8 +65,8 @@ Stat values (`.stat-v` on research sheets, `.sw-stat dd` on software datasheets)
 ### Grid input contract (decided & shipped)
 - **Wheel/scroll** only ever scrolls *inside* a room (native). No scroll-hijacking, no wheel page-flips.
 - **← / →** always move across the grid (rooms only scroll vertically, so horizontal arrows are free).
-- **↑ / ↓** scroll the room; AT the top/bottom scroll edge a **fresh** press (key-repeat is ignored, so holding ↓ can't overshoot through the south wall) steps to the neighboring room.
-- **H / Esc** return home. Mobile: edge buttons become compact chevron tabs (side tabs at thumb height), horizontal swipe = E/W move.
+- **↑ / ↓** scroll the room; AT the top/bottom scroll edge a **fresh** press steps to the neighboring room *immediately* (key-repeat is ignored, so holding ↓ can't overshoot through the south wall). While a held key parks at the edge, the swallowed repeats flash a brief "↓ again · ROOM" cue (`.gv-edgehint`) so the next fresh press is announced. Decision (2026-06 audit): navigate-on-first-fresh-press is the cleaner feel since key-repeat is already filtered; the hint covers the held-key case only.
+- **H / Esc** return home. Mobile: N/S edge tabs at the screen's top/bottom edges, E/W docked labeled pills at the bottom corners, horizontal swipe = E/W move.
 - Reduced motion: the same map, instant page swaps, no slides, no boot animation.
 
 ### SEO / no-JS prerender
@@ -107,6 +107,7 @@ Add to **Research** or **Personal projects** (software datasheets) only with cle
 
 ## 5) Visual Consistency Rules
 - One accent. Mono for instrument copy, Fraunces for titles. No new fonts/colors.
+- **Fonts are self-hosted** (`src/fonts.css` + `public/assets/fonts/*.woff2`, mirrored from Google Fonts with per-subset `unicode-range` and `font-display: swap`; the three latin workhorses are preloaded in `index.html`). No third-party font requests — don't reintroduce the Google Fonts `<link>`s.
 - Keep card density balanced within each room.
 
 ---
@@ -157,7 +158,16 @@ npm run preview
 - Unproven/placeholder projects; repeated content across rooms.
 - New CI workflows (the existing Pages deploy is the only one).
 
-## 9) Future Work (not yet done)
+## 9) Decided in the 2026-06 audit fix wave
+- **Thesis-site links removed everywhere** (home hero, N1 card, N2, S1, JSON-LD): krishiattrisnu.github.io is parked until the thesis release and 404s. "Thesis & code release upcoming, 2026." stays as plain text (`note` on the card; `status` on the publication). Re-link only when the site is live.
+- **N1 GaussianFeels evidence clip** — `public/assets/videos/gaussianfeels-forming.mp4` (+`-poster.jpg`), the card's `media` field in `data.js`. Re-encoded from `production/readme_assets/forming_demo_can_3x.mp4` in the gaussianfeels repo (720p h264, ~3.8 MB, muted/loop/playsinline/autoplay). The caption deliberately does not claim real hardware: the forming demos render FeelSight *simulation* data.
+- **Hero proof line** (`profile.proofLine` in `data.js`, `ProofLine` in `Sections.jsx`, `.hero-proof` in `styles.css`): flagship + two headline numbers + the three libraries, each part deep-linking by plain hash (works in both render targets; card ids + `SECTION_TARGETS` in `grid.js`). Stats reuse the instrument treatment.
+- **Per-room document titles** ("Research · Krishi Attri") set in `GridSite.jsx` on room change.
+- **`public/404.html`** — styled minimal, JS + meta-refresh redirect to `/#home`.
+- **W2 documents** fold behind one `<details>` expander ("Documents and certificates (N)", count auto-derived); education/honors/leadership stay visible.
+- **No home-bench video echo**: judged against — the bench is a composed two-instrument plate (photo + map) and the proof line already routes to N1 where the clip is the hero.
+
+## 10) Future Work (not yet done)
 - [ ] **GaussianFeels results gallery** — reconstruction images/video in N1 when public.
 - [ ] **PoP-SLAM benchmark table** — expanded card table when the paper is public.
 - [ ] **Publications growth** — formal venues when published.

@@ -158,6 +158,27 @@ html.grid-mode, html.grid-mode body {
 }
 .gridview[data-room="home"] .gv-corner-map { display: none; } /* the centerpiece IS the map */
 
+/* "press again to continue" cue: flashes when a held ↑/↓ parks at the
+   room's scroll edge (a fresh press at the edge moves immediately) */
+.gv-edgehint {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  z-index: 125; pointer-events: none;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  background: color-mix(in oklab, var(--bg) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--accent); border-radius: 2px;
+  padding: 8px 14px;
+  animation: gvHintIn 0.18s ease-out;
+}
+.gv-edgehint-n { top: 64px; }
+.gv-edgehint-s { bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+@keyframes gvHintIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(0); }
+  to { opacity: 1; }
+}
+
 /* caption — bottom-left */
 .gv-caption {
   position: fixed; left: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -498,12 +519,25 @@ html.grid-mode, html.grid-mode body {
   }
   .gv-edge-n { top: 10px; }
   .gv-edge-s { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
-  /* E/W: chevron-only thumb tabs (labels stay hidden on touch) */
-  .gv-edge-w, .gv-edge-e { top: 58%; min-height: 52px; }
-  .gv-edge-w .gv-edge-arrow, .gv-edge-e .gv-edge-arrow { height: 52px; }
-  .gv-edge-w .gv-edge-label, .gv-edge-e .gv-edge-label { display: none; }
-  .gv-edge-w { left: 6px; }
-  .gv-edge-e { right: 6px; }
+  /* E/W: docked pill tabs at the bottom corners (they used to float
+     unlabeled at mid-screen over body text), compact always-on room
+     label, same blurred-plate scrim as every HUD control */
+  .gv-edge-w, .gv-edge-e {
+    top: auto; transform: none;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    min-height: 44px;
+  }
+  .gv-edge-w { left: 8px; }
+  .gv-edge-e { right: 8px; }
+  .gv-edge-w .gv-edge-arrow, .gv-edge-e .gv-edge-arrow { width: 30px; height: 44px; }
+  .gv-edge-w .gv-edge-label, .gv-edge-e .gv-edge-label {
+    max-width: 96px; opacity: 1;
+    padding: 0 11px 0 0;
+    white-space: normal; line-height: 1.35;
+    font-size: 8.5px; letter-spacing: 0.08em;
+    text-align: left;
+  }
+  .gv-edge-e .gv-edge-label { padding: 0 0 0 11px; text-align: right; }
 
   .gv-homebtn { top: 10px; left: 10px; padding: 8px 11px; font-size: 10px; }
   .gv-brand { top: 10px; left: 10px; font-size: 10px; }

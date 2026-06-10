@@ -33,6 +33,34 @@ function ExtLinks({ links }) {
   );
 }
 
+/* ── hero proof line: flagship + numbers + libraries, all deep links ──
+   Plain hash anchors so it works in both render targets: the grid's
+   hashchange router lands the room (and scrolls the card via
+   sectionFromHash), the prerendered document scrolls natively. */
+export function ProofLine({ proof }) {
+  const f = proof.flagship;
+  return (
+    <p className="hero-proof">
+      <a className="proof-flagship" href={f.href}>
+        <strong>{f.pre}</strong>
+        <span className="proof-stat">{f.statA}</span>
+        {f.mid}
+        <span className="proof-stat">{f.statB}</span>
+        {f.post}
+      </a>{" "}
+      <span className="proof-libs">
+        {proof.libraries.map((l, i) => (
+          <span key={l.label}>
+            {i > 0 && ", "}
+            <a className="proof-lib" href={l.href}>{l.label}</a>
+          </span>
+        ))}
+        {proof.librariesTail}
+      </span>
+    </p>
+  );
+}
+
 function StatRow({ stats }) {
   return (
     <div className="stat-row">
@@ -49,7 +77,19 @@ function StatRow({ stats }) {
 /* ──────────────── 01 / RESEARCH ──────────────── */
 export function ResearchCard({ item }) {
   return (
-    <article className={"sheet" + (item.flagship ? " flagship" : "")}>
+    <article className={"sheet" + (item.flagship ? " flagship" : "")} id={item.id}>
+      {item.media && (
+        <figure className="sheet-media">
+          <video
+            src={item.media.video}
+            poster={item.media.poster}
+            autoPlay muted loop playsInline
+            preload="metadata"
+            aria-label={item.media.caption}
+          />
+          <figcaption>{item.media.caption}</figcaption>
+        </figure>
+      )}
       <header className="sheet-head">
         <div>
           <h3 className="sheet-title">{item.title}</h3>
@@ -310,18 +350,25 @@ export function SchoolSection({ data, index = "04" }) {
             ))}
           </div>
           <div className="bg-col">
-            <div className="bg-label">Documents</div>
-            {data.documents.map((d, i) => (
-              <div key={i} className="bg-row doc-row">
-                <a className="bg-title" href={d.href} target="_blank" rel="noopener">
-                  {d.title} <Icon name="external" size={10} />
-                </a>
-                <span className="bg-meta">
-                  <a className="doc-kind" href={d.href} target="_blank" rel="noopener">PDF</a>
-                  {d.drive && <> · <a className="doc-kind" href={d.drive} target="_blank" rel="noopener">Drive</a></>}
-                </span>
-              </div>
-            ))}
+            {/* the certificate wall, folded behind one expander:
+                native <details> so the no-JS prerender still opens it */}
+            <details className="docs-fold">
+              <summary className="bg-label docs-fold-toggle">
+                Documents and certificates ({data.documents.length})
+                <span className="sum-mark" aria-hidden="true">+</span>
+              </summary>
+              {data.documents.map((d, i) => (
+                <div key={i} className="bg-row doc-row">
+                  <a className="bg-title" href={d.href} target="_blank" rel="noopener">
+                    {d.title} <Icon name="external" size={10} />
+                  </a>
+                  <span className="bg-meta">
+                    <a className="doc-kind" href={d.href} target="_blank" rel="noopener">PDF</a>
+                    {d.drive && <> · <a className="doc-kind" href={d.drive} target="_blank" rel="noopener">Drive</a></>}
+                  </span>
+                </div>
+              ))}
+            </details>
           </div>
         </div>
 
@@ -414,7 +461,7 @@ export function GallerySection({ data }) {
         ))}
         {data.galleryVideos.map((v, i) => (
           <figure key={"v" + i} className="log-item">
-            <video src={v.src} muted loop playsInline preload="none" controls />
+            <video src={v.src} poster={v.poster} muted loop playsInline preload="none" controls />
             <figcaption>▶ {v.caption}</figcaption>
           </figure>
         ))}
@@ -445,7 +492,6 @@ export function ContactSection({ data, index = "06", children }) {
             {[
               { label: "GitHub", val: "github.com/Archerkattri", href: c.github, icon: "github" },
               { label: "LinkedIn", val: "linkedin.com/in/krishi-attri15", href: c.linkedin, icon: "linkedin" },
-              { label: "Thesis site", val: "krishiattrisnu.github.io", href: c.thesisSite, icon: "external" },
               { label: "CV", val: "Krishi_Attri_CV.pdf", href: c.cv, icon: "file" },
               { label: "Resume", val: "Krishi_Attri_Resume.pdf", href: c.resume, icon: "file" },
               { label: "This site", val: "source on GitHub", href: c.siteSource, icon: "github" },
