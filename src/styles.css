@@ -191,7 +191,11 @@ p { margin: 0; }
   font-family: var(--font-mono); font-size: 12.5px; line-height: 2.05;
   color: var(--ink-faint); letter-spacing: 0.01em;
 }
-.hero-meta li::before { content: "— "; color: var(--accent-deep); }
+.hero-meta li { position: relative; padding-left: 24px; }
+.hero-meta li::before {
+  content: ""; position: absolute; left: 0; top: 1.02em;
+  width: 14px; height: 1px; background: var(--accent-deep);
+}
 .hero-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .hero-links a {
   display: inline-flex; align-items: center; gap: 7px;
@@ -304,6 +308,11 @@ html.js .prerendered { display: none; }
 
 /* ════════════════ RESEARCH sheets ════════════════ */
 .sheet-stack { display: grid; gap: 28px; }
+/* break the uniform stack: the flagship runs the full measure,
+   follow-up sheets sit indented like supporting exhibits */
+@media (min-width: 1020px) {
+  .sheet-stack .sheet:not(.flagship) { margin-left: clamp(28px, 7vw, 104px); }
+}
 .sheet {
   position: relative;
   border: 1px solid var(--line);
@@ -347,12 +356,14 @@ html.js .prerendered { display: none; }
   margin-top: 26px;
 }
 .stat { background: var(--bg-raised); padding: 16px 18px; }
+/* readouts are instruments: mono, not display type
+   (Fraunces is reserved for titles and the few set-piece moments) */
 .stat-v {
-  display: block; font-family: var(--font-display); font-weight: 420;
-  font-size: 30px; line-height: 1.1; color: var(--ink);
-  font-variation-settings: "opsz" 60;
+  display: block; font-family: var(--font-mono); font-weight: 500;
+  font-size: 25px; line-height: 1.15; color: var(--ink);
+  letter-spacing: -0.02em;
 }
-.stat-v small { font-size: 16px; color: var(--ink-muted); font-family: var(--font-mono); }
+.stat-v small { font-size: 14px; color: var(--ink-muted); font-family: var(--font-mono); }
 .stat-l {
   display: block; margin-top: 7px;
   font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.07em;
@@ -438,6 +449,11 @@ html.js .prerendered { display: none; }
 
 /* ════════════ PERSONAL PROJECTS (software datasheets) ════════════ */
 .sw-stack { display: grid; gap: 30px; }
+/* stagger the datasheets so the column doesn't read as a uniform pile */
+@media (min-width: 1020px) {
+  .sw-stack .sw:nth-child(odd) { margin-right: clamp(24px, 6vw, 88px); }
+  .sw-stack .sw:nth-child(even) { margin-left: clamp(24px, 6vw, 88px); }
+}
 .sw {
   position: relative;
   border: 1px solid var(--line);
@@ -488,9 +504,9 @@ html.js .prerendered { display: none; }
   text-transform: uppercase; color: var(--ink-faint);
 }
 .sw-stat dd {
-  margin: 0; font-family: var(--font-display); font-weight: 440;
-  font-size: 22px; color: var(--ink); white-space: nowrap;
-  font-variation-settings: "opsz" 60;
+  margin: 0; font-family: var(--font-mono); font-weight: 500;
+  font-size: 17px; color: var(--ink); white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 @media (max-width: 820px) {
   .sw-grid { grid-template-columns: 1fr; }
@@ -524,6 +540,25 @@ html.js .prerendered { display: none; }
 
 /* ════════════════ EXPERIENCE ════════════════ */
 .xp-list { border-top: 1px solid var(--line); }
+.xp-links { margin-top: 14px; }
+.xp-links .ext-links a { font-size: 11px; padding: 6px 10px; }
+
+/* the two non-research Villanova jobs: one quiet line each */
+.xp-earlier { margin-top: 44px; }
+.xp-earlier-row {
+  display: grid; grid-template-columns: 230px minmax(0, 1fr) auto;
+  gap: 16px; align-items: baseline;
+  padding: 10px 0; border-bottom: 1px solid var(--line-faint);
+}
+.xp-earlier-title { font-size: 14px; color: var(--ink); }
+.xp-earlier-note { font-size: 13px; color: var(--ink-faint); }
+.xp-earlier-date {
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint);
+  letter-spacing: 0.05em; white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .xp-earlier-row { grid-template-columns: 1fr; gap: 3px; }
+}
 .xp-row {
   display: grid; grid-template-columns: 150px minmax(0, 1fr);
   gap: 24px; padding: 26px 0; border-bottom: 1px solid var(--line-faint);
@@ -559,6 +594,13 @@ html.js .prerendered { display: none; }
 .edu-school { margin-top: 6px; font-size: 14.5px; color: var(--ink-muted); }
 .edu-note { margin-top: 10px; font-size: 13px; color: var(--ink-faint); line-height: 1.55; }
 .edu-date { margin-top: 12px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.05em; }
+.edu-link {
+  margin-left: 14px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.edu-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .bg-label {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
@@ -576,6 +618,10 @@ html.js .prerendered { display: none; }
 .bg-row.link:hover .bg-title { color: var(--accent); }
 .bg-title { font-size: 14.5px; color: var(--ink); transition: color 0.18s ease; display: inline-flex; align-items: center; gap: 7px; }
 .bg-meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); }
+.bg-label-follow { margin-top: 36px; }
+.doc-row a.bg-title:hover { color: var(--accent); }
+.doc-kind { color: var(--ink-faint); }
+.doc-kind:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
 .skills { margin-top: 52px; }
 .skills-grid {

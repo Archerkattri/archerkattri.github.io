@@ -56,7 +56,7 @@ const ALIASES = {
   "villanova-research": "experience", area2farms: "experience",
   ampere: "experience", "ucf-next": "experience",
   background: "school", education: "school", honors: "school",
-  documents: "school", skills: "school",
+  documents: "school", skills: "school", leadership: "school",
   fieldlog: "gallery", "field-log": "gallery", "log-0": "gallery",
   seoul: "contact", orlando: "contact",
 };

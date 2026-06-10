@@ -87,8 +87,10 @@ export const STATIONS = [
     far: 44, label: "Education", data: D.education },
   { id: "honors", type: "honors", district: "experience", x: -1460, y: 1620, w: 460, h: 590,
     far: 44, label: "Honors", data: D.honors },
-  { id: "documents", type: "documents", district: "experience", x: -1380, y: 2310, w: 400, h: 525,
-    far: 44, label: "Documents", data: D.documents },
+  /* documents live in the map (W2) and doc views only: the chart is the
+     overview layer, not the file cabinet. */
+  { id: "documents-marker", type: "marker", district: "experience", x: -1340, y: 2370, w: 280, h: 60,
+    far: 0, label: "Documents · CV & proofs", data: { sub: "in the map view, room W2", href: "?view=doc#school" } },
   { id: "skills", type: "skills", district: "experience", x: -840, y: 2080, w: 600, h: 595,
     far: 44, label: "Stack", data: D.skills },
   { id: "archive", type: "archive", district: "experience", x: -2240, y: 2280, w: 640, h: 490,
@@ -121,11 +123,11 @@ export const STATION_MAP = Object.fromEntries(STATIONS.map(s => [s.id, s]));
 
 export const anchor = s => ({ x: s.x + s.w / 2, y: s.y + s.h / 2 });
 
-/* ── HiCache++ adapter constellation: 12 satellite dots ── */
+/* ── HiCache accelerator constellation: one satellite dot per repo ── */
 const HI = anchor(STATION_MAP["hicache-pp"]);
 export const ADAPTER_DOTS = D.adapters.map((a, i) => {
   // a fan east of HiCache++, two interleaved radii for an organic ring
-  const t = -78 + i * (164 / 11);                     // degrees, -78° … +86°
+  const t = -78 + i * (164 / (D.adapters.length - 1)); // degrees, -78° … +86°
   const r = i % 2 === 0 ? 880 : 1060;
   const rad = (t * Math.PI) / 180;
   return {
@@ -158,7 +160,7 @@ export const INDEX_GROUPS = [
   { district: "origin", items: ["hero"] },
   { district: "research", items: ["gaussianfeels", "popslam", "gnss-denied", "semg", "publications"] },
   { district: "software", items: ["splatreg", "mathlas", "hicache-pp"] },
-  { district: "experience", items: ["snu-grad", "snu-intern", "villanova-research", "area2farms", "ampere", "education", "honors", "documents", "skills", "archive"] },
+  { district: "experience", items: ["snu-grad", "snu-intern", "villanova-research", "area2farms", "ampere", "education", "honors", "skills", "archive"] },
   { district: "fieldlog", items: ["log-0"] },
   { district: "contact", items: ["contact"] },
 ];
@@ -173,7 +175,7 @@ export const INDEX_LABELS = {
   publications: "Publications",
   splatreg: "splatreg",
   mathlas: "mathlas",
-  "hicache-pp": "HiCache++ · 12 adapters",
+  "hicache-pp": "HiCache++ · accelerator family",
   "snu-grad": "SNU · Soft Robotics & Bionics",
   "snu-intern": "SNU · research intern",
   "villanova-research": "Villanova · robotics",
@@ -181,7 +183,6 @@ export const INDEX_LABELS = {
   ampere: "Ampere",
   education: "Education",
   honors: "Honors & fellowships",
-  documents: "Documents",
   skills: "Stack",
   archive: "School projects · earlier builds",
   "log-0": "Photo plates",
