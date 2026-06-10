@@ -99,15 +99,6 @@ function HomeRoom({ navigate }) {
               <source srcSet={p.headshotWebp} type="image/webp" />
               <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
             </picture>
-            <span className="gv-stamp" aria-hidden="true">
-              <svg viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="46" />
-                <circle cx="50" cy="50" r="31" />
-                <path id="gv-stamp-arc" d="M 50 11 A 39 39 0 1 1 49.9 11" fill="none" stroke="none" />
-                <text><textPath href="#gv-stamp-arc">SURVEYED · SEOUL · 2024–26 · SRBL ·</textPath></text>
-                <text className="gv-stamp-core" x="50" y="54" textAnchor="middle">SNU</text>
-              </svg>
-            </span>
           </figure>
           <div className="gv-bench-map">
             <GridMap cur="home" navigate={navigate} large />

@@ -39,9 +39,11 @@ export const neighborOf = (room, d) =>
   AT[`${room.col + DIRS[d].dx},${room.row + DIRS[d].dy}`] || null;
 
 /* hash → room; station-level deep links land on the containing room.
-   Legacy room slugs (pre-retitle) stay as redirect aliases:
-   #software → E1, #adapters → E1 (constellation section),
-   #background → W2, #fieldlog / #field-log → S2. */
+   Legacy room slugs (pre-retitle) and retired chart/doc anchors stay
+   as redirect aliases: #software → E1, #adapters → E1 (constellation
+   section), #background → W2, #fieldlog / #field-log → S2,
+   chart station ids (#gaussianfeels, #log-3, #adapter-7, …) → their
+   owning rooms. */
 const ALIASES = {
   top: "home", hero: "home",
   gaussianfeels: "research", popslam: "research",
@@ -52,6 +54,7 @@ const ALIASES = {
   "mcp-node": "personal-projects", "lean-node": "personal-projects",
   "school-projects": "school-projects", capstone: "school-projects",
   archive: "school-projects",
+  "documents-marker": "school",
   "snu-grad": "experience", "snu-intern": "experience",
   "villanova-research": "experience", area2farms: "experience",
   ampere: "experience", "ucf-next": "experience",
@@ -65,7 +68,12 @@ export function roomFromHash(hash) {
   const id = (hash || "").replace(/^#/, "");
   if (!id) return "home";
   if (ROOM_MAP[id]) return id;
-  return ALIASES[id] || null;
+  if (ALIASES[id]) return ALIASES[id];
+  /* retired-chart numbered stations: photo/video plates → S2,
+     accelerator satellite dots → E1's constellation section */
+  if (/^logv?-\d+$/.test(id)) return "gallery";
+  if (/^adapter-\d+$/.test(id)) return "personal-projects";
+  return null;
 }
 
 /* hash → in-room section anchor (scrolled to after the room lands) */
@@ -73,5 +81,6 @@ const SECTION_TARGETS = { adapters: "adapter-constellation" };
 
 export function sectionFromHash(hash) {
   const id = (hash || "").replace(/^#/, "");
+  if (/^adapter-\d+$/.test(id)) return "adapter-constellation";
   return SECTION_TARGETS[id] || null;
 }

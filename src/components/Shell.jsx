@@ -80,18 +80,18 @@ export function Hero({ profile }) {
     <section id="top" className="hero">
       <div className="container hero-grid">
         <div className="hero-main">
-          <p className="hero-kicker boot" style={{ "--d": "0.05s" }}>
+          <p className="hero-kicker">
             <span className="kicker-dash" aria-hidden="true" />{profile.kicker}
           </p>
           <h1 className="hero-title">
-            <span className="line-mask boot" style={{ "--d": "0.15s" }}><span>{profile.headlineLines[0]}</span></span>
-            <span className="line-mask boot" style={{ "--d": "0.27s" }}><span>a <em>sense of touch.</em></span></span>
+            <span className="line-mask"><span>{profile.headlineLines[0]}</span></span>
+            <span className="line-mask"><span>a <em>sense of touch.</em></span></span>
           </h1>
-          <p className="hero-sub boot" style={{ "--d": "0.45s" }}>{profile.sub}</p>
-          <ul className="hero-meta boot" style={{ "--d": "0.58s" }}>
+          <p className="hero-sub">{profile.sub}</p>
+          <ul className="hero-meta">
             {profile.meta.map((m, i) => <li key={i}>{m}</li>)}
           </ul>
-          <div className="hero-links boot" style={{ "--d": "0.7s" }}>
+          <div className="hero-links">
             {links.map(l => (
               <a key={l.label} href={l.href} {...(l.ext ? { target: "_blank", rel: "noopener" } : {})}>
                 <Icon name={l.icon} size={13} /> {l.label}
@@ -99,7 +99,7 @@ export function Hero({ profile }) {
             ))}
           </div>
         </div>
-        <figure className="hero-fig boot" style={{ "--d": "0.5s" }}>
+        <figure className="hero-fig">
           <Crosshairs />
           <picture>
             <source srcSet={profile.headshotWebp} type="image/webp" />
@@ -109,7 +109,7 @@ export function Hero({ profile }) {
           <figcaption>{profile.figcaption}</figcaption>
         </figure>
       </div>
-      <div className="hero-rule boot-rule" aria-hidden="true" />
+      <div className="hero-rule" aria-hidden="true" />
     </section>
   );
 }

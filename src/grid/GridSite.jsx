@@ -19,7 +19,7 @@ import { RoomContent, GridMap } from "./RoomViews";
 const SLIDE_MS = 520;       // cardinal slide
 const SLIDE_DIAG_MS = 640;  // mini-map diagonal jump (single oblique slide)
 
-export default function GridSite({ reduced, onChartView, onDocView }) {
+export default function GridSite({ reduced }) {
   const [room, setRoom] = useState("home");
   const [trans, setTrans] = useState(null); // { to, dx, dy, dur }
   const roomRef = useRef(room);
@@ -225,15 +225,6 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
 
       <div className="gv-corner-map">
         <GridMap cur={room} navigate={navigate} />
-      </div>
-
-      <div className="gv-views" role="group" aria-label="Other views">
-        <button className="gv-viewbtn" onClick={onChartView} title="Open the free-pan research chart">
-          ⌖ CHART
-        </button>
-        <button className="gv-viewbtn" onClick={onDocView} title="Read as a plain document">
-          DOC
-        </button>
       </div>
 
       <div className="gv-caption" aria-hidden="true">
