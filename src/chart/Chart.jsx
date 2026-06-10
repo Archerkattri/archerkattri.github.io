@@ -398,7 +398,7 @@ export default function Chart({ onDocView, onGridView, reduced }) {
         className="viewport"
         ref={viewportRef}
         data-band="far"
-        aria-label="The research chart — drag to pan, scroll to zoom, click a station to open it. A station index is available from the top bar."
+        aria-label="The research chart: drag to pan, scroll to zoom, click a station to open it. A station index is available from the top bar."
       >
         <div className="world" ref={worldRef}>
           <Graticule />
@@ -453,7 +453,7 @@ export default function Chart({ onDocView, onGridView, reduced }) {
         DRAG TO PAN · SCROLL TO ZOOM · CLICK A STATION
       </div>
       <div className="hud chart-foot" aria-hidden="true">
-        © {new Date().getFullYear()} KRISHI ATTRI · CHART DRAWN AT 37.4565° N — BOUND FOR 28.6024° N
+        © {new Date().getFullYear()} KRISHI ATTRI · CHART DRAWN AT 37.4565° N · BOUND FOR 28.6024° N
       </div>
     </div>
   );

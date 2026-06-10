@@ -6,7 +6,7 @@
 import { PORTFOLIO_DATA as D } from "../data";
 import { Icon, Crosshairs } from "../components/Shell";
 import {
-  SectionHead, ResearchCard, SoftwareCard,
+  SectionHead, ResearchCard, SoftwareCard, XpRow, EarlierRoles,
   SchoolSection, SchoolProjectsSection, ContactSection,
 } from "../components/Sections";
 import { ROOMS, ROOM_MAP, DIRS } from "./grid";
@@ -17,7 +17,7 @@ export function GridMap({ cur, navigate, large = false }) {
     <div
       className={"gv-map" + (large ? " lg" : " sm")}
       role="navigation"
-      aria-label="Site map — the page grid"
+      aria-label="Site map, the page grid"
     >
       <span className="gv-map-axis h" aria-hidden="true" />
       <span className="gv-map-axis v" aria-hidden="true" />
@@ -27,7 +27,7 @@ export function GridMap({ cur, navigate, large = false }) {
           className={"gv-cell" + (r.id === cur ? " on" : "")}
           style={{ gridColumn: r.col + 1, gridRow: r.row + 1 }}
           onClick={() => navigate(r.id)}
-          aria-label={r.id === cur ? `${r.name} — you are here` : `Go to ${r.code} ${r.name}`}
+          aria-label={r.id === cur ? `${r.name}, you are here` : `Go to ${r.code} ${r.name}`}
           aria-current={r.id === cur ? "page" : undefined}
           title={`${r.code} · ${r.name}`}
         >
@@ -88,23 +88,35 @@ function HomeRoom({ navigate }) {
         </div>
       </div>
 
-      <div className="gv-home-side">
-        <div className="gv-map-plate">
-          <Crosshairs />
-          <div className="gv-map-cap">THE MAP — PRESS AN EDGE, OR A CELL</div>
-          <GridMap cur="home" navigate={navigate} large />
-          <div className="gv-map-legend" aria-hidden="true">
-            N RESEARCH · E PROJECTS · S CONTACT · W EXPERIENCE
+      {/* one composed instrument bench: photo plate + navigation chart
+          sharing a single frame and one caption rail */}
+      <div className="gv-bench">
+        <Crosshairs />
+        <div className="gv-bench-row">
+          <figure className="gv-bench-fig">
+            <span className="gv-fig-coord" aria-hidden="true">N 37.4565°<br />E 126.9520°</span>
+            <picture>
+              <source srcSet={p.headshotWebp} type="image/webp" />
+              <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
+            </picture>
+            <span className="gv-stamp" aria-hidden="true">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="46" />
+                <circle cx="50" cy="50" r="31" />
+                <path id="gv-stamp-arc" d="M 50 11 A 39 39 0 1 1 49.9 11" fill="none" stroke="none" />
+                <text><textPath href="#gv-stamp-arc">SURVEYED · SEOUL · 2024–26 · SRBL ·</textPath></text>
+                <text className="gv-stamp-core" x="50" y="54" textAnchor="middle">SNU</text>
+              </svg>
+            </span>
+          </figure>
+          <div className="gv-bench-map">
+            <GridMap cur="home" navigate={navigate} large />
           </div>
         </div>
-        <figure className="gv-home-fig">
-          <Crosshairs />
-          <picture>
-            <source srcSet={p.headshotWebp} type="image/webp" />
-            <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
-          </picture>
-          <figcaption>{p.figcaption}</figcaption>
-        </figure>
+        <div className="gv-bench-rail" aria-hidden="true">
+          <span className="gv-rail-cap">FIG. 00 · THE SURVEYOR</span>
+          <span className="gv-rail-cap wide">FIG. 01 · THE MAP · PRESS AN EDGE, OR A CELL</span>
+        </div>
       </div>
     </div>
   );
@@ -118,7 +130,7 @@ function ResearchRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="N1" label="Research" title="Perception through" em="occlusion."
-          sub="Thesis work and papers on visuo-tactile SLAM — making robots perceive what their own hands hide." />
+          sub="Thesis work and papers on visuo-tactile SLAM: making robots perceive what their own hands hide." />
         <div className="sheet-stack">
           {main.map(r => <ResearchCard key={r.id} item={r} />)}
         </div>
@@ -134,7 +146,7 @@ function ResearchRoom({ navigate }) {
             </div>
           ))}
         </div>
-        <RoomXRef to="publications" dir="n" label="The publication record — one room north" navigate={navigate} />
+        <RoomXRef to="publications" dir="n" label="The publication record, one room north" navigate={navigate} />
       </div>
     </section>
   );
@@ -165,10 +177,10 @@ function PublicationsRoom({ navigate }) {
         </div>
         <div className="ext-links gv-pub-extra">
           <a href={D.profile.contact.thesisSite} target="_blank" rel="noopener">
-            Thesis site — krishiattrisnu.github.io <Icon name="external" size={10} />
+            Thesis site · krishiattrisnu.github.io <Icon name="external" size={10} />
           </a>
         </div>
-        <RoomXRef to="research" dir="s" label="Back south — the research itself" navigate={navigate} />
+        <RoomXRef to="research" dir="s" label="Back south, the research itself" navigate={navigate} />
       </div>
     </section>
   );
@@ -176,9 +188,10 @@ function PublicationsRoom({ navigate }) {
 
 /* ════════════════ E1 · PERSONAL PROJECTS ════════════════ */
 const FAMILY_OF = name =>
-  name.includes("hunyuan") ? "Hunyuan3D family"
-    : name.includes("trellis") ? "TRELLIS family"
-      : "SAM 3D family";
+  name.toLowerCase().includes("comfyui") ? "Integrations"
+    : name.includes("hunyuan") ? "Hunyuan3D family"
+      : name.includes("trellis") ? "TRELLIS family"
+        : "SAM 3D family";
 
 /* in-room pointer: scrolls to a section further down the same room */
 function SectionJump({ target, label }) {
@@ -205,7 +218,7 @@ function PersonalProjectsRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="E1" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source research libraries — each one pip-installable, benchmarked, and in use." />
+          sub="Open-source research libraries. Each one pip-installable, benchmarked, and in use." />
         <div className="sw-stack">
           {D.software.map(s => (
             <SoftwareCard
@@ -215,17 +228,17 @@ function PersonalProjectsRoom({ navigate }) {
               adaptersAction={
                 s.adaptersNote ? (
                   <SectionJump target="adapter-constellation"
-                    label="The 12 per-model adapters — end of this room" />
+                    label="The accelerator family, end of this room" />
                 ) : null
               }
             />
           ))}
         </div>
 
-        {/* closing section: the HiCache++ adapter constellation */}
+        {/* closing section: the HiCache accelerator constellation */}
         <div id="adapter-constellation" className="gv-constellation">
-          <SectionHead index="E1·b" label="Adapter constellation" title="The HiCache++" em="constellation."
-            sub="Twelve per-model adapter repos — each generator paired with HiCache++ (DMD exponential basis) or HiCache (Hermite). Drop-in and training-free." />
+          <SectionHead index="E1·b" label="Accelerator family" title="The HiCache++" em="constellation."
+            sub="Fourteen repos around one idea: thirteen accelerators (each generator paired with HiCache++ DMD or HiCache Hermite, plus the TaylorSeer baseline) and a ComfyUI node. Drop-in and training-free." />
           {families.map(f => (
             <div key={f.name} className="gv-family">
               <div className="bg-label">{f.name}</div>
@@ -241,7 +254,7 @@ function PersonalProjectsRoom({ navigate }) {
             </div>
           ))}
         </div>
-        <RoomXRef to="school-projects" dir="e" label="School projects — one room east" navigate={navigate} />
+        <RoomXRef to="school-projects" dir="e" label="School projects, one room east" navigate={navigate} />
       </div>
     </section>
   );
@@ -255,7 +268,7 @@ function SchoolProjectsRoom({ navigate }) {
       index="E2"
       footer={
         <RoomXRef to="personal-projects" dir="w"
-          label="Back west — the released libraries" navigate={navigate} />
+          label="Back west, the released libraries" navigate={navigate} />
       }
     />
   );
@@ -267,29 +280,22 @@ function ExperienceRoom() {
     <section className="section">
       <div className="container">
         <SectionHead index="W1" label="Experience" title="Lab, field &" em="industry."
-          sub="The route so far — newest first. Seoul now, Orlando next." />
+          sub="The route so far, newest first. Seoul now, Orlando next." />
         <div className="gv-route">
-          <div className="gv-route-next">
-            NEXT STOP — UCF PH.D. · ORCGS DOCTORAL FELLOW · AUG 2026
+          {/* penciled-in margin note: the stop that isn't on the route yet */}
+          <div className="gv-route-next" aria-label="Next stop: UCF Ph.D., ORCGS Doctoral Fellow, August 2026">
+            <span className="gv-note-caret" aria-hidden="true">^</span>
+            <span className="gv-note-text">next stop UCF, Ph.D. · ORCGS fellow · Aug 2026</span>
           </div>
           <div className="xp-list gv-route-list">
             {D.experience.map(e => (
-              <div key={e.id} className="xp-row gv-stop">
-                <div className="xp-date">{e.date}</div>
-                <div className="xp-main">
-                  <h3>{e.title}</h3>
-                  <div className="xp-org">{e.org} · {e.location}</div>
-                  <p className="xp-sum">{e.summary}</p>
-                  {e.bullets.length > 0 && (
-                    <ul className="xp-bullets">
-                      {e.bullets.map((b, i) => <li key={i}>{b}</li>)}
-                    </ul>
-                  )}
-                </div>
+              <div key={e.id} className="gv-stop">
+                <XpRow e={e} />
               </div>
             ))}
           </div>
         </div>
+        <EarlierRoles data={D} />
       </div>
     </section>
   );

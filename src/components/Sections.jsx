@@ -92,7 +92,7 @@ export function ResearchSection({ data }) {
     <section id="research" className="section">
       <div className="container">
         <SectionHead index="01" label="Research" title="Perception through" em="occlusion."
-          sub="Thesis work and papers on visuo-tactile SLAM — making robots perceive what their own hands hide." />
+          sub="Thesis work and papers on visuo-tactile SLAM: making robots perceive what their own hands hide." />
         <div className="sheet-stack">
           {main.map(r => <ResearchCard key={r.id} item={r} />)}
         </div>
@@ -196,7 +196,7 @@ export function PersonalProjectsSection({ data }) {
     <section id="personal-projects" className="section">
       <div className="container">
         <SectionHead index="02" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source research libraries — each one pip-installable, benchmarked, and in use." />
+          sub="Open-source research libraries. Each one pip-installable, benchmarked, and in use." />
         <div className="sw-stack">
           {data.software.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
         </div>
@@ -206,28 +206,54 @@ export function PersonalProjectsSection({ data }) {
 }
 
 /* ──────────────── 03 / EXPERIENCE ──────────────── */
+export function XpRow({ e }) {
+  return (
+    <div className="xp-row reveal">
+      <div className="xp-date">{e.date}</div>
+      <div className="xp-main">
+        <h3>{e.title}</h3>
+        <div className="xp-org">{e.org} · {e.location}</div>
+        <p className="xp-sum">{e.summary}</p>
+        {e.bullets.length > 0 && (
+          <ul className="xp-bullets">
+            {e.bullets.map((b, i) => <li key={i}>{b}</li>)}
+          </ul>
+        )}
+        {e.links?.length > 0 && (
+          <div className="xp-links">
+            <ExtLinks links={e.links} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* the two non-research university jobs, kept to one quiet line each */
+export function EarlierRoles({ data }) {
+  return (
+    <div className="xp-earlier reveal">
+      <div className="bg-label">Also held, Villanova</div>
+      {data.earlierRoles.map((r, i) => (
+        <div key={i} className="xp-earlier-row">
+          <span className="xp-earlier-title">{r.title}</span>
+          <span className="xp-earlier-note">{r.note}</span>
+          <span className="xp-earlier-date">{r.date}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function ExperienceSection({ data, index = "03", sub }) {
   return (
     <section id="experience" className="section">
       <div className="container">
         <SectionHead index={index} label="Experience" title="Lab, field &" em="industry." sub={sub} />
         <div className="xp-list">
-          {data.experience.map(e => (
-            <div key={e.id} className="xp-row reveal">
-              <div className="xp-date">{e.date}</div>
-              <div className="xp-main">
-                <h3>{e.title}</h3>
-                <div className="xp-org">{e.org} · {e.location}</div>
-                <p className="xp-sum">{e.summary}</p>
-                {e.bullets.length > 0 && (
-                  <ul className="xp-bullets">
-                    {e.bullets.map((b, i) => <li key={i}>{b}</li>)}
-                  </ul>
-                )}
-              </div>
-            </div>
-          ))}
+          {data.experience.map(e => <XpRow key={e.id} e={e} />)}
         </div>
+        <EarlierRoles data={data} />
       </div>
     </section>
   );
@@ -246,7 +272,14 @@ export function SchoolSection({ data, index = "04" }) {
               <div className="edu-degree">{e.degree}</div>
               <div className="edu-school">{e.school}</div>
               <div className="edu-note">{e.note}</div>
-              <div className="edu-date">{e.date}</div>
+              <div className="edu-date">
+                {e.date}
+                {e.links?.map(l => (
+                  <a key={l.href} className="edu-link" href={l.href} target="_blank" rel="noopener">
+                    {l.label} <Icon name="external" size={9} />
+                  </a>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -254,7 +287,24 @@ export function SchoolSection({ data, index = "04" }) {
         <div className="bg-cols">
           <div className="bg-col reveal">
             <div className="bg-label">Honors & fellowships</div>
-            {data.honors.map((h, i) => (
+            {data.honors.map((h, i) => h.href ? (
+              <a key={i} className="bg-row link" href={h.href} target="_blank" rel="noopener">
+                <span className="bg-title">{h.title} <Icon name="external" size={10} /></span>
+                <span className="bg-meta">{h.org} · {h.date}</span>
+              </a>
+            ) : (
+              <div key={i} className="bg-row">
+                <span className="bg-title">{h.title}</span>
+                <span className="bg-meta">{h.org} · {h.date}</span>
+              </div>
+            ))}
+            <div className="bg-label bg-label-follow">Leadership</div>
+            {data.leadership.map((h, i) => h.href ? (
+              <a key={i} className="bg-row link" href={h.href} target="_blank" rel="noopener">
+                <span className="bg-title">{h.title} <Icon name="external" size={10} /></span>
+                <span className="bg-meta">{h.org} · {h.date}</span>
+              </a>
+            ) : (
               <div key={i} className="bg-row">
                 <span className="bg-title">{h.title}</span>
                 <span className="bg-meta">{h.org} · {h.date}</span>
@@ -264,10 +314,15 @@ export function SchoolSection({ data, index = "04" }) {
           <div className="bg-col reveal">
             <div className="bg-label">Documents</div>
             {data.documents.map((d, i) => (
-              <a key={i} className="bg-row link" href={d.href} target="_blank" rel="noopener">
-                <span className="bg-title">{d.title} <Icon name="external" size={10} /></span>
-                <span className="bg-meta">PDF</span>
-              </a>
+              <div key={i} className="bg-row doc-row">
+                <a className="bg-title" href={d.href} target="_blank" rel="noopener">
+                  {d.title} <Icon name="external" size={10} />
+                </a>
+                <span className="bg-meta">
+                  <a className="doc-kind" href={d.href} target="_blank" rel="noopener">PDF</a>
+                  {d.drive && <> · <a className="doc-kind" href={d.drive} target="_blank" rel="noopener">Drive</a></>}
+                </span>
+              </div>
             ))}
           </div>
         </div>
@@ -313,11 +368,7 @@ export function SchoolProjectsSection({ data, index = "05", footer = null }) {
               </div>
             </header>
             <footer className="sheet-foot">
-              <div className="ext-links">
-                <a href={capstone.href} target="_blank" rel="noopener">
-                  Capstone award (PDF) <Icon name="external" size={10} />
-                </a>
-              </div>
+              <ExtLinks links={data.capstoneLinks} />
             </footer>
           </article>
         </div>
@@ -352,7 +403,7 @@ export function GallerySection({ data }) {
   return (
     <section id="gallery" className="section fieldlog-sec">
       <div className="container">
-        <div className="bg-label reveal">Gallery — hardware along the way</div>
+        <div className="bg-label reveal">Gallery · hardware along the way</div>
       </div>
       <div className="fieldlog reveal" tabIndex="0" aria-label="Photo log, scrolls horizontally">
         {data.gallery.map((g, i) => (
@@ -399,6 +450,8 @@ export function ContactSection({ data, index = "06", children }) {
               { label: "LinkedIn", val: "linkedin.com/in/krishi-attri15", href: c.linkedin, icon: "linkedin" },
               { label: "Thesis site", val: "krishiattrisnu.github.io", href: c.thesisSite, icon: "external" },
               { label: "CV", val: "Krishi_Attri_CV.pdf", href: c.cv, icon: "file" },
+              { label: "Resume", val: "Krishi_Attri_Resume.pdf", href: c.resume, icon: "file" },
+              { label: "This site", val: "source on GitHub", href: c.siteSource, icon: "github" },
             ].map(l => (
               <a key={l.label} href={l.href} target="_blank" rel="noopener">
                 <span className="cl-label">{l.label}</span>

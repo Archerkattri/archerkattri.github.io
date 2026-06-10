@@ -32,7 +32,7 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
 
   const announce = useCallback(id => {
     const r = ROOM_MAP[id];
-    if (liveRef.current) liveRef.current.textContent = `${r.code} — ${r.name}`;
+    if (liveRef.current) liveRef.current.textContent = `${r.code} · ${r.name}`;
   }, []);
 
   const setHash = useCallback((id, push) => {
@@ -191,8 +191,11 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
         )}
       </div>
 
-      {/* ── HUD: fixed instruments over the sliding pages ── */}
-      <nav className="gv-edges" aria-label="Map navigation — neighboring pages">
+      {/* ── HUD: fixed instruments over the sliding pages ──
+          Edge buttons are bare arrows; hover / keyboard focus slides the
+          destination name out. Touch: N/S keep their labels (room at the
+          edges), E/W stay chevron-only thumb tabs (see grid.css). */}
+      <nav className="gv-edges" aria-label="Map navigation, neighboring pages">
         {Object.keys(DIRS).map(d => {
           const n = neighborOf(cur, d);
           if (!n) return null;
@@ -201,11 +204,10 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
               key={d}
               className={`gv-edge gv-edge-${d}`}
               onClick={() => navigate(n.id)}
-              aria-label={`Go ${DIRS[d].word} — ${n.name}`}
+              aria-label={`Go ${DIRS[d].word}: ${n.name}`}
             >
               <span className="gv-edge-arrow" aria-hidden="true">{DIRS[d].arrow}</span>
-              <span className="gv-edge-label">{n.name}</span>
-              <span className="gv-edge-code" aria-hidden="true">{n.code}</span>
+              <span className="gv-edge-label" aria-hidden="true">{n.name}</span>
             </button>
           );
         })}
@@ -213,7 +215,7 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
 
       {room === "home" ? (
         <span className="gv-brand" aria-hidden="true">
-          <span className="nav-sig" />KRISHI ATTRI<span className="gv-brand-tail"> — THE MAP</span>
+          <span className="nav-sig" />KRISHI ATTRI<span className="gv-brand-tail"> · THE MAP</span>
         </span>
       ) : (
         <button className="gv-homebtn" onClick={() => navigate("home")} aria-label="Return home (H)">
@@ -235,7 +237,7 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
       </div>
 
       <div className="gv-caption" aria-hidden="true">
-        {cur.code} · {cur.name} — © {new Date().getFullYear()} KRISHI ATTRI
+        {cur.code} · {cur.name} · © {new Date().getFullYear()} KRISHI ATTRI
       </div>
 
       <span className="gv-live" role="status" aria-live="polite" ref={liveRef} />
@@ -247,7 +249,7 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
 function RoomShell({ id, navigate, scrollerRef }) {
   const def = ROOM_MAP[id];
   return (
-    <section className="gv-room" aria-label={`${def.code} — ${def.name}`}>
+    <section className="gv-room" aria-label={`${def.code} · ${def.name}`}>
       <div className="gv-scroll" ref={scrollerRef} tabIndex={-1}>
         <div className="gv-inner">
           <RoomContent id={id} navigate={navigate} />

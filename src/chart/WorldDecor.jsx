@@ -34,7 +34,7 @@ export function Graticule() {
         <line className="g-axis" vectorEffect="non-scaling-stroke" x1={WORLD.minX} y1="0" x2={WORLD.maxX} y2="0" />
         <line className="g-axis" vectorEffect="non-scaling-stroke" x1="0" y1={WORLD.minY} x2="0" y2={WORLD.maxY} />
         <circle className="g-origin" cx="0" cy="0" r="7" />
-        <text className="g-tick origin" x={20} y={-18}>0,0 — SEOUL DATUM</text>
+        <text className="g-tick origin" x={20} y={-18}>0,0 · SEOUL DATUM</text>
         {ticks}
       </svg>
     </>
@@ -49,7 +49,7 @@ export function DistrictFrames() {
       style={{ left: d.rect.x, top: d.rect.y, width: d.rect.w, height: d.rect.h }}
       aria-hidden="true"
     >
-      <span className="district-tab">DISTRICT {d.n} — {d.name}</span>
+      <span className="district-tab">DISTRICT {d.n} · {d.name}</span>
       <span className="district-name">{d.name}</span>
       <i className="dc tl" /><i className="dc tr" /><i className="dc bl" /><i className="dc br" />
     </div>

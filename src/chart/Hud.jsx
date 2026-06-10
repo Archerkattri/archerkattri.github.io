@@ -89,7 +89,7 @@ export function Minimap({ viewRectRef, onJump }) {
     window.addEventListener("pointerup", up);
   };
   return (
-    <div className="hud minimap" aria-label="Mini-map — click to jump">
+    <div className="hud minimap" aria-label="Mini-map, click to jump">
       <svg
         ref={svgRef} width={MM_W} height={MM_H}
         viewBox={`${WORLD.minX} ${WORLD.minY} ${WORLD.maxX - WORLD.minX} ${WORLD.maxY - WORLD.minY}`}
@@ -105,7 +105,7 @@ export function Minimap({ viewRectRef, onJump }) {
         ))}
         <rect ref={viewRectRef} className="mm-view" x="0" y="0" width="100" height="100" vectorEffect="non-scaling-stroke" />
       </svg>
-      <span className="mm-label">PLAN — 1:{Math.round(1 / k / 10) * 10}</span>
+      <span className="mm-label">PLAN · 1:{Math.round(1 / k / 10) * 10}</span>
     </div>
   );
 }
@@ -168,7 +168,7 @@ export function MobileSheet({ state, setState, openId, onSelect, onCloseCard }) 
   const title = st ? (st.data?.title || st.data?.name || st.label) : null;
   return (
     <div className={`hud sheet s-${state}`} role={state === "card" ? "dialog" : undefined}
-      aria-label={state === "card" && title ? `${title} — full card` : "Station index"}>
+      aria-label={state === "card" && title ? `${title}: full card` : "Station index"}>
       <button className="sheet-handle" onPointerDown={onDown} onPointerUp={onUp}
         aria-label={state === "peek" ? "Open station index" : "Collapse sheet"}>
         <i aria-hidden="true" />
@@ -182,7 +182,7 @@ export function MobileSheet({ state, setState, openId, onSelect, onCloseCard }) 
       <div className="sheet-body">
         {state === "card" && st ? (
           <div className="sheet-card">
-            <span className="st-code">ST {codeOf(st.id)} — FULL CARD</span>
+            <span className="st-code">ST {codeOf(st.id)} · FULL CARD</span>
             <h2 className="pn-title">{title}</h2>
             <PanelContent st={st} />
           </div>

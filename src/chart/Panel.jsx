@@ -66,7 +66,7 @@ function SoftwareFull({ data }) {
       {data.links?.length > 0 && <ExtLinks links={data.links} />}
       {data.adaptersNote && (
         <>
-          <div className="pn-label">The 12 per-model adapters</div>
+          <div className="pn-label">The accelerator family · 14 repos</div>
           <div className="adapters-grid">
             {D.adapters.map(a => (
               <a key={a.name} href={a.url} target="_blank" rel="noopener" className="adapter">
@@ -91,6 +91,7 @@ function XpFull({ data }) {
           {data.bullets.map((b, i) => <li key={i}>{b}</li>)}
         </ul>
       )}
+      {data.links?.length > 0 && <ExtLinks links={data.links} />}
     </>
   );
 }
@@ -104,12 +105,22 @@ function EducationFull({ data }) {
       </div>
       <span className="edu-school">{e.school} · {e.date}</span>
       <span className="edu-note">{e.note}</span>
+      {e.links?.map(l => (
+        <a key={l.href} className="edu-link" href={l.href} target="_blank" rel="noopener">
+          {l.label} <Icon name="external" size={9} />
+        </a>
+      ))}
     </div>
   ));
 }
 
 function HonorsFull({ data }) {
-  return data.map((h, i) => (
+  return data.map((h, i) => h.href ? (
+    <a key={i} className="bg-row link" href={h.href} target="_blank" rel="noopener">
+      <span className="bg-title">{h.title} <Icon name="external" size={10} /></span>
+      <span className="bg-meta">{h.org} · {h.date}</span>
+    </a>
+  ) : (
     <div key={i} className="bg-row">
       <span className="bg-title">{h.title}</span>
       <span className="bg-meta">{h.org} · {h.date}</span>
@@ -205,10 +216,10 @@ function titleOf(st) {
 export function Panel({ st, onClose }) {
   if (!st) return null;
   return (
-    <aside className="panel" role="dialog" aria-modal="false" aria-label={`${titleOf(st)} — full card`}>
+    <aside className="panel" role="dialog" aria-modal="false" aria-label={`${titleOf(st)}: full card`}>
       <header className="pn-head">
         <div>
-          <span className="st-code">ST {codeOf(st.id)} — FULL CARD</span>
+          <span className="st-code">ST {codeOf(st.id)} · FULL CARD</span>
           <h2 className="pn-title">{titleOf(st)}</h2>
         </div>
         <button className="pn-close" onClick={onClose} aria-label="Close card (Esc)">

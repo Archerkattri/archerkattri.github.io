@@ -161,7 +161,7 @@ function SoftwareBody({ data }) {
       <InstallLine cmd={data.install} />
       <p className="sw-spec">{data.spec}</p>
       <SwStats stats={data.stats} />
-      {data.adaptersNote && <p className="st-meta-line sat-note">▸ {data.adaptersNote} — 12 satellites, charted east</p>}
+      {data.adaptersNote && <p className="st-meta-line sat-note">▸ {data.adaptersNote} · 14 satellites, charted east</p>}
     </>
   );
 }
@@ -180,7 +180,7 @@ function XpBody({ data }) {
 function EducationBody({ data }) {
   return (
     <>
-      <h2 className="st-label-title">Education — four schools, three countries</h2>
+      <h2 className="st-label-title">Education · four schools, three countries</h2>
       {data.map(e => (
         <div key={e.id} className="edu-row">
           <div className="edu-row-head">
@@ -384,7 +384,7 @@ export function Station({ st, bootIndex, active, onActivate, onFocusStation }) {
         <button
           type="button" className="st-chrome" tabIndex={-1}
           onClick={() => onActivate(st.id)}
-          title={PANEL_TYPES.has(st.type) ? `Open ${st.label} — full card` : st.label}
+          title={PANEL_TYPES.has(st.type) ? `Open ${st.label}: full card` : st.label}
         >
           <span className="st-code">ST {codeOf(st.id)}</span>
           <span className="st-chrome-rule" />
@@ -398,7 +398,7 @@ export function Station({ st, bootIndex, active, onActivate, onFocusStation }) {
       <button
         type="button"
         className="st-hit"
-        aria-label={`${st.label} — open station`}
+        aria-label={`${st.label}, open station`}
         onClick={() => onActivate(st.id)}
         onFocus={e => onFocusStation(st.id, e)}
       />
