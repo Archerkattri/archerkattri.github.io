@@ -57,6 +57,11 @@ function RoomXRef({ to, dir, label, navigate }) {
 }
 
 /* ════════════════ 00 · HOME ════════════════ */
+/* Identity-first composition: the photo is the primary visual mass
+   (one framed plate beside the identity stack); the room-grid map is a
+   subordinate instrument card below the text. The map stays fully
+   usable as navigation (clickable cells), it just no longer competes
+   with Krishi for the cold-open eye. */
 function HomeRoom({ navigate }) {
   const p = D.profile;
   const c = p.contact;
@@ -66,48 +71,53 @@ function HomeRoom({ navigate }) {
     { label: "LinkedIn", href: c.linkedin, icon: "linkedin", ext: true },
     { label: "CV", href: c.cv, icon: "file", ext: true },
   ];
+  const identity = (
+    <div className="gv-home-id">
+      {/* identity first: the name at display scale, then the role line,
+          then the one-liner (who / what / why inside two seconds) */}
+      <h1 className="gv-home-name">{p.name}</h1>
+      <p className="gv-home-role">
+        <span className="kicker-dash" aria-hidden="true" />{p.roleLine}
+      </p>
+      <p className="gv-home-tag">
+        {p.headlineLines[0]} <em>{p.headlineLines[1]}</em>
+      </p>
+      <p className="hero-sub">{p.sub}</p>
+      <ProofLine proof={p.proofLine} />
+      <ul className="hero-meta">
+        {p.meta.map((m, i) => <li key={i}>{m}</li>)}
+      </ul>
+      <div className="hero-links">
+        {links.map(l => (
+          <a key={l.label} href={l.href} {...(l.ext ? { target: "_blank", rel: "noopener" } : {})}>
+            <Icon name={l.icon} size={13} /> {l.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+  const photo = (
+    <figure className="gv-home-fig">
+      <picture>
+        <source srcSet={p.headshotWebp} type="image/webp" />
+        <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
+      </picture>
+    </figure>
+  );
+  // GridMap carries role="navigation" itself
+  const map = (
+    <div className="gv-home-map">
+      <GridMap cur="home" navigate={navigate} large />
+      <span className="gv-map-hint" aria-hidden="true">Press an edge, or a cell</span>
+    </div>
+  );
   return (
     <div className="gv-home">
-      <div className="gv-home-id">
-        {/* identity first: the name at display scale, then the role line,
-            then the one-liner (who / what / why inside two seconds) */}
-        <h1 className="gv-home-name">{p.name}</h1>
-        <p className="gv-home-role">
-          <span className="kicker-dash" aria-hidden="true" />{p.roleLine}
-        </p>
-        <p className="gv-home-tag">
-          {p.headlineLines[0]} <em>{p.headlineLines[1]}</em>
-        </p>
-        <p className="hero-sub">{p.sub}</p>
-        <ProofLine proof={p.proofLine} />
-        <ul className="hero-meta">
-          {p.meta.map((m, i) => <li key={i}>{m}</li>)}
-        </ul>
-        <div className="hero-links">
-          {links.map(l => (
-            <a key={l.label} href={l.href} {...(l.ext ? { target: "_blank", rel: "noopener" } : {})}>
-              <Icon name={l.icon} size={13} /> {l.label}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* one composed instrument bench: photo plate + navigation chart
-          sharing a single frame */}
-      <div className="gv-bench">
-        <div className="gv-bench-row">
-          <figure className="gv-bench-fig">
-            <picture>
-              <source srcSet={p.headshotWebp} type="image/webp" />
-              <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
-            </picture>
-          </figure>
-          <div className="gv-bench-map">
-            <GridMap cur="home" navigate={navigate} large />
-            <span className="gv-map-hint" aria-hidden="true">Press an edge, or a cell</span>
-          </div>
-        </div>
-      </div>
+      {identity}
+      <aside className="gv-home-rail">
+        {photo}
+        {map}
+      </aside>
     </div>
   );
 }

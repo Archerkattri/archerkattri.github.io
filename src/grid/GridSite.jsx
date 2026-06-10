@@ -242,11 +242,18 @@ export default function GridSite({ reduced }) {
         })}
       </nav>
 
-      {room === "home" ? (
-        <span className="gv-brand" aria-hidden="true">KRISHI ATTRI</span>
-      ) : (
-        <button className="gv-homebtn" onClick={() => navigate("home")} aria-label="Return home (H)">
-          <span aria-hidden="true">⌖</span> HOME
+      {/* Identity anchor: on HOME the hero name is the only name on screen
+          (no corner brand). In every other room the top-left control is the
+          name itself acting as the home link, so each page stays signed and
+          one press returns to the hero. */}
+      {room !== "home" && (
+        <button
+          className="gv-homebtn"
+          onClick={() => navigate("home")}
+          aria-label="Krishi Attri, return home (H)"
+          title="Home (H)"
+        >
+          <span aria-hidden="true">⌖</span> KRISHI ATTRI
         </button>
       )}
 
@@ -260,8 +267,10 @@ export default function GridSite({ reduced }) {
         </div>
       )}
 
+      {/* on home the hero name stands alone, so the caption skips the © name */}
       <div className="gv-caption" aria-hidden="true">
-        {cur.code} · {cur.name} · © {new Date().getFullYear()} KRISHI ATTRI
+        {cur.code} · {cur.name}
+        {room !== "home" && <> · © {new Date().getFullYear()} KRISHI ATTRI</>}
       </div>
 
       <span className="gv-live" role="status" aria-live="polite" ref={liveRef} />
