@@ -50,7 +50,8 @@ const ALIASES = {
   "gnss-denied": "research", semg: "research", "thesis-site": "research",
   software: "personal-projects", adapters: "personal-projects",
   splatreg: "personal-projects", mathlas: "personal-projects",
-  "hicache-pp": "personal-projects",
+  "hicache-pp": "personal-projects", "cert-flow": "personal-projects",
+  certflow: "personal-projects",
   "mcp-node": "personal-projects", "lean-node": "personal-projects",
   "school-projects": "school-projects", capstone: "school-projects",
   archive: "school-projects",
@@ -85,6 +86,8 @@ const SECTION_TARGETS = {
   splatreg: "splatreg",
   mathlas: "mathlas",
   "hicache-pp": "hicache-pp",
+  "cert-flow": "cert-flow",
+  certflow: "cert-flow",
 };
 
 export function sectionFromHash(hash) {
