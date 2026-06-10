@@ -142,26 +142,34 @@ p { margin: 0; }
   gap: clamp(32px, 6vw, 80px);
   align-items: end;
 }
-.hero-kicker {
-  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--accent);
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 26px;
-}
 .kicker-dash { width: 42px; height: 1px; background: var(--accent); display: inline-block; }
-.hero-title {
+/* identity stack (mirrors .gv-home-name / -role / -tag in grid.css):
+   name at display scale → role line → one-liner */
+.hero-name {
   font-family: var(--font-display);
-  font-size: clamp(46px, 8.2vw, 96px);
-  font-weight: 380;
-  line-height: 1.02;
-  letter-spacing: -0.015em;
-  margin: 0 0 30px;
+  font-size: clamp(50px, 7vw, 88px);
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -0.018em;
+  margin: 0 0 20px;
   font-variation-settings: "opsz" 144;
 }
-.hero-title em {
-  font-style: italic; font-weight: 340; color: var(--accent);
+.hero-role {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 17px; line-height: 1.5; font-weight: 540;
+  color: var(--ink);
+  margin: 0 0 16px;
 }
-.line-mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.hero-tag {
+  font-family: var(--font-display);
+  font-size: clamp(23px, 2.6vw, 32px);
+  font-weight: 380;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 24px;
+  font-variation-settings: "opsz" 110;
+}
+.hero-tag em { font-style: italic; font-weight: 340; color: var(--accent); }
 .hero-sub {
   max-width: 560px; font-size: 17.5px; line-height: 1.66;
   color: var(--ink-muted); margin-bottom: 30px;

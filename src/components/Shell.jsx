@@ -70,13 +70,14 @@ export function Hero({ profile }) {
     <section id="top" className="hero">
       <div className="container hero-grid">
         <div className="hero-main">
-          <p className="hero-kicker">
-            <span className="kicker-dash" aria-hidden="true" />{profile.kicker}
+          {/* identity first: name at display scale → role line → one-liner */}
+          <h1 className="hero-name">{profile.name}</h1>
+          <p className="hero-role">
+            <span className="kicker-dash" aria-hidden="true" />{profile.roleLine}
           </p>
-          <h1 className="hero-title">
-            <span className="line-mask"><span>{profile.headlineLines[0]}</span></span>
-            <span className="line-mask"><span>a <em>sense of touch.</em></span></span>
-          </h1>
+          <p className="hero-tag">
+            {profile.headlineLines[0]} <em>{profile.headlineLines[1]}</em>
+          </p>
           <p className="hero-sub">{profile.sub}</p>
           <ProofLine proof={profile.proofLine} />
           <ul className="hero-meta">
