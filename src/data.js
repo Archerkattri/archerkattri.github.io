@@ -1,6 +1,7 @@
 // Portfolio data — edit this file to update content.
-// Sections map: profile/hero → Shell.jsx · research/software/experience/
-// background/gallery/contact → components/Sections.jsx
+// Sections map: profile/hero → Shell.jsx · research / personal projects
+// (software+adapters) / experience / school / school projects (archive) /
+// gallery / contact → components/Sections.jsx
 
 export const PORTFOLIO_DATA = {
   profile: {
@@ -118,7 +119,7 @@ export const PORTFOLIO_DATA = {
     },
   ],
 
-  /* ──────────────── 02 / SOFTWARE ──────────────── */
+  /* ──────── E1 / PERSONAL PROJECTS — released libraries ──────── */
   software: [
     {
       id: "splatreg",
@@ -179,7 +180,8 @@ export const PORTFOLIO_DATA = {
     },
   ],
 
-  // HiCache family adapter repos, shown as an expandable cluster under HiCache++.
+  // HiCache family adapter repos — the constellation closing the
+  // PERSONAL PROJECTS room (expandable cluster under HiCache++ in doc view).
   adapters: [
     { name: "hunyuan2.1-plus-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus-plus", desc: "HiCache++ (DMD) · Hunyuan3D-2.1" },
     { name: "hunyuan2.1-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus", desc: "HiCache (Hermite) · Hunyuan3D-2.1" },
@@ -251,7 +253,7 @@ export const PORTFOLIO_DATA = {
     },
   ],
 
-  /* ──────────────── 04 / BACKGROUND ──────────────── */
+  /* ──────── W2 / SCHOOL — education · honors · documents · stack ──────── */
   education: [
     {
       id: "ucf",
@@ -314,8 +316,9 @@ export const PORTFOLIO_DATA = {
     "Languages & tools": ["Python", "C/C++", "MATLAB", "LaTeX", "SOLIDWORKS", "Linux", "Git"],
   },
 
+  /* ──────── E2 / SCHOOL PROJECTS — capstone first, then earlier builds ──────── */
   archive: [
-    { title: "Plant-lifting device for 3D imaging", date: "2024", note: "FMC-sponsored capstone — 1st place, Most Innovative Solution. Team lead." },
+    { title: "Plant-lifting device for 3D imaging", date: "2024", note: "FMC-sponsored capstone — 1st place, Most Innovative Solution. Team lead.", href: "assets/docs/Capstone.pdf" },
     { title: "CV object-detection web app", date: "2024", note: "React + Flask; benchmarked five detectors on COCO.", href: "https://github.com/Archerkattri/computervisionproj" },
     { title: "EOD robot platform", date: "2023", note: "Explosive-ordnance-disposal robotics; teleoperation and manipulation." },
     { title: "Arduino puzzle box", date: "2022", note: "Randomised solution algorithm; glitter-spray penalty for wrong inputs." },

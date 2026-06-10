@@ -32,10 +32,11 @@ export function Crosshairs() {
 
 const NAV_LINKS = [
   { id: "research", n: "01", label: "Research" },
-  { id: "software", n: "02", label: "Software" },
+  { id: "personal-projects", n: "02", label: "Personal projects" },
   { id: "experience", n: "03", label: "Experience" },
-  { id: "background", n: "04", label: "Background" },
-  { id: "contact", n: "05", label: "Contact" },
+  { id: "school", n: "04", label: "School" },
+  { id: "school-projects", n: "05", label: "School projects" },
+  { id: "contact", n: "06", label: "Contact" },
 ];
 
 export function Nav({ active, cv }) {

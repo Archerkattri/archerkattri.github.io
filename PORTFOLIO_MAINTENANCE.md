@@ -22,19 +22,26 @@ The chosen view persists for the session (`sessionStorage["ka-view"]`).
 
 ### Grid anatomy (`src/grid/`)
 
-The grid (plus-shaped; arms only connect through the center):
+The grid (plus-shaped; arms only connect through the center). Room titles
+are deliberately self-explanatory — reading the title tells you what's inside:
 
 ```
-                       [N2 PUBLICATIONS]
-                       [N1 RESEARCH    ]
-[W2 BACKGROUND] [W1 EXPERIENCE] [00 HOME] [E1 SOFTWARE] [E2 ADAPTERS]
-                       [S1 CONTACT     ]
-                       [S2 FIELD LOG   ]
+                   [N2 PUBLICATIONS]
+                   [N1 RESEARCH    ]
+[W2 SCHOOL] [W1 EXPERIENCE] [00 HOME] [E1 PERSONAL PROJECTS] [E2 SCHOOL PROJECTS]
+                   [S1 CONTACT     ]
+                   [S2 GALLERY     ]
 ```
 
-- **`grid.js`** — the room lattice (`ROOMS` with col/row, codes, names), cardinal `neighborOf`, and `roomFromHash` (station-level hashes like `#gaussianfeels` alias to their containing room).
+- **E1 PERSONAL PROJECTS** — the three released library datasheets (splatreg / mathlas / HiCache++) with the 12-adapter HiCache++ constellation as the room's closing section (`#adapter-constellation`).
+- **E2 SCHOOL PROJECTS** — the FMC-sponsored capstone (featured) + the "Earlier builds" archive.
+- **W2 SCHOOL** — education, honors & fellowships, documents (CV/resume/PDFs), the condensed stack.
+- **S2 GALLERY** — the photo/video plates (formerly "Field log").
+- Legacy hash slugs stay as **redirect aliases** (don't remove): `#software` → E1, `#adapters` → E1's constellation section, `#background` → W2, `#fieldlog` / `#field-log` → S2. New canonical slugs: `#personal-projects`, `#school-projects`, `#school`, `#gallery`.
+
+- **`grid.js`** — the room lattice (`ROOMS` with col/row, codes, names), cardinal `neighborOf`, `roomFromHash` (station-level hashes like `#gaussianfeels` alias to their containing room; legacy room slugs alias to the renamed rooms), and `sectionFromHash` (hashes that land on an in-room section anchor, e.g. `#adapters`).
 - **`GridSite.jsx`** — the engine: full-viewport slide transitions (~520 ms cardinal, ~640 ms single diagonal slide for mini-map jumps; CSS keyframes driven by `--gv-dx/--gv-dy`), edge buttons (rendered only where a neighbor exists), persistent HOME button (every page except home), corner mini-map (hidden on home — the home centerpiece IS the map), hash routing (`pushState` + `hashchange`, browser back/forward work; deep links land via a quick orient slide from home), CHART/DOC view toggles, aria-live room announcements.
-- **`RoomViews.jsx`** — one component per room, reusing `Sections.jsx` pieces (`ResearchCard`, `SoftwareCard`, `BackgroundSection`, `ContactSection`) plus grid-only pieces: the `GridMap` (mini-map + home centerpiece), `RoomXRef` neighbor pointers, the W1 experience route rail, the S1 Seoul→Orlando relocation arc, the S2 photo-plate grid, the E2 adapter constellation grouped by model family.
+- **`RoomViews.jsx`** — one component per room, reusing `Sections.jsx` pieces (`ResearchCard`, `SoftwareCard`, `SchoolSection`, `SchoolProjectsSection`, `ContactSection`) plus grid-only pieces: the `GridMap` (mini-map + home centerpiece), `RoomXRef` neighbor pointers (must always show the *current* room names), `SectionJump` in-room pointers, the W1 experience route rail, the S1 Seoul→Orlando relocation arc, the S2 photo-plate grid, the E1 adapter constellation grouped by model family.
 - **`src/grid.css`** — all grid styling (`gv-` prefix; chart classes are scoped under `.station`/`.panel`/`.hud` — keep it that way).
 
 ### Grid input contract (decided & shipped)
@@ -83,14 +90,14 @@ The grid (plus-shaped; arms only connect through the center):
 
 ---
 
-## 2) Rules for Research & Software Cards
+## 2) Rules for Research & Personal-Projects Cards
 
-Add to **Research** or **Software** only with clear substance and proof:
+Add to **Research** or **Personal projects** (software datasheets) only with clear substance and proof:
 1. **Problem** 2. **What I Built** 3. **Tools** 4. **Proof** (paper, demo, repo, benchmark, artifact).
 - Card summary 1–3 short lines; metrics whenever possible.
 - Full-card detail bullets live in `details` (research) / `summary + stats` (software).
 - GaussianFeels expanded card is distilled from the **thesis abstract only** — keep it that way.
-- Immature projects → **Archive** ("Earlier builds" station).
+- Immature projects → the **School projects / Earlier builds** archive (E2; `archive` in `data.js`).
 
 ## 3) Documents & Credentials
 - Files in `public/assets/docs/`; stable readable filenames; replace high-traffic docs (CV/Resume) at the same URL.
@@ -113,10 +120,10 @@ Add to **Research** or **Software** only with clear substance and proof:
 | Profile text, headline, hero meta | `src/data.js` → `profile` |
 | Research entries (incl. GaussianFeels stats) | `src/data.js` → `research` |
 | Publications | `src/data.js` → `publications` |
-| Software libraries (pip lines, stats, links) | `src/data.js` → `software` |
-| HiCache++ adapter repo cluster | `src/data.js` → `adapters` (constellation auto-generates) |
-| Experience / education / honors / documents / skills / archive | `src/data.js` |
-| Field-log gallery | `src/data.js` → `gallery`, `galleryVideos` |
+| Personal projects — released libraries (pip lines, stats, links) | `src/data.js` → `software` |
+| HiCache++ adapter repo cluster (E1 closing section) | `src/data.js` → `adapters` (constellation auto-generates) |
+| Experience / education / honors / documents / skills / archive (school projects) | `src/data.js` |
+| Gallery photo/video plates (S2) | `src/data.js` → `gallery`, `galleryVideos` |
 | Grid rooms / neighbors / hash aliases | `src/grid/grid.js` |
 | Room contents (map view) | `src/grid/RoomViews.jsx` |
 | Grid engine (slides, edge buttons, keyboard, routing) | `src/grid/GridSite.jsx` |
@@ -139,7 +146,7 @@ npm run build      # must log "✓ prerendered document view into dist/index.htm
 npm run preview
 ```
 
-- [ ] Map (default): home shows identity + the “you are here” grid centerpiece; edge buttons slide the viewport (N→Research, E→Software, …); each room scrolls natively.
+- [ ] Map (default): home shows identity + the “you are here” grid centerpiece; edge buttons slide the viewport (N→Research, E→Personal projects, …); each room scrolls natively.
 - [ ] Keyboard: ←/→ move across the grid; ↑/↓ scroll then step rooms at the scroll edge; H/Esc go home. Browser back/forward retrace moves; deep links (`/#publications`, `/#gaussianfeels`) land on the right room.
 - [ ] Mini-map (corner / home centerpiece) jumps anywhere, incl. single diagonal slides (e.g. W2 → E1).
 - [ ] Mobile (~420 px): compact chevron tabs (side tabs thumb-height), horizontal swipe = E/W, no brand/button overlap at the top.

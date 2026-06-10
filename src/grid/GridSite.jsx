@@ -13,7 +13,7 @@
 //   H / Esc          return to HOME
 // ════════════════════════════════════════════════════════════
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ROOMS, ROOM_MAP, DIRS, neighborOf, roomFromHash } from "./grid";
+import { ROOMS, ROOM_MAP, DIRS, neighborOf, roomFromHash, sectionFromHash } from "./grid";
 import { RoomContent, GridMap } from "./RoomViews";
 
 const SLIDE_MS = 520;       // cardinal slide
@@ -69,10 +69,22 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
   const navRef = useRef(navigate);
   navRef.current = navigate;
 
+  /* section-level deep links (e.g. legacy #adapters → the E1
+     constellation): scroll once the target room has landed */
+  const pendingSectionRef = useRef(null);
+  useEffect(() => {
+    const sec = pendingSectionRef.current;
+    if (!sec) return;
+    pendingSectionRef.current = null;
+    requestAnimationFrame(() =>
+      document.getElementById(sec)?.scrollIntoView({ block: "start" }));
+  }, [room]);
+
   /* deep link: land on the hashed room — quick orient slide from home */
   useEffect(() => {
     const target = roomFromHash(location.hash);
     if (target && target !== "home") {
+      pendingSectionRef.current = sectionFromHash(location.hash);
       if (reduced) { setRoom(target); announce(target); return; }
       const t = setTimeout(() => navRef.current(target, { push: false }), 380);
       return () => clearTimeout(t);
@@ -84,7 +96,10 @@ export default function GridSite({ reduced, onChartView, onDocView }) {
   useEffect(() => {
     const onHash = () => {
       const id = roomFromHash(location.hash);
-      if (id && id !== roomRef.current) navRef.current(id, { push: false });
+      if (id && id !== roomRef.current) {
+        pendingSectionRef.current = sectionFromHash(location.hash);
+        navRef.current(id, { push: false });
+      }
     };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);

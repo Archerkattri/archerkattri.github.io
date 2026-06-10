@@ -5,8 +5,9 @@ import { useEffect } from "react";
 import { PORTFOLIO_DATA } from "./data";
 import { Nav, Hero } from "./components/Shell";
 import {
-  ResearchSection, SoftwareSection, ExperienceSection,
-  BackgroundSection, FieldLog, ContactSection, Footer,
+  ResearchSection, PersonalProjectsSection, ExperienceSection,
+  SchoolSection, SchoolProjectsSection, GallerySection,
+  ContactSection, Footer,
 } from "./components/Sections";
 
 export default function DocumentView({ onChartView, onGridView }) {
@@ -32,10 +33,11 @@ export default function DocumentView({ onChartView, onGridView }) {
       <main>
         <Hero profile={data.profile} />
         <ResearchSection data={data} />
-        <SoftwareSection data={data} />
+        <PersonalProjectsSection data={data} />
         <ExperienceSection data={data} />
-        <BackgroundSection data={data} />
-        <FieldLog data={data} />
+        <SchoolSection data={data} />
+        <SchoolProjectsSection data={data} />
+        <GallerySection data={data} />
         <ContactSection data={data} />
       </main>
       <Footer />

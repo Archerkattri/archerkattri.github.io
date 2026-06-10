@@ -7,7 +7,7 @@ import { PORTFOLIO_DATA as D } from "../data";
 import { Icon, Crosshairs } from "../components/Shell";
 import {
   SectionHead, ResearchCard, SoftwareCard,
-  BackgroundSection, ContactSection,
+  SchoolSection, SchoolProjectsSection, ContactSection,
 } from "../components/Sections";
 import { ROOMS, ROOM_MAP, DIRS } from "./grid";
 
@@ -94,7 +94,7 @@ function HomeRoom({ navigate }) {
           <div className="gv-map-cap">THE MAP — PRESS AN EDGE, OR A CELL</div>
           <GridMap cur="home" navigate={navigate} large />
           <div className="gv-map-legend" aria-hidden="true">
-            N RESEARCH · E SOFTWARE · S CONTACT · W EXPERIENCE
+            N RESEARCH · E PROJECTS · S CONTACT · W EXPERIENCE
           </div>
         </div>
         <figure className="gv-home-fig">
@@ -174,40 +174,26 @@ function PublicationsRoom({ navigate }) {
   );
 }
 
-/* ════════════════ E1 · SOFTWARE ════════════════ */
-function SoftwareRoom({ navigate }) {
-  return (
-    <section className="section">
-      <div className="container">
-        <SectionHead index="E1" label="Software" title="Released &" em="installable."
-          sub="Open-source research libraries — each one pip-installable, benchmarked, and in use." />
-        <div className="sw-stack">
-          {D.software.map(s => (
-            <SoftwareCard
-              key={s.id}
-              item={s}
-              adapters={D.adapters}
-              adaptersAction={
-                s.adaptersNote ? (
-                  <RoomXRef to="adapters" dir="e"
-                    label="The 12 per-model adapters — one room east" navigate={navigate} />
-                ) : null
-              }
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ════════════════ E2 · ADAPTERS ════════════════ */
+/* ════════════════ E1 · PERSONAL PROJECTS ════════════════ */
 const FAMILY_OF = name =>
   name.includes("hunyuan") ? "Hunyuan3D family"
     : name.includes("trellis") ? "TRELLIS family"
       : "SAM 3D family";
 
-function AdaptersRoom({ navigate }) {
+/* in-room pointer: scrolls to a section further down the same room */
+function SectionJump({ target, label }) {
+  return (
+    <button
+      className="gv-xref"
+      onClick={() => document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+    >
+      <span className="gv-xref-dir">↓ BELOW</span>
+      <span className="gv-xref-label">{label}</span>
+    </button>
+  );
+}
+
+function PersonalProjectsRoom({ navigate }) {
   const families = [];
   for (const a of D.adapters) {
     const f = FAMILY_OF(a.name);
@@ -218,25 +204,60 @@ function AdaptersRoom({ navigate }) {
   return (
     <section className="section">
       <div className="container">
-        <SectionHead index="E2" label="Adapters" title="The HiCache++" em="constellation."
-          sub="Twelve per-model adapter repos — each generator paired with HiCache++ (DMD exponential basis) or HiCache (Hermite). Drop-in and training-free." />
-        {families.map(f => (
-          <div key={f.name} className="gv-family">
-            <div className="bg-label">{f.name}</div>
-            <div className="gv-adapters">
-              {f.items.map(a => (
-                <a key={a.name} className="gv-adapter" href={a.url} target="_blank" rel="noopener">
-                  <Crosshairs />
-                  <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
-                  <span className="adapter-desc">{a.desc}</span>
-                </a>
-              ))}
+        <SectionHead index="E1" label="Personal projects" title="Released &" em="installable."
+          sub="Open-source research libraries — each one pip-installable, benchmarked, and in use." />
+        <div className="sw-stack">
+          {D.software.map(s => (
+            <SoftwareCard
+              key={s.id}
+              item={s}
+              adapters={D.adapters}
+              adaptersAction={
+                s.adaptersNote ? (
+                  <SectionJump target="adapter-constellation"
+                    label="The 12 per-model adapters — end of this room" />
+                ) : null
+              }
+            />
+          ))}
+        </div>
+
+        {/* closing section: the HiCache++ adapter constellation */}
+        <div id="adapter-constellation" className="gv-constellation">
+          <SectionHead index="E1·b" label="Adapter constellation" title="The HiCache++" em="constellation."
+            sub="Twelve per-model adapter repos — each generator paired with HiCache++ (DMD exponential basis) or HiCache (Hermite). Drop-in and training-free." />
+          {families.map(f => (
+            <div key={f.name} className="gv-family">
+              <div className="bg-label">{f.name}</div>
+              <div className="gv-adapters">
+                {f.items.map(a => (
+                  <a key={a.name} className="gv-adapter" href={a.url} target="_blank" rel="noopener">
+                    <Crosshairs />
+                    <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
+                    <span className="adapter-desc">{a.desc}</span>
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-        <RoomXRef to="software" dir="w" label="Back west — HiCache++ itself" navigate={navigate} />
+          ))}
+        </div>
+        <RoomXRef to="school-projects" dir="e" label="School projects — one room east" navigate={navigate} />
       </div>
     </section>
+  );
+}
+
+/* ════════════════ E2 · SCHOOL PROJECTS ════════════════ */
+function SchoolProjectsRoom({ navigate }) {
+  return (
+    <SchoolProjectsSection
+      data={D}
+      index="E2"
+      footer={
+        <RoomXRef to="personal-projects" dir="w"
+          label="Back west — the released libraries" navigate={navigate} />
+      }
+    />
   );
 }
 
@@ -274,9 +295,9 @@ function ExperienceRoom() {
   );
 }
 
-/* ════════════════ W2 · BACKGROUND ════════════════ */
-function BackgroundRoom() {
-  return <BackgroundSection data={D} index="W2" />;
+/* ════════════════ W2 · SCHOOL ════════════════ */
+function SchoolRoom() {
+  return <SchoolSection data={D} index="W2" />;
 }
 
 /* ════════════════ S1 · CONTACT (+ relocation arc) ════════════════ */
@@ -306,14 +327,14 @@ function ContactRoom() {
   );
 }
 
-/* ════════════════ S2 · FIELD LOG ════════════════ */
+/* ════════════════ S2 · GALLERY ════════════════ */
 const toWebp = src => src.replace(/\.(jpe?g|png)$/i, ".webp");
 
-function FieldLogRoom() {
+function GalleryRoom() {
   return (
     <section className="section">
       <div className="container">
-        <SectionHead index="S2" label="Field log" title="Hardware along" em="the way." />
+        <SectionHead index="S2" label="Gallery" title="Hardware along" em="the way." />
         <div className="gv-plates">
           {D.gallery.map((g, i) => (
             <figure key={i} className="gv-plate">
@@ -341,12 +362,12 @@ const VIEWS = {
   home: HomeRoom,
   research: ResearchRoom,
   publications: PublicationsRoom,
-  software: SoftwareRoom,
-  adapters: AdaptersRoom,
+  "personal-projects": PersonalProjectsRoom,
+  "school-projects": SchoolProjectsRoom,
   experience: ExperienceRoom,
-  background: BackgroundRoom,
+  school: SchoolRoom,
   contact: ContactRoom,
-  fieldlog: FieldLogRoom,
+  gallery: GalleryRoom,
 };
 
 export function RoomContent({ id, navigate }) {
