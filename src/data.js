@@ -47,6 +47,7 @@ export const PORTFOLIO_DATA = {
         { label: "splatreg", href: "#splatreg" },
         { label: "mathlas", href: "#mathlas" },
         { label: "HiCache++", href: "#hicache-pp" },
+        { label: "CERT-FLOW", href: "#cert-flow" },
       ],
       librariesTail: " on PyPI.",
     },
