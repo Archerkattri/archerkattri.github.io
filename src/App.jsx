@@ -1,61 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import GridSite from "./grid/GridSite";
-import Chart from "./chart/Chart";
-import DocumentView from "./DocumentView";
 
-// View selection:
-//   default              → the map (2D page grid, edge-button navigation)
-//   ?view=chart / toggle → the free-pan research chart (ZUI)
-//   ?view=doc / toggle   → plain document view (also the no-JS/SEO prerender)
-// Reduced motion: the map stays default — it swaps pages instantly
-// instead of sliding (the chart remains reachable via its toggle).
+// The map (2D page grid, edge-button navigation) is the one and only
+// interactive experience. The document view survives solely as the
+// build-time prerender (no-JS / SEO fallback, see prerender-entry.jsx).
+// Reduced motion: same map, instant page swaps (handled in GridSite +
+// the prefers-reduced-motion rules in grid.css).
 export default function App() {
   const reduced = useMemo(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     []
   );
-  const [view, setView] = useState(() => {
-    const q = new URLSearchParams(window.location.search).get("view");
-    if (q === "doc" || q === "chart" || q === "grid") return q;
-    const stored = sessionStorage.getItem("ka-view");
-    if (stored === "doc" || stored === "chart" || stored === "grid") return stored;
-    return "grid";
-  });
 
   useEffect(() => {
-    sessionStorage.setItem("ka-view", view);
-    document.documentElement.classList.toggle("chart-mode", view === "chart");
-    document.documentElement.classList.toggle("grid-mode", view === "grid");
-  }, [view]);
+    document.documentElement.classList.add("grid-mode");
+  }, []);
 
-  if (view === "chart") {
-    return (
-      <>
-        <div className="grain" aria-hidden="true" />
-        <Chart
-          reduced={reduced}
-          onDocView={() => setView("doc")}
-          onGridView={() => setView("grid")}
-        />
-      </>
-    );
-  }
-  if (view === "grid") {
-    return (
-      <>
-        <div className="grain" aria-hidden="true" />
-        <GridSite
-          reduced={reduced}
-          onChartView={() => setView("chart")}
-          onDocView={() => setView("doc")}
-        />
-      </>
-    );
-  }
   return (
-    <DocumentView
-      onChartView={() => setView("chart")}
-      onGridView={() => setView("grid")}
-    />
+    <>
+      <div className="grain" aria-hidden="true" />
+      <GridSite reduced={reduced} />
+    </>
   );
 }

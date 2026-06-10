@@ -7,7 +7,7 @@ import { Icon, Crosshairs } from "./Shell";
    `index` doubles as the grid coordinate in map view (e.g. "N1"). */
 export function SectionHead({ index, label, title, em, sub }) {
   return (
-    <div className="sec-head reveal">
+    <div className="sec-head">
       <div className="sec-index">
         <span className="sec-n">{index}</span>
         <span className="sec-label">{label}</span>
@@ -49,7 +49,7 @@ function StatRow({ stats }) {
 /* ──────────────── 01 / RESEARCH ──────────────── */
 export function ResearchCard({ item }) {
   return (
-    <article className={"sheet reveal" + (item.flagship ? " flagship" : "")}>
+    <article className={"sheet" + (item.flagship ? " flagship" : "")}>
       <Crosshairs />
       <header className="sheet-head">
         <div>
@@ -96,7 +96,7 @@ export function ResearchSection({ data }) {
         <div className="sheet-stack">
           {main.map(r => <ResearchCard key={r.id} item={r} />)}
         </div>
-        <div className="compact-grid reveal">
+        <div className="compact-grid">
           {compact.map(r => (
             <div key={r.id} className="compact-row">
               <div className="compact-head">
@@ -108,7 +108,7 @@ export function ResearchSection({ data }) {
             </div>
           ))}
         </div>
-        <div className="pub-list reveal" aria-label="Publications">
+        <div className="pub-list" aria-label="Publications">
           <div className="pub-label">Publications</div>
           {data.publications.map((p, i) => (
             <div key={i} className="pub-row">
@@ -164,7 +164,7 @@ function AdapterCluster({ adapters }) {
    pointer to the Adapters room. */
 export function SoftwareCard({ item, adapters, adaptersAction }) {
   return (
-    <article className="sw reveal" id={item.id}>
+    <article className="sw" id={item.id}>
       <Crosshairs />
       <div className="sw-grid">
         <div className="sw-id">
@@ -208,7 +208,7 @@ export function PersonalProjectsSection({ data }) {
 /* ──────────────── 03 / EXPERIENCE ──────────────── */
 export function XpRow({ e }) {
   return (
-    <div className="xp-row reveal">
+    <div className="xp-row">
       <div className="xp-date">{e.date}</div>
       <div className="xp-main">
         <h3>{e.title}</h3>
@@ -232,7 +232,7 @@ export function XpRow({ e }) {
 /* the two non-research university jobs, kept to one quiet line each */
 export function EarlierRoles({ data }) {
   return (
-    <div className="xp-earlier reveal">
+    <div className="xp-earlier">
       <div className="bg-label">Also held, Villanova</div>
       {data.earlierRoles.map((r, i) => (
         <div key={i} className="xp-earlier-row">
@@ -267,7 +267,7 @@ export function SchoolSection({ data, index = "04" }) {
         <SectionHead index={index} label="School" title="Four schools," em="three countries." />
         <div className="edu-grid">
           {data.education.map(e => (
-            <div key={e.id} className="edu-card reveal">
+            <div key={e.id} className="edu-card">
               <span className={"status " + e.status}>{e.status}</span>
               <div className="edu-degree">{e.degree}</div>
               <div className="edu-school">{e.school}</div>
@@ -285,7 +285,7 @@ export function SchoolSection({ data, index = "04" }) {
         </div>
 
         <div className="bg-cols">
-          <div className="bg-col reveal">
+          <div className="bg-col">
             <div className="bg-label">Honors & fellowships</div>
             {data.honors.map((h, i) => h.href ? (
               <a key={i} className="bg-row link" href={h.href} target="_blank" rel="noopener">
@@ -311,7 +311,7 @@ export function SchoolSection({ data, index = "04" }) {
               </div>
             ))}
           </div>
-          <div className="bg-col reveal">
+          <div className="bg-col">
             <div className="bg-label">Documents</div>
             {data.documents.map((d, i) => (
               <div key={i} className="bg-row doc-row">
@@ -327,7 +327,7 @@ export function SchoolSection({ data, index = "04" }) {
           </div>
         </div>
 
-        <div className="skills reveal">
+        <div className="skills">
           <div className="bg-label">Stack</div>
           <div className="skills-grid">
             {Object.entries(data.skills).map(([group, items]) => (
@@ -355,7 +355,7 @@ export function SchoolProjectsSection({ data, index = "05", footer = null }) {
         <SectionHead index={index} label="School projects" title="Built at" em="university."
           sub="The FMC-sponsored capstone and the earlier hands-on builds from the undergraduate years." />
         <div className="sheet-stack">
-          <article className="sheet flagship reveal">
+          <article className="sheet flagship">
             <Crosshairs />
             <header className="sheet-head">
               <div>
@@ -372,7 +372,7 @@ export function SchoolProjectsSection({ data, index = "05", footer = null }) {
             </footer>
           </article>
         </div>
-        <div className="archive reveal">
+        <div className="archive">
           <div className="bg-label">Earlier builds</div>
           <div className="archive-grid">
             {earlier.map((a, i) => (
@@ -403,9 +403,9 @@ export function GallerySection({ data }) {
   return (
     <section id="gallery" className="section fieldlog-sec">
       <div className="container">
-        <div className="bg-label reveal">Gallery · hardware along the way</div>
+        <div className="bg-label">Gallery · hardware along the way</div>
       </div>
-      <div className="fieldlog reveal" tabIndex="0" aria-label="Photo log, scrolls horizontally">
+      <div className="fieldlog" tabIndex="0" aria-label="Photo log, scrolls horizontally">
         {data.gallery.map((g, i) => (
           <figure key={i} className="log-item">
             <picture>
@@ -434,7 +434,7 @@ export function ContactSection({ data, index = "06", children }) {
       <div className="container">
         <SectionHead index={index} label="Contact" title="Write" em="first." />
         <div className="contact-grid">
-          <div className="contact-main reveal">
+          <div className="contact-main">
             <a className="contact-email" href={`mailto:${c.email}`}>{c.email}</a>
             <p className="contact-loc">{c.location}</p>
             <div className="contact-open">
@@ -444,7 +444,7 @@ export function ContactSection({ data, index = "06", children }) {
               ))}
             </div>
           </div>
-          <div className="contact-links reveal">
+          <div className="contact-links">
             {[
               { label: "GitHub", val: "github.com/Archerkattri", href: c.github, icon: "github" },
               { label: "LinkedIn", val: "linkedin.com/in/krishi-attri15", href: c.linkedin, icon: "linkedin" },
