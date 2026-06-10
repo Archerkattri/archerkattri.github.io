@@ -248,7 +248,14 @@ html.js .docview .reveal.in { opacity: 1; transform: none; }
 /* hide the build-time prerender as soon as JS is available */
 html.js .prerendered { display: none; }
 
-/* doc-mode → chart-mode return control */
+/* doc-mode → map/chart return controls */
+.view-returns {
+  position: fixed; right: 18px; bottom: 18px; z-index: 110;
+  display: flex; gap: 8px;
+}
+.view-returns .chart-return { position: static; }
+.chart-return.secondary { border-color: var(--line); color: var(--ink-muted); }
+.chart-return.secondary:hover { border-color: var(--accent); color: var(--ink); }
 .chart-return {
   position: fixed; right: 18px; bottom: 18px; z-index: 110;
   font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.14em;

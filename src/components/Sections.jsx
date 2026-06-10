@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { Icon, Crosshairs } from "./Shell";
 
-/* ── shared section header ── */
-function SectionHead({ index, label, title, em, sub }) {
+/* ── shared section header ──
+   `index` doubles as the grid coordinate in map view (e.g. "N1"). */
+export function SectionHead({ index, label, title, em, sub }) {
   return (
     <div className="sec-head reveal">
       <div className="sec-index">
@@ -45,7 +46,7 @@ function StatRow({ stats }) {
 }
 
 /* ──────────────── 01 / RESEARCH ──────────────── */
-function ResearchCard({ item }) {
+export function ResearchCard({ item }) {
   return (
     <article className={"sheet reveal" + (item.flagship ? " flagship" : "")}>
       <Crosshairs />
@@ -158,7 +159,9 @@ function AdapterCluster({ adapters }) {
   );
 }
 
-function SoftwareCard({ item, adapters }) {
+/* `adaptersAction` (map view) replaces the inline cluster with a
+   pointer to the Adapters room. */
+export function SoftwareCard({ item, adapters, adaptersAction }) {
   return (
     <article className="sw reveal" id={item.id}>
       <Crosshairs />
@@ -180,7 +183,7 @@ function SoftwareCard({ item, adapters }) {
               </div>
             ))}
           </dl>
-          {item.adaptersNote && <AdapterCluster adapters={adapters} />}
+          {item.adaptersNote && (adaptersAction ?? <AdapterCluster adapters={adapters} />)}
         </div>
       </div>
     </article>
@@ -202,11 +205,11 @@ export function SoftwareSection({ data }) {
 }
 
 /* ──────────────── 03 / EXPERIENCE ──────────────── */
-export function ExperienceSection({ data }) {
+export function ExperienceSection({ data, index = "03", sub }) {
   return (
     <section id="experience" className="section">
       <div className="container">
-        <SectionHead index="03" label="Experience" title="Lab, field &" em="industry." />
+        <SectionHead index={index} label="Experience" title="Lab, field &" em="industry." sub={sub} />
         <div className="xp-list">
           {data.experience.map(e => (
             <div key={e.id} className="xp-row reveal">
@@ -230,11 +233,11 @@ export function ExperienceSection({ data }) {
 }
 
 /* ──────────────── 04 / BACKGROUND ──────────────── */
-export function BackgroundSection({ data }) {
+export function BackgroundSection({ data, index = "04" }) {
   return (
     <section id="background" className="section">
       <div className="container">
-        <SectionHead index="04" label="Background" title="Four schools," em="three countries." />
+        <SectionHead index={index} label="Background" title="Four schools," em="three countries." />
         <div className="edu-grid">
           {data.education.map(e => (
             <div key={e.id} className="edu-card reveal">
@@ -336,12 +339,12 @@ export function FieldLog({ data }) {
 }
 
 /* ──────────────── 05 / CONTACT ──────────────── */
-export function ContactSection({ data }) {
+export function ContactSection({ data, index = "05", children }) {
   const c = data.profile.contact;
   return (
     <section id="contact" className="section">
       <div className="container">
-        <SectionHead index="05" label="Contact" title="Write" em="first." />
+        <SectionHead index={index} label="Contact" title="Write" em="first." />
         <div className="contact-grid">
           <div className="contact-main reveal">
             <a className="contact-email" href={`mailto:${c.email}`}>{c.email}</a>
@@ -368,6 +371,7 @@ export function ContactSection({ data }) {
             ))}
           </div>
         </div>
+        {children}
       </div>
     </section>
   );

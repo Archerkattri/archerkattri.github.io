@@ -22,7 +22,7 @@ const HASH_DISTRICTS = {
   background: "experience", fieldlog: "fieldlog", contact: "contact", top: "origin",
 };
 
-export default function Chart({ onDocView, reduced }) {
+export default function Chart({ onDocView, onGridView, reduced }) {
   const viewportRef = useRef(null);
   const worldRef = useRef(null);
   const readoutRef = useRef(null);
@@ -415,6 +415,7 @@ export default function Chart({ onDocView, reduced }) {
         indexOpen={indexOpen}
         onIndex={a => (a === "home" ? (closeStation(), homeView(650)) : setIndexOpen(o => !o))}
         onDocView={onDocView}
+        onGridView={onGridView}
       />
       {!mobile && <Minimap viewRectRef={viewRectRef} onJump={(x, y, smooth) => {
         cancelFlight();

@@ -505,8 +505,10 @@ a.marker-inner:hover .marker-name { color: var(--accent); }
 .pn-pub .pub-link, .pn-pub .pub-status { justify-self: start; }
 .pn-edu .edu-degree { font-size: 17px; }
 
-/* ════════════════ MOBILE SHEET ════════════════ */
-.sheet {
+/* ════════════════ MOBILE SHEET ════════════════
+   Scoped to .hud.sheet — the document/grid views use a `.sheet`
+   class of their own for research cards (styles.css). */
+.hud.sheet {
   left: 0; right: 0; bottom: 0; z-index: 75;
   height: 78dvh;
   display: flex; flex-direction: column;
@@ -517,8 +519,8 @@ a.marker-inner:hover .marker-name { color: var(--accent); }
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   touch-action: none;
 }
-.sheet.s-list { transform: translateY(24dvh); }
-.sheet.s-card { transform: none; }
+.hud.sheet.s-list { transform: translateY(24dvh); }
+.hud.sheet.s-card { transform: none; }
 .sheet-handle {
   position: relative; flex: 0 0 54px;
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -536,9 +538,10 @@ a.marker-inner:hover .marker-name { color: var(--accent); }
   width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;
   color: var(--ink-muted);
 }
-.sheet-body {
+.hud.sheet .sheet-body {
   flex: 1; overflow-y: auto; overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  margin: 0; max-width: none;
   padding: 14px 18px calc(20px + env(safe-area-inset-bottom));
   touch-action: pan-y;
 }
