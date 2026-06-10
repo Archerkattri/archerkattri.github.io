@@ -161,18 +161,19 @@ export const PORTFOLIO_DATA = {
     },
   ],
 
-  /* ──────── E1 / PERSONAL PROJECTS — released libraries ──────── */
+  /* ──────── E1 / PERSONAL PROJECTS — released research software ──────── */
   software: [
     {
       id: "splatreg",
       name: "splatreg",
       install: "pip install splatreg",
-      spec: "BSD-3-Clause · pure PyTorch",
+      spec: "v1.3.0 · BSD-3-Clause · pure PyTorch · CLI + API",
       oneliner: "Register Gaussian splats.",
       summary:
-        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges the registered scans into one coherent splat scene, with photometric refinement where geometry alone under-constrains the solution.",
+        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges, or aligns without merging: the CLI bakes the recovered pose into the source so both scans stay separate PLYs in one frame. Baked-in transforms rotate the higher-order spherical-harmonic colour with the splat (real-basis Wigner-D); photometric refinement with exposure compensation handles the poses geometry cannot see; every builtin solve reports pose covariance for pose-graph weighting, never faked. The MAC maximal-clique seed handles contaminated correspondence sets, with the honest measured verdict kept: a wash on the official 3DMatch split, a decisive win on structured decoys.",
       stats: [
-        { value: "91.5%", label: "official 3DMatch registration recall" },
+        { value: "91.5%", label: "official 3DMatch registration recall, 1279 pairs" },
+        { value: "2.4e-15", label: "SH Wigner-rotation error vs an independent evaluator" },
         { value: "10.3 → 2.0 mm", label: "splat-merge Chamfer vs naïve concat" },
         { value: "5° → 0.36°", label: "photometric refine where geometry under-constrains" },
       ],
@@ -187,36 +188,58 @@ export const PORTFOLIO_DATA = {
       id: "mathlas",
       name: "mathlas",
       install: "pip install mathlas-mcp",
-      spec: "MCP server · 13 tools · no LLM inside · no API key",
+      spec: "v1.1.2 · Apache-2.0 · 12 MCP tools · no LLM inside, no API key · official MCP registry · Glama grade A",
       oneliner: "Airtight math tools an AI uses.",
       summary:
-        "Language models hallucinate theorems, and prose is not verification. mathlas is an MCP server of 13 deterministic, data-returning tools an AI agent drives: search over 3.7M theorems (dense + BM25 + rank fusion), PSLQ constant identification, OEIS sequence lookup, and real Lean-kernel formal checks. The agent is the brain; mathlas is the hands.",
+        "Language models hallucinate theorems, and prose is not verification. mathlas is an MCP server of 12 deterministic, data-returning tools an AI agent drives: search over a 3.68M-document index (dense + BM25 + rank fusion), PSLQ constant identification, OEIS sequence lookup, and real Lean-kernel checks that now verify full proofs, returning the kernel's error verbatim so the agent can repair and re-call. A quantized laptop tier serves the same index from 1.9 GB at 2.4 s/query on 4 CPU threads, measured recall-lossless. The discipline is airtight-or-nothing: every verification tier returns an independently checkable fact or an honest nothing, with zero false positives measured across all tiers.",
       stats: [
+        { value: "18/18 vs 15/18", label: "the same agent on 18 math tasks, with vs without mathlas" },
         { value: "59.1 vs 45.0", label: "Hit@20 vs TheoremSearch, on its own 110 human queries" },
-        { value: "0.96", label: "mathlib formal-search Hit@5" },
-        { value: "3.7M", label: "theorems searchable, LLM-free" },
+        { value: "3.68M", label: "documents indexed; 1.9 GB quantized tier, recall-lossless" },
       ],
       links: [
         { label: "PyPI", href: "https://pypi.org/project/mathlas-mcp/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/mathlas" },
+        { label: "Glama (MCP)", href: "https://glama.ai/mcp/servers/Archerkattri/mathlas" },
+        { label: "DOI 10.5281/zenodo.20618603", href: "https://doi.org/10.5281/zenodo.20618603" },
+      ],
+    },
+    {
+      id: "cert-flow",
+      name: "CERT-FLOW",
+      install: "gh repo clone Archerkattri/CERT-FLOW",
+      spec: "v1.0.0 · MIT · 223 tests · 16 reproduction pipelines · preprint forthcoming",
+      oneliner: "Certified route planning under drifting costs.",
+      summary:
+        "A robot replanning through a world whose costs drift never knows how good its current route is once the map goes stale; classical planners silently trust the stale map. CERT-FLOW answers with a proof every round: a high-probability certificate LB ≤ OPT ≤ UB on the optimal route cost, built from age-weighted non-exchangeable conformal prediction over drift-adjusted residuals, and it spends paid sensing exactly where the certificate says the gap shrinks fastest. When the certificate proves the map tight, that proof licenses ns-to-µs preprocessed queries that self-expire the instant drift exceeds tolerance. Seven theorems (coverage through an impossibility result on lower bounds), validated on 17 synthetic regimes, game maps, and real traffic (METR-LA, PEMS-BAY); the failed hypotheses stay documented in the record.",
+      stats: [
+        { value: "0.95 – 1.00", label: "coverage on every condition ever run; classical replanning 0.02 – 0.59" },
+        { value: "269 ns", label: "certificate-gated static cost query; 3.7 ms p50 full certified round, one CPU core" },
+        { value: "2 – 3×", label: "lower sensing regret than freshness, uncertainty, or random at equal budget" },
+      ],
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/CERT-FLOW" },
+        { label: "Results, per experiment", href: "https://github.com/Archerkattri/CERT-FLOW/tree/main/docs/results" },
+        { label: "DOI 10.5281/zenodo.20631476", href: "https://doi.org/10.5281/zenodo.20631476" },
       ],
     },
     {
       id: "hicache-pp",
       name: "HiCache++",
       install: "pip install hicache-pp",
-      spec: "training-free · model-agnostic · 14-repo accelerator family",
-      oneliner: "Diffusion acceleration by exponential forecasting.",
+      spec: "v1.1.0 · MIT · training-free · 14-repo accelerator family",
+      oneliner: "Diffusion acceleration by feature forecasting, honestly selected.",
       summary:
-        "Diffusion and flow samplers spend most of their compute re-deriving smoothly varying features. HiCache++ forecasts them with a Dynamic-Mode-Decomposition exponential basis, exact on the feature-ODE class these caches actually face, so prediction error stays flat across the skip horizon where polynomial bases (TaylorSeer, Hermite) diverge. Ships as a drop-in basis upgrade with per-model adapters across the TRELLIS, Hunyuan3D, and SAM 3D families, plus a ComfyUI node.",
+        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. Deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus a ComfyUI node (beta, 35 tests, Comfy Registry submission held until GPU validation).",
       stats: [
-        { value: "0.86 vs 0.74", label: "F-score held vs polynomial basis at skip-interval 5, Hunyuan3D-2.1" },
-        { value: "flat", label: "forecast error in the skip horizon where polynomial bases diverge" },
-        { value: "14", label: "repos in the family: TRELLIS · Hunyuan3D · SAM 3D · ComfyUI" },
+        { value: "0.860 vs 0.735", label: "F-score at skip-interval 5, exponential vs polynomial arm, Hunyuan3D-2.1" },
+        { value: "1.56×", label: "geometry-lossless (F1 = 1.000) through interval 6, SAM 3D Objects" },
+        { value: "120/120", label: "holdout auto detects basis misfit and serves the winning arm" },
       ],
       links: [
         { label: "PyPI", href: "https://pypi.org/project/hicache-pp/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" },
+        { label: "DOI 10.5281/zenodo.20618824", href: "https://doi.org/10.5281/zenodo.20618824" },
       ],
       adaptersNote: "Per-model adapter cluster",
     },
@@ -239,7 +262,7 @@ export const PORTFOLIO_DATA = {
     { name: "sam3d-plus", url: "https://github.com/Archerkattri/sam3d-plus", desc: "HiCache (Hermite) · SAM 3D Objects" },
     { name: "fastsam3d-plus-plus", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", desc: "HiCache++ (DMD) · Fast-SAM3D" },
     { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", desc: "HiCache (Hermite) · Fast-SAM3D" },
-    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp" },
+    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 35 tests" },
   ],
 
   /* ──────────────── 03 / EXPERIENCE ──────────────── */
