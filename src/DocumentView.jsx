@@ -9,7 +9,7 @@ import {
   BackgroundSection, FieldLog, ContactSection, Footer,
 } from "./components/Sections";
 
-export default function DocumentView({ onChartView }) {
+export default function DocumentView({ onChartView, onGridView }) {
   const data = PORTFOLIO_DATA;
 
   useEffect(() => {
@@ -39,10 +39,19 @@ export default function DocumentView({ onChartView }) {
         <ContactSection data={data} />
       </main>
       <Footer />
-      {onChartView && (
-        <button className="chart-return" onClick={onChartView} title="Open the interactive research chart">
-          ⌖ OPEN THE CHART
-        </button>
+      {(onGridView || onChartView) && (
+        <div className="view-returns">
+          {onGridView && (
+            <button className="chart-return" onClick={onGridView} title="Back to the map (default view)">
+              ▦ BACK TO THE MAP
+            </button>
+          )}
+          {onChartView && (
+            <button className="chart-return secondary" onClick={onChartView} title="Open the interactive research chart">
+              ⌖ CHART
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

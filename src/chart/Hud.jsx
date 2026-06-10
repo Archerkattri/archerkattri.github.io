@@ -9,7 +9,7 @@ import { WORLD, DISTRICTS, STATIONS, STATION_MAP, INDEX_GROUPS, INDEX_LABELS, DI
 import { codeOf } from "./Stations";
 import { PanelContent } from "./Panel";
 
-export function TopBar({ onIndex, indexOpen, onDocView, cv }) {
+export function TopBar({ onIndex, indexOpen, onDocView, onGridView, cv }) {
   return (
     <header className="hud topbar">
       <a className="tb-brand" href="#" onClick={e => { e.preventDefault(); onIndex("home"); }}>
@@ -22,6 +22,11 @@ export function TopBar({ onIndex, indexOpen, onDocView, cv }) {
         <button className="tb-btn" onClick={() => onIndex("toggle")} aria-expanded={indexOpen} aria-controls="station-index">
           <span className="tb-key" aria-hidden="true">I</span> INDEX
         </button>
+        {onGridView && (
+          <button className="tb-btn" onClick={onGridView} title="Back to the map (default view)">
+            MAP
+          </button>
+        )}
         <button className="tb-btn" onClick={onDocView} title="Read as a plain document">
           DOC VIEW
         </button>

@@ -4,18 +4,45 @@
 - The homepage sells **Krishi Attri** (research identity, direction, proof of work).
 - No single project should become the whole brand.
 - Design system: dark instrument-panel — one ink, one instrument-teal accent (`--accent: #3ebfc6`), Fraunces / Hanken Grotesk / Spline Sans Mono, film grain. Committed dark theme (no toggle).
-- **The site is "The Research Chart"** — a pannable/zoomable map canvas (the thesis is SLAM; the site itself is a map). A classic sectioned **document view** remains as the reduced-motion / no-JS / SEO fallback and as an explicit "DOC VIEW" reading mode.
+- **The site is "The Map"** — a 2D page grid of compass rooms with edge-button navigation (still a map — the thesis is SLAM — but each page is a normal, vertically-scrolling website page; no free pan). The free-pan ZUI **Research Chart** remains one toggle away ("⌖ CHART"), and a classic sectioned **document view** remains as the no-JS / SEO fallback and an explicit "DOC" reading mode.
 
 ---
 
-## 0) Architecture — The Research Chart
+## 0) Architecture — The Map (grid) · The Chart (ZUI) · The Document
 
-Two complete render modes share one data source (`src/data.js`):
+Three complete render modes share one data source (`src/data.js`):
 
 | Mode | When | Entry |
 |---|---|---|
-| **Chart** (default) | JS + no reduced-motion preference | `src/chart/Chart.jsx` |
-| **Document** | `prefers-reduced-motion`, `?view=doc`, "DOC VIEW" button, no-JS (build-time prerender) | `src/DocumentView.jsx` (wraps the classic `Shell.jsx` / `Sections.jsx`) |
+| **Map / grid** (default) | always (incl. reduced motion — pages swap instantly instead of sliding) | `src/grid/GridSite.jsx` |
+| **Chart** (ZUI) | `?view=chart`, "⌖ CHART" toggle | `src/chart/Chart.jsx` |
+| **Document** | `?view=doc`, "DOC" toggle, no-JS (build-time prerender) | `src/DocumentView.jsx` (wraps the classic `Shell.jsx` / `Sections.jsx`) |
+
+The chosen view persists for the session (`sessionStorage["ka-view"]`).
+
+### Grid anatomy (`src/grid/`)
+
+The grid (plus-shaped; arms only connect through the center):
+
+```
+                       [N2 PUBLICATIONS]
+                       [N1 RESEARCH    ]
+[W2 BACKGROUND] [W1 EXPERIENCE] [00 HOME] [E1 SOFTWARE] [E2 ADAPTERS]
+                       [S1 CONTACT     ]
+                       [S2 FIELD LOG   ]
+```
+
+- **`grid.js`** — the room lattice (`ROOMS` with col/row, codes, names), cardinal `neighborOf`, and `roomFromHash` (station-level hashes like `#gaussianfeels` alias to their containing room).
+- **`GridSite.jsx`** — the engine: full-viewport slide transitions (~520 ms cardinal, ~640 ms single diagonal slide for mini-map jumps; CSS keyframes driven by `--gv-dx/--gv-dy`), edge buttons (rendered only where a neighbor exists), persistent HOME button (every page except home), corner mini-map (hidden on home — the home centerpiece IS the map), hash routing (`pushState` + `hashchange`, browser back/forward work; deep links land via a quick orient slide from home), CHART/DOC view toggles, aria-live room announcements.
+- **`RoomViews.jsx`** — one component per room, reusing `Sections.jsx` pieces (`ResearchCard`, `SoftwareCard`, `BackgroundSection`, `ContactSection`) plus grid-only pieces: the `GridMap` (mini-map + home centerpiece), `RoomXRef` neighbor pointers, the W1 experience route rail, the S1 Seoul→Orlando relocation arc, the S2 photo-plate grid, the E2 adapter constellation grouped by model family.
+- **`src/grid.css`** — all grid styling (`gv-` prefix; chart classes are scoped under `.station`/`.panel`/`.hud` — keep it that way).
+
+### Grid input contract (decided & shipped)
+- **Wheel/scroll** only ever scrolls *inside* a room (native). No scroll-hijacking, no wheel page-flips.
+- **← / →** always move across the grid (rooms only scroll vertically, so horizontal arrows are free).
+- **↑ / ↓** scroll the room; AT the top/bottom scroll edge a **fresh** press (key-repeat is ignored, so holding ↓ can't overshoot through the south wall) steps to the neighboring room.
+- **H / Esc** return home. Mobile: edge buttons become compact chevron tabs (side tabs at thumb height), horizontal swipe = E/W move.
+- Reduced motion: instant page swaps, no slides.
 
 ### Chart anatomy (`src/chart/`)
 - **`layout.js`** — the world. Station positions/sizes in world units (px at zoom ×1.00), district rects, edges, the adapter constellation, station-index order, camera constants (zoom bands: `far < 0.34 ≤ mid < 0.62 ≤ near`). World origin (0,0) ≙ Seoul; the coordinate readout derives pseudo-lat/lon from it.
@@ -45,7 +72,7 @@ Two complete render modes share one data source (`src/data.js`):
 - [ ] Experience reflects latest academic/professional role changes.
 - [ ] Contact links valid; CV/Resume links point to latest PDFs in `public/assets/docs/`.
 - [ ] OG image exists (`public/assets/images/og-image.png`); `sitemap.xml` / `robots.txt` valid.
-- [ ] New station? Add data in `data.js`, place it in `layout.js` (position + measured height), add it to `INDEX_GROUPS`/`INDEX_LABELS`, and re-run the overlap check (below).
+- [ ] New content? It must land in **all three views**: `data.js` (single source) → usually automatic for grid + doc; for the chart also place a station in `layout.js` (+ `INDEX_GROUPS`/`INDEX_LABELS`, overlap check below). A brand-new *room* needs `grid.js` (lattice cell on an arm of the plus), `RoomViews.jsx` (content + `VIEWS` entry), and a `roomFromHash` alias for any station-level hashes.
 - [ ] GitHub Pages deployment workflow succeeds.
 
 ### Station placement workflow
@@ -90,6 +117,10 @@ Add to **Research** or **Software** only with clear substance and proof:
 | HiCache++ adapter repo cluster | `src/data.js` → `adapters` (constellation auto-generates) |
 | Experience / education / honors / documents / skills / archive | `src/data.js` |
 | Field-log gallery | `src/data.js` → `gallery`, `galleryVideos` |
+| Grid rooms / neighbors / hash aliases | `src/grid/grid.js` |
+| Room contents (map view) | `src/grid/RoomViews.jsx` |
+| Grid engine (slides, edge buttons, keyboard, routing) | `src/grid/GridSite.jsx` |
+| Grid styling (edge buttons, mini-map, home, rooms) | `src/grid.css` |
 | Station positions, districts, edges, index order | `src/chart/layout.js` |
 | Station card rendering | `src/chart/Stations.jsx` · full cards: `src/chart/Panel.jsx` |
 | Chart instruments (minimap, readout, sheet) | `src/chart/Hud.jsx` |
@@ -108,12 +139,14 @@ npm run build      # must log "✓ prerendered document view into dist/index.htm
 npm run preview
 ```
 
-- [ ] Chart boots (graticule → stations plot in → edges draw), then settles on the hero.
-- [ ] Drag-pan, wheel zoom, pinch (touch), minimap jump, `i` index, Esc all work; no console errors.
-- [ ] Click GaussianFeels → fly-to + docked full card; deep link `/#gaussianfeels` works on fresh load.
+- [ ] Map (default): home shows identity + the “you are here” grid centerpiece; edge buttons slide the viewport (N→Research, E→Software, …); each room scrolls natively.
+- [ ] Keyboard: ←/→ move across the grid; ↑/↓ scroll then step rooms at the scroll edge; H/Esc go home. Browser back/forward retrace moves; deep links (`/#publications`, `/#gaussianfeels`) land on the right room.
+- [ ] Mini-map (corner / home centerpiece) jumps anywhere, incl. single diagonal slides (e.g. W2 → E1).
+- [ ] Mobile (~420 px): compact chevron tabs (side tabs thumb-height), horizontal swipe = E/W, no brand/button overlap at the top.
+- [ ] `?view=chart`: chart boots, drag-pan/zoom/index work, "MAP" button returns to the grid; deep link `/#gaussianfeels` opens the docked card there.
+- [ ] `?view=doc`: document view renders; pip-copy buttons & expanders work; "BACK TO THE MAP" returns.
 - [ ] Key numbers present in `dist/index.html` (grep: GaussianFeels, 0.83, 3.37, 91.5%, 3.7M, HiCache++).
-- [ ] Mobile (~420 px): bottom sheet index, tap station → sheet card; pinch zoom.
-- [ ] `?view=doc` and reduced-motion render the document view; pip-copy buttons & expanders work there.
+- [ ] Reduced motion: pages swap instantly (no slides) in the map view.
 - [ ] GitHub Pages deployment succeeds (push to `main` triggers `.github/workflows/deploy.yml`).
 
 ---
