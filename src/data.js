@@ -40,17 +40,20 @@ export const PORTFOLIO_DATA = {
       summary:
         "When a robot hand grasps an object, it occludes exactly the region it most needs to perceive. GaussianFeels fuses RGB-D vision, DIGIT tactile contact geometry, and hand proprioception into one explicit object-centric 3D Gaussian Splatting map — reconstructing and tracking objects online, through the occlusion, with no CAD model.",
       stats: [
-        { value: "0.84", unit: "mm", label: "median ADD-S · simulation" },
-        { value: "3.4", unit: "mm", label: "median ADD-S · real hardware" },
+        { value: "0.83", unit: "mm", label: "median ADD-S · simulation" },
+        { value: "3.37", unit: "mm", label: "median ADD-S · real hardware" },
         { value: "7.6×", unit: "", label: "frame rate vs NeuralFeels" },
         { value: "94%", unit: "", label: "sim F-score retained on real" },
       ],
+      // Expanded-card copy distilled from the thesis abstract.
       details: [
-        "Pose tracker: multi-residual Levenberg–Marquardt SE(3) optimiser over a frozen Gaussian-density SDF — photometric, depth-SDF, tactile-SDF, tactile-normal, and one-sided non-penetration residuals with an analytic Jacobian read through gsplat.",
-        "Contact-aware map management: multimodal spawning, direct contact-point insertion, tactile-region density boosting, and selective freezing to preserve contact-critical geometry.",
-        "Occlusion-aware training objective that dynamically reweights RGB, depth, and tactile supervision based on hand-induced occlusion.",
-        "Frame-0 shape-completion bootstrap: an image-to-3D prior (Hunyuan3D-2-mini) is aligned to first-frame observations, then progressively replaced by measured geometry.",
-        "Evaluated on the FeelSight benchmark family (14 objects; simulation, real-world, and occlusion-focused episodes) against NeuralFeels and V-HOP — ≈28 FPS sim / ≈23.5 FPS real on a single RTX 5090.",
+        "One map, every job: a single object-centric 3D Gaussian state serves training, rendering, frozen-map SDF pose tracking, reconstruction evaluation, and manipulation-facing geometry — replacing the neural-implicit SDF as the shared representation for online, model-free visuo-tactile object SLAM.",
+        "Pose is recovered by a multi-residual Levenberg–Marquardt optimiser solving SE(3) against a frozen dual-sigma Gaussian-density anchor SDF, fusing synchronized RGB-D, tactile, and proprioceptive observations in one canonical frame.",
+        "A frame-zero branch generates a shape estimate from a single RGB crop with an image-to-3D model, then progressively replaces generated geometry with measured geometry as the episode progresses.",
+        "Real time, no CAD model: map and pose modes clear the 25 FPS target; slam mode runs ≈28 FPS in simulation and ≈23.5 FPS on real hardware across the 14-cell FeelSight primary sweep (multi-seed medians).",
+        "Sim-to-real is strong reconstruction transfer with a harder real tracking bottleneck: 94% of simulation F-score@5mm is retained on real hardware (0.946 → 0.888), versus 80% for NeuralFeels (0.898 → 0.716).",
+        "Frame-matched against model-free NeuralFeels: more accurate in simulation (0.91 vs 2.51 mm ADD-S), real-hardware parity (3.34 vs 3.42 mm), at ≈7.6× the mean frame rate — the implicit baseline wins only when handed an exact CAD model.",
+        "Paired tactile ablation isolates a domain-dependent finding: tactile improves reconstruction in simulation but degrades it on real hardware — noisy DIGIT depth drags the map — while pose accuracy stays near-neutral in both domains.",
         "Developed inside Korea's national “Alchemist” humanoid programme (MOTIE) — bringing visuo-tactile SLAM from research prototype to the Phase-2 full-scale humanoid.",
       ],
       tools: ["3D Gaussian Splatting", "PyTorch", "CUDA", "gsplat", "LM SE(3)", "UR5e", "Allegro Hand", "DIGIT tactile", "NVIDIA Omniverse"],
@@ -202,7 +205,7 @@ export const PORTFOLIO_DATA = {
       date: "2024 — 2026",
       summary: "GSFS Scholar. GaussianFeels thesis; PoP-SLAM; perception integration for the Phase-2 “Alchemist” humanoid (MOTIE).",
       bullets: [
-        "Built GaussianFeels: online visuo-tactile reconstruction and pose tracking on an object-centric 3DGS map — 0.84 mm ADD-S sim / 3.4 mm real at ≈28 / ≈23.5 FPS, matching or beating model-free NeuralFeels at ≈7.6× the frame rate with no CAD model.",
+        "Built GaussianFeels: online visuo-tactile reconstruction and pose tracking on an object-centric 3DGS map — 0.83 mm ADD-S sim / 3.37 mm real at ≈28 / ≈23.5 FPS, matching or beating model-free NeuralFeels at ≈7.6× the frame rate with no CAD model.",
         "Co-developed PoP-SLAM: projection-first dense visual SLAM, 0.75 cm ATE RMSE on TUM-RGBD on a consumer GPU.",
         "Leading integration of visuo-tactile SLAM and dexterous in-hand manipulation into the Phase-2 full-scale humanoid prototype of Korea's “Alchemist” programme.",
       ],
