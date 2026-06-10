@@ -1,4 +1,5 @@
-// Sections — Research, Software, Experience, Background, Field log, Contact, Footer
+// Sections — Research, Personal projects, Experience, School,
+// School projects, Gallery, Contact, Footer
 import { useState } from "react";
 import { Icon, Crosshairs } from "./Shell";
 
@@ -124,7 +125,7 @@ export function ResearchSection({ data }) {
   );
 }
 
-/* ──────────────── 02 / SOFTWARE ──────────────── */
+/* ──────────────── 02 / PERSONAL PROJECTS ──────────────── */
 function InstallLine({ cmd }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
@@ -190,11 +191,11 @@ export function SoftwareCard({ item, adapters, adaptersAction }) {
   );
 }
 
-export function SoftwareSection({ data }) {
+export function PersonalProjectsSection({ data }) {
   return (
-    <section id="software" className="section">
+    <section id="personal-projects" className="section">
       <div className="container">
-        <SectionHead index="02" label="Software" title="Released &" em="installable."
+        <SectionHead index="02" label="Personal projects" title="Released &" em="installable."
           sub="Open-source research libraries — each one pip-installable, benchmarked, and in use." />
         <div className="sw-stack">
           {data.software.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
@@ -232,12 +233,12 @@ export function ExperienceSection({ data, index = "03", sub }) {
   );
 }
 
-/* ──────────────── 04 / BACKGROUND ──────────────── */
-export function BackgroundSection({ data, index = "04" }) {
+/* ──────────────── 04 / SCHOOL ──────────────── */
+export function SchoolSection({ data, index = "04" }) {
   return (
-    <section id="background" className="section">
+    <section id="school" className="section">
       <div className="container">
-        <SectionHead index={index} label="Background" title="Four schools," em="three countries." />
+        <SectionHead index={index} label="School" title="Four schools," em="three countries." />
         <div className="edu-grid">
           {data.education.map(e => (
             <div key={e.id} className="edu-card reveal">
@@ -285,10 +286,45 @@ export function BackgroundSection({ data, index = "04" }) {
           </div>
         </div>
 
+      </div>
+    </section>
+  );
+}
+
+/* ──────────────── 05 / SCHOOL PROJECTS ──────────────── */
+export function SchoolProjectsSection({ data, index = "05", footer = null }) {
+  const [capstone, ...earlier] = data.archive;
+  return (
+    <section id="school-projects" className="section">
+      <div className="container">
+        <SectionHead index={index} label="School projects" title="Built at" em="university."
+          sub="The FMC-sponsored capstone and the earlier hands-on builds from the undergraduate years." />
+        <div className="sheet-stack">
+          <article className="sheet flagship reveal">
+            <Crosshairs />
+            <header className="sheet-head">
+              <div>
+                <h3 className="sheet-title">{capstone.title}</h3>
+                <p className="sheet-subtitle">{capstone.note}</p>
+              </div>
+              <div className="sheet-meta">
+                <span className="pill">Capstone · 1st place</span>
+                <span className="sheet-date">{capstone.date}</span>
+              </div>
+            </header>
+            <footer className="sheet-foot">
+              <div className="ext-links">
+                <a href={capstone.href} target="_blank" rel="noopener">
+                  Capstone award (PDF) <Icon name="external" size={10} />
+                </a>
+              </div>
+            </footer>
+          </article>
+        </div>
         <div className="archive reveal">
           <div className="bg-label">Earlier builds</div>
           <div className="archive-grid">
-            {data.archive.map((a, i) => (
+            {earlier.map((a, i) => (
               <div key={i} className="archive-row">
                 <div className="archive-head">
                   {a.href
@@ -301,21 +337,22 @@ export function BackgroundSection({ data, index = "04" }) {
             ))}
           </div>
         </div>
+        {footer}
       </div>
     </section>
   );
 }
 
-/* ── Field log (gallery strip) ── */
+/* ── Gallery (photo strip) ── */
 function toWebp(src) {
   return src.replace(/\.(jpe?g|png)$/i, ".webp");
 }
 
-export function FieldLog({ data }) {
+export function GallerySection({ data }) {
   return (
-    <section id="fieldlog" className="section fieldlog-sec">
+    <section id="gallery" className="section fieldlog-sec">
       <div className="container">
-        <div className="bg-label reveal">Field log — hardware along the way</div>
+        <div className="bg-label reveal">Gallery — hardware along the way</div>
       </div>
       <div className="fieldlog reveal" tabIndex="0" aria-label="Photo log, scrolls horizontally">
         {data.gallery.map((g, i) => (
@@ -338,8 +375,8 @@ export function FieldLog({ data }) {
   );
 }
 
-/* ──────────────── 05 / CONTACT ──────────────── */
-export function ContactSection({ data, index = "05", children }) {
+/* ──────────────── 06 / CONTACT ──────────────── */
+export function ContactSection({ data, index = "06", children }) {
   const c = data.profile.contact;
   return (
     <section id="contact" className="section">

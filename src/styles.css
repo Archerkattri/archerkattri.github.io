@@ -436,7 +436,7 @@ html.js .prerendered { display: none; }
   .pub-link, .pub-status { justify-self: start; }
 }
 
-/* ════════════════ SOFTWARE datasheets ════════════════ */
+/* ════════════ PERSONAL PROJECTS (software datasheets) ════════════ */
 .sw-stack { display: grid; gap: 30px; }
 .sw {
   position: relative;
@@ -542,7 +542,7 @@ html.js .prerendered { display: none; }
   .xp-row { grid-template-columns: 1fr; gap: 6px; }
 }
 
-/* ════════════════ BACKGROUND ════════════════ */
+/* ════════════════ SCHOOL (education · honors · docs · stack) ════════════════ */
 .edu-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1px; background: var(--line-faint); border: 1px solid var(--line-faint);
@@ -600,7 +600,7 @@ html.js .prerendered { display: none; }
 .archive-date { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint); white-space: nowrap; }
 .archive-row p { margin-top: 4px; font-size: 13px; color: var(--ink-faint); line-height: 1.55; }
 
-/* ════════════════ FIELD LOG ════════════════ */
+/* ════════════════ GALLERY (photo strip) ════════════════ */
 .fieldlog-sec { padding-top: clamp(60px, 9vh, 100px); }
 .fieldlog {
   display: flex; gap: 14px; overflow-x: auto;

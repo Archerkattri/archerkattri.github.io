@@ -21,9 +21,9 @@ export const DEG_PER_UNIT = 0.00042;
 export const DISTRICTS = [
   { id: "origin",   n: "00", name: "ORIGIN",     rect: { x: -560, y: -460, w: 1140, h: 950 } },
   { id: "research", n: "01", name: "RESEARCH",   rect: { x: -2720, y: -1660, w: 1690, h: 1640 } },
-  { id: "software", n: "02", name: "SOFTWARE",   rect: { x: 760, y: -1660, w: 2300, h: 1680 } },
+  { id: "software", n: "02", name: "PERSONAL PROJECTS", rect: { x: 760, y: -1660, w: 2300, h: 1680 } },
   { id: "experience", n: "03", name: "EXPERIENCE", rect: { x: -2860, y: 560, w: 2780, h: 2360 } },
-  { id: "fieldlog", n: "04", name: "FIELD LOG",  rect: { x: 760, y: 660, w: 1880, h: 1240 } },
+  { id: "fieldlog", n: "04", name: "GALLERY",    rect: { x: 760, y: 660, w: 1880, h: 1240 } },
   { id: "contact",  n: "05", name: "CONTACT",    rect: { x: -460, y: 1560, w: 1180, h: 1300 } },
 ];
 
@@ -56,7 +56,7 @@ export const STATIONS = [
   { id: "thesis-site", type: "marker", district: "research", x: -1660, y: -1580, w: 200, h: 60,
     far: 0, label: "Thesis site", data: { sub: "krishiattrisnu.github.io", href: "https://krishiattrisnu.github.io" } },
 
-  /* ── 02 SOFTWARE ── */
+  /* ── 02 PERSONAL PROJECTS ── */
   { id: "splatreg", type: "software", district: "software", x: 900, y: -1520, w: 540, h: 460,
     far: 68, label: "splatreg", data: sw.splatreg },
   { id: "mathlas", type: "software", district: "software", x: 2080, y: -1380, w: 540, h: 460,
@@ -94,7 +94,7 @@ export const STATIONS = [
   { id: "archive", type: "archive", district: "experience", x: -2240, y: 2280, w: 640, h: 490,
     far: 44, label: "Earlier builds", data: D.archive },
 
-  /* ── 04 FIELD LOG — photo plates ── */
+  /* ── 04 GALLERY — photo plates ── */
   ...D.gallery.map((g, i) => ({
     id: `log-${i}`, type: "photo", district: "fieldlog",
     x: [900, 1340, 1780, 2220, 1020, 1460][i], y: [800, 880, 780, 900, 1340, 1430][i],
@@ -183,7 +183,7 @@ export const INDEX_LABELS = {
   honors: "Honors & fellowships",
   documents: "Documents",
   skills: "Stack",
-  archive: "Earlier builds",
+  archive: "School projects · earlier builds",
   "log-0": "Photo plates",
   contact: "Contact",
 };

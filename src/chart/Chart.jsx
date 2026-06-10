@@ -17,9 +17,15 @@ import { TopBar, Readout, ZoomControls, Minimap, StationIndex, MobileSheet } fro
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const ease = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
+/* hash → district (new slugs + legacy aliases kept as redirects;
+   district *ids* are stable internals — only display names changed) */
 const HASH_DISTRICTS = {
-  research: "research", software: "software", experience: "experience",
-  background: "experience", fieldlog: "fieldlog", contact: "contact", top: "origin",
+  research: "research",
+  "personal-projects": "software", software: "software", adapters: "software",
+  experience: "experience",
+  school: "experience", background: "experience", "school-projects": "experience",
+  gallery: "fieldlog", fieldlog: "fieldlog", "field-log": "fieldlog",
+  contact: "contact", top: "origin",
 };
 
 export default function Chart({ onDocView, onGridView, reduced }) {
