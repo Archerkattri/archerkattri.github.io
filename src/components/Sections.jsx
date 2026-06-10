@@ -142,23 +142,19 @@ function InstallLine({ cmd }) {
 }
 
 function AdapterCluster({ adapters }) {
-  const [open, setOpen] = useState(false);
+  // native <details>: works in the no-JS prerender too
   return (
-    <div className="adapters">
-      <button className="adapters-toggle" onClick={() => setOpen(o => !o)} aria-expanded={open}>
-        {open ? "− Hide" : "+ Show"} the 12 per-model adapters
-      </button>
-      {open && (
-        <div className="adapters-grid">
-          {adapters.map(a => (
-            <a key={a.name} href={a.url} target="_blank" rel="noopener" className="adapter">
-              <span className="adapter-name"><Icon name="github" size={11} /> {a.name}</span>
-              <span className="adapter-desc">{a.desc}</span>
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
+    <details className="adapters">
+      <summary className="adapters-toggle">+ The 12 per-model adapters</summary>
+      <div className="adapters-grid">
+        {adapters.map(a => (
+          <a key={a.name} href={a.url} target="_blank" rel="noopener" className="adapter">
+            <span className="adapter-name"><Icon name="github" size={11} /> {a.name}</span>
+            <span className="adapter-desc">{a.desc}</span>
+          </a>
+        ))}
+      </div>
+    </details>
   );
 }
 

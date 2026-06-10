@@ -225,25 +225,39 @@ p { margin: 0; }
   .hero-fig { justify-self: start; }
 }
 
-/* ── load sequence ── */
-.boot { opacity: 0; animation: bootIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: var(--d, 0s); }
+/* ── load sequence (JS-gated: without JS everything renders visible) ── */
+html.js .docview .boot { opacity: 0; animation: bootIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: var(--d, 0s); }
 @keyframes bootIn {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
 }
-.line-mask.boot { opacity: 1; animation: none; }
-.line-mask.boot > span {
+html.js .docview .line-mask.boot { opacity: 1; animation: none; overflow: hidden; }
+html.js .docview .line-mask.boot > span {
   display: block; transform: translateY(112%);
   animation: lineUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: var(--d, 0s);
 }
 @keyframes lineUp { to { transform: none; } }
-.boot-rule { transform: scaleX(0); animation: ruleDraw 1.3s cubic-bezier(0.6, 0, 0.2, 1) 0.85s forwards; }
+html.js .docview .boot-rule { transform: scaleX(0); animation: ruleDraw 1.3s cubic-bezier(0.6, 0, 0.2, 1) 0.85s forwards; }
 @keyframes ruleDraw { to { transform: scaleX(1); } }
 
-/* ── scroll reveal ── */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
-.reveal.in { opacity: 1; transform: none; }
+/* ── scroll reveal (JS-gated) ── */
+html.js .docview .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+html.js .docview .reveal.in { opacity: 1; transform: none; }
+
+/* hide the build-time prerender as soon as JS is available */
+html.js .prerendered { display: none; }
+
+/* doc-mode → chart-mode return control */
+.chart-return {
+  position: fixed; right: 18px; bottom: 18px; z-index: 110;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.14em;
+  color: var(--ink); background: rgba(12, 13, 16, 0.85);
+  border: 1px solid var(--accent-deep); border-radius: 2px;
+  padding: 11px 16px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.chart-return:hover { border-color: var(--accent); background: var(--accent-soft); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -480,7 +494,9 @@ p { margin: 0; }
 .adapters-toggle {
   font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--accent); padding: 8px 0;
+  cursor: pointer; list-style: none;
 }
+.adapters-toggle::-webkit-details-marker { display: none; }
 .adapters-toggle:hover { text-decoration: underline; text-underline-offset: 3px; }
 .adapters-grid {
   margin-top: 12px;

@@ -1,51 +1,36 @@
-import { useState, useEffect } from "react";
-import { PORTFOLIO_DATA } from "./data";
-import { Nav, Hero } from "./components/Shell";
-import {
-  ResearchSection, SoftwareSection, ExperienceSection,
-  BackgroundSection, FieldLog, ContactSection, Footer,
-} from "./components/Sections";
+import { useEffect, useMemo, useState } from "react";
+import Chart from "./chart/Chart";
+import DocumentView from "./DocumentView";
 
+// View selection:
+//   default            → the research chart (the site IS a map)
+//   reduced motion     → document view (chart still reachable via toggle)
+//   ?view=doc / toggle → document view, remembered for the session
 export default function App() {
-  const data = PORTFOLIO_DATA;
-  const [active, setActive] = useState("");
+  const reduced = useMemo(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    []
+  );
+  const [view, setView] = useState(() => {
+    const q = new URLSearchParams(window.location.search).get("view");
+    if (q === "doc" || q === "chart") return q;
+    const stored = sessionStorage.getItem("ka-view");
+    if (stored === "doc" || stored === "chart") return stored;
+    return reduced ? "doc" : "chart";
+  });
 
   useEffect(() => {
-    // active-section tracking for the nav
-    const navIds = new Set(["research", "software", "experience", "background", "contact"]);
-    const navObs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting && navIds.has(e.target.id)) setActive(e.target.id); }),
-      { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
+    sessionStorage.setItem("ka-view", view);
+    document.documentElement.classList.toggle("chart-mode", view === "chart");
+  }, [view]);
+
+  if (view === "chart") {
+    return (
+      <>
+        <div className="grain" aria-hidden="true" />
+        <Chart reduced={reduced} onDocView={() => setView("doc")} />
+      </>
     );
-    document.querySelectorAll("section[id]").forEach(s => navObs.observe(s));
-
-    // unified scroll reveal
-    const revealObs = new IntersectionObserver(
-      entries => entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add("in"); revealObs.unobserve(e.target); }
-      }),
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
-    );
-    document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
-
-    return () => { navObs.disconnect(); revealObs.disconnect(); };
-  }, []);
-
-  return (
-    <>
-      <div className="grain" aria-hidden="true" />
-      <div className="col-rules" aria-hidden="true" />
-      <Nav active={active} cv={data.profile.contact.cv} />
-      <main>
-        <Hero profile={data.profile} />
-        <ResearchSection data={data} />
-        <SoftwareSection data={data} />
-        <ExperienceSection data={data} />
-        <BackgroundSection data={data} />
-        <FieldLog data={data} />
-        <ContactSection data={data} />
-      </main>
-      <Footer />
-    </>
-  );
+  }
+  return <DocumentView onChartView={() => setView("chart")} />;
 }
