@@ -1,7 +1,7 @@
 /* ════════════════════════════════════════════════════════════
    Krishi Attri — portfolio
    Aesthetic: dark instrument-panel editorial.
-   One ink (warm paper-white on carbon), one accent (terracotta),
+   One ink (warm paper-white on carbon), one accent (instrument teal),
    Fraunces display · Hanken Grotesk body · Spline Sans Mono labels.
    ════════════════════════════════════════════════════════════ */
 
@@ -14,11 +14,11 @@
   --ink-faint: #6e6a5e;
   --line: rgba(233, 228, 214, 0.14);
   --line-faint: rgba(233, 228, 214, 0.07);
-  /* terracotta accent — restored from the pre-revamp palette:
-     accent = oklch(0.72 0.13 55); deep = AA-tuned oklch(0.62 0.13 55) */
-  --accent: #e28d4f;
-  --accent-deep: #c16e2d;
-  --accent-soft: rgba(226, 141, 79, 0.12);
+  /* instrument teal accent — restored from the pre-revamp palette (dcc118e):
+     accent = oklch(0.74 0.11 200); deep = AA-tuned oklch(0.62 0.11 200) */
+  --accent: #3ebfc6;
+  --accent-deep: #0099a0;
+  --accent-soft: rgba(62, 191, 198, 0.12);
   --font-display: "Fraunces", "Georgia", serif;
   --font-body: "Hanken Grotesk", system-ui, sans-serif;
   --font-mono: "Spline Sans Mono", ui-monospace, "SFMono-Regular", monospace;
@@ -41,12 +41,12 @@ body {
   overflow-x: hidden;
 }
 
-/* atmospheric depth: faint terracotta field + vignette */
+/* atmospheric depth: faint teal field + vignette */
 body::before {
   content: "";
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(1100px 600px at 18% -8%, rgba(226, 141, 79, 0.055), transparent 64%),
+    radial-gradient(1100px 600px at 18% -8%, rgba(62, 191, 198, 0.055), transparent 64%),
     radial-gradient(900px 700px at 100% 110%, rgba(110, 130, 180, 0.05), transparent 60%),
     var(--bg);
 }
