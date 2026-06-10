@@ -214,9 +214,7 @@ export default function GridSite({ reduced }) {
       </nav>
 
       {room === "home" ? (
-        <span className="gv-brand" aria-hidden="true">
-          <span className="nav-sig" />KRISHI ATTRI<span className="gv-brand-tail"> · THE MAP</span>
-        </span>
+        <span className="gv-brand" aria-hidden="true">KRISHI ATTRI</span>
       ) : (
         <button className="gv-homebtn" onClick={() => navigate("home")} aria-label="Return home (H)">
           <span aria-hidden="true">⌖</span> HOME
@@ -247,7 +245,6 @@ function RoomShell({ id, navigate, scrollerRef }) {
           {id !== "home" && (
             <footer className="gv-foot">
               <span>{def.code} · {def.name}</span>
-              <span className="gv-foot-coords">37.4565° N, 126.9520° E → 28.6024° N, 81.2001° W</span>
             </footer>
           )}
         </div>

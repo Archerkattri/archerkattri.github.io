@@ -3,8 +3,9 @@
 // reads from data.js (single source of truth shared with the
 // document view and the chart).
 // ════════════════════════════════════════════════════════════
+import { useEffect, useRef } from "react";
 import { PORTFOLIO_DATA as D } from "../data";
-import { Icon, Crosshairs } from "../components/Shell";
+import { Icon } from "../components/Shell";
 import {
   SectionHead, ResearchCard, SoftwareCard, XpRow, EarlierRoles,
   SchoolSection, SchoolProjectsSection, ContactSection,
@@ -89,12 +90,10 @@ function HomeRoom({ navigate }) {
       </div>
 
       {/* one composed instrument bench: photo plate + navigation chart
-          sharing a single frame and one caption rail */}
+          sharing a single frame */}
       <div className="gv-bench">
-        <Crosshairs />
         <div className="gv-bench-row">
           <figure className="gv-bench-fig">
-            <span className="gv-fig-coord" aria-hidden="true">N 37.4565°<br />E 126.9520°</span>
             <picture>
               <source srcSet={p.headshotWebp} type="image/webp" />
               <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
@@ -102,11 +101,8 @@ function HomeRoom({ navigate }) {
           </figure>
           <div className="gv-bench-map">
             <GridMap cur="home" navigate={navigate} large />
+            <span className="gv-map-hint" aria-hidden="true">Press an edge, or a cell</span>
           </div>
-        </div>
-        <div className="gv-bench-rail" aria-hidden="true">
-          <span className="gv-rail-cap">FIG. 00 · THE SURVEYOR</span>
-          <span className="gv-rail-cap wide">FIG. 01 · THE MAP · PRESS AN EDGE, OR A CELL</span>
         </div>
       </div>
     </div>
@@ -121,7 +117,7 @@ function ResearchRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="N1" label="Research" title="Perception through" em="occlusion."
-          sub="Thesis work and papers on visuo-tactile SLAM: making robots perceive what their own hands hide." />
+          sub="SLAM when the easy signal is denied: visuo-tactile perception through the robot's own grasp (M.S. thesis), dense visual SLAM, and GNSS-denied navigation (B.S. thesis research)." />
         <div className="sheet-stack">
           {main.map(r => <ResearchCard key={r.id} item={r} />)}
         </div>
@@ -153,7 +149,6 @@ function PublicationsRoom({ navigate }) {
         <div className="gv-pubs">
           {D.publications.map((p, i) => (
             <article key={i} className="gv-pub">
-              <Crosshairs />
               <h3 className="gv-pub-title">{p.title}</h3>
               <div className="gv-pub-meta">{p.venue} · {p.date}</div>
               {p.href ? (
@@ -236,7 +231,6 @@ function PersonalProjectsRoom({ navigate }) {
               <div className="gv-adapters">
                 {f.items.map(a => (
                   <a key={a.name} className="gv-adapter" href={a.url} target="_blank" rel="noopener">
-                    <Crosshairs />
                     <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
                     <span className="adapter-desc">{a.desc}</span>
                   </a>
@@ -266,19 +260,63 @@ function SchoolProjectsRoom({ navigate }) {
 }
 
 /* ════════════════ W1 · EXPERIENCE (the route) ════════════════ */
+/* The route line draws downward as the room scrolls; each stop stays
+   greyed until the drawn line reaches its node, then lights up.
+   Reduced motion (and any setup failure): line fully drawn, nothing
+   greyed: the `gv-route-anim` class never lands, the CSS fallback
+   shows the full line. */
 function ExperienceRoom() {
+  const routeRef = useRef(null);
+  useEffect(() => {
+    const route = routeRef.current;
+    if (!route) return;
+    const track = route.querySelector(".gv-route-track");
+    const line = route.querySelector(".gv-route-line");
+    const stops = Array.from(route.querySelectorAll(".gv-stop"));
+    const scroller = route.closest(".gv-scroll");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || !track || !line || !scroller) {
+      stops.forEach(s => s.classList.add("lit"));
+      return;
+    }
+    route.classList.add("gv-route-anim");
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const tr = track.getBoundingClientRect();
+      if (tr.height < 1) return;
+      // the pen tip rides 62% down the viewport
+      const tip = Math.max(tr.top, Math.min(tr.bottom, scroller.getBoundingClientRect().top + scroller.clientHeight * 0.62));
+      line.style.transform = `scaleY(${(tip - tr.top) / tr.height})`;
+      for (const s of stops) {
+        // node center sits ~36px below the stop's top edge (see .gv-stop::before)
+        s.classList.toggle("lit", tip >= s.getBoundingClientRect().top + 36);
+      }
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
   return (
     <section className="section">
       <div className="container">
         <SectionHead index="W1" label="Experience" title="Lab, field &" em="industry."
           sub="The route so far, newest first. Seoul now, Orlando next." />
-        <div className="gv-route">
+        <div className="gv-route" ref={routeRef}>
           {/* penciled-in margin note: the stop that isn't on the route yet */}
           <div className="gv-route-next" aria-label="Next stop: UCF Ph.D., ORCGS Doctoral Fellow, August 2026">
             <span className="gv-note-caret" aria-hidden="true">^</span>
             <span className="gv-note-text">next stop UCF, Ph.D. · ORCGS fellow · Aug 2026</span>
           </div>
           <div className="xp-list gv-route-list">
+            <span className="gv-route-track" aria-hidden="true" />
+            <span className="gv-route-line" aria-hidden="true" />
             {D.experience.map(e => (
               <div key={e.id} className="gv-stop">
                 <XpRow e={e} />
@@ -301,16 +339,13 @@ function SchoolRoom() {
 function RelocationArc() {
   return (
     <div className="gv-arc" aria-label="Relocation: Seoul to Orlando, August 2026">
-      <Crosshairs />
-      <svg viewBox="0 0 640 170" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <svg viewBox="0 0 640 158" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <path className="gv-arc-path" d="M 60 122 Q 320 8 580 122" />
         <circle className="gv-arc-dot" cx="60" cy="122" r="4" />
         <circle className="gv-arc-dot hollow" cx="580" cy="122" r="4" />
         <text className="gv-arc-mid" x="320" y="46" textAnchor="middle">≈12,100 KM · AUG 2026</text>
         <text className="gv-arc-city" x="60" y="146" textAnchor="start">SEOUL</text>
-        <text className="gv-arc-coord" x="60" y="162" textAnchor="start">37.4565° N · 126.9520° E</text>
         <text className="gv-arc-city" x="580" y="146" textAnchor="end">ORLANDO</text>
-        <text className="gv-arc-coord" x="580" y="162" textAnchor="end">28.6024° N · 81.2001° W</text>
       </svg>
     </div>
   );

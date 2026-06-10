@@ -52,7 +52,13 @@ are deliberately self-explanatory — reading the title tells you what's inside:
 - Full room names always live in `aria-label`, never truncated.
 
 ### Home room (decided & shipped)
-The right column of HOME is **one composed plate** (`.gv-bench`): the headshot (Fig. 00, with surveyor coordinates in the air above it) and the room-grid map (Fig. 01) sit side by side inside a single frame, bottom-aligned, separated by a dashed internal divider, with one shared caption rail underneath ("FIG. 00 · THE SURVEYOR" / "FIG. 01 · THE MAP · PRESS AN EDGE, OR A CELL"). The rotated "SURVEYED" SVG stamp that used to sit on the photo corner was removed (2026-06: read as AI decoration) — don't bring it back. On mobile the bench keeps the two-plate row at a narrower ratio. Don't split it back into separate stacked cards.
+The right column of HOME is **one composed plate** (`.gv-bench`): the headshot and the room-grid map sit side by side inside a single frame, bottom-aligned, separated by a dashed internal divider, with a quiet usage hint under the map ("PRESS AN EDGE, OR A CELL", `.gv-map-hint`). The decoration that used to dress the site was removed in the 2026-06 declutter passes (read as AI decoration) — don't bring any of it back: the rotated "SURVEYED" SVG stamp, the "FIG. 00 / FIG. 01" caption rail, the corner crosshair registration marks (site-wide), the lat/lon coordinate strings (site-wide, incl. the footers and the contact arc), the squiggle glyph + "· THE MAP" tail next to the name in the header, and the fixed editorial column hairlines (`.col-rules`). On mobile the bench keeps the two-plate row at a narrower ratio. Don't split it back into separate stacked cards.
+
+### W1 route (decided & shipped)
+The experience route line is **scroll-linked**: a faint full-length track (`.gv-route-track`) plus a teal line (`.gv-route-line`) drawn downward via `scaleY` from a rAF-throttled scroll handler in `ExperienceRoom`; each `.gv-stop` waits greyed and un-greys (`.lit`: teal node fill + ping) when the line tip (62% down the viewport) reaches its node. Reduced motion, or any setup failure: the `gv-route-anim` class never lands and the CSS default shows the line fully drawn with nothing greyed.
+
+### Numbers are the proof (decided & shipped)
+Stat values (`.stat-v` on research sheets, `.sw-stat dd` on software datasheets) get one consistent emphasis treatment: heavier mono, accent teal, faint teal glow. Keep the two selectors in lockstep if either changes.
 - **`RoomViews.jsx`** — one component per room, reusing `Sections.jsx` pieces (`ResearchCard`, `SoftwareCard`, `SchoolSection`, `SchoolProjectsSection`, `ContactSection`) plus grid-only pieces: the `GridMap` (mini-map + home centerpiece), `RoomXRef` neighbor pointers (must always show the *current* room names), `SectionJump` in-room pointers, the W1 experience route rail, the S1 Seoul→Orlando relocation arc, the S2 photo-plate grid, the E1 adapter constellation grouped by model family.
 - **`src/grid.css`** — all grid styling (`gv-` prefix; document/prerender styling lives in `src/styles.css`).
 
@@ -134,7 +140,7 @@ npm run build      # must log "✓ prerendered document view into dist/index.htm
 npm run preview
 ```
 
-- [ ] Map (default): home shows identity + the composed bench (photo + map, one caption rail); edge arrows expand on hover/focus to show the destination name and slide the viewport (N→Research, E→Personal projects, …); each room scrolls natively.
+- [ ] Map (default): home shows identity + the composed bench (photo + map, hint under the map); edge arrows expand on hover/focus to show the destination name and slide the viewport (N→Research, E→Personal projects, …); each room scrolls natively.
 - [ ] Keyboard: ←/→ move across the grid; ↑/↓ scroll then step rooms at the scroll edge; H/Esc go home. Browser back/forward retrace moves; deep links (`/#publications`, `/#gaussianfeels`) land on the right room.
 - [ ] Mini-map (corner / home centerpiece) jumps anywhere, incl. single diagonal slides (e.g. W2 → E1).
 - [ ] Mobile (~420 px): compact chevron tabs (side tabs thumb-height), horizontal swipe = E/W, no brand/button overlap at the top.

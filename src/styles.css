@@ -76,16 +76,6 @@ p { margin: 0; }
   80% { transform: translate(2%, -1%); }
 }
 
-/* ── editorial column rules ── */
-.col-rules {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  max-width: calc(var(--container) + 2px);
-  margin: 0 auto;
-  border-left: 1px solid var(--line-faint);
-  border-right: 1px solid var(--line-faint);
-}
-@media (max-width: 1180px) { .col-rules { display: none; } }
-
 /* ════════════════ NAV ════════════════ */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -100,19 +90,9 @@ p { margin: 0; }
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
 }
 .nav-brand {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center;
   font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em;
   color: var(--ink); text-transform: uppercase;
-}
-.nav-sig {
-  width: 18px; height: 8px; position: relative; display: inline-block;
-}
-.nav-sig::before {
-  content: ""; position: absolute; inset: 0;
-  background:
-    linear-gradient(90deg, var(--accent) 0 5px, transparent 5px 7px,
-      var(--accent) 7px 9px, transparent 9px 11px, var(--accent) 11px 18px);
-  clip-path: polygon(0 60%, 30% 60%, 45% 0, 60% 100%, 72% 40%, 100% 40%, 100% 60%, 78% 60%, 60% 100%, 45% 0, 35% 80%, 0 80%);
 }
 .nav-links {
   display: flex; align-items: center; gap: 2px;
@@ -258,15 +238,6 @@ html.js .prerendered { display: none; }
 .sec-title em { font-style: italic; color: var(--accent); font-weight: 340; }
 .sec-sub { margin-top: 16px; max-width: 560px; color: var(--ink-muted); font-size: 16px; }
 
-/* ── crosshair registration marks ── */
-.xhairs { position: absolute; inset: 0; pointer-events: none; }
-.xh { position: absolute; width: 9px; height: 9px; }
-.xh::before, .xh::after { content: ""; position: absolute; background: var(--ink-faint); }
-.xh::before { width: 9px; height: 1px; top: 4px; }
-.xh::after { width: 1px; height: 9px; left: 4px; }
-.xh.tl { top: -5px; left: -5px; } .xh.tr { top: -5px; right: -5px; }
-.xh.bl { bottom: -5px; left: -5px; } .xh.br { bottom: -5px; right: -5px; }
-
 /* ════════════════ RESEARCH sheets ════════════════ */
 .sheet-stack { display: grid; gap: 28px; }
 /* break the uniform stack: the flagship runs the full measure,
@@ -318,13 +289,16 @@ html.js .prerendered { display: none; }
 }
 .stat { background: var(--bg-raised); padding: 16px 18px; }
 /* readouts are instruments: mono, not display type
-   (Fraunces is reserved for titles and the few set-piece moments) */
+   (Fraunces is reserved for titles and the few set-piece moments).
+   The numbers are the proof: accent teal + a faint glow so they
+   carry at a skim (same treatment as .sw-stat dd). */
 .stat-v {
-  display: block; font-family: var(--font-mono); font-weight: 500;
-  font-size: 25px; line-height: 1.15; color: var(--ink);
+  display: block; font-family: var(--font-mono); font-weight: 600;
+  font-size: 29px; line-height: 1.15; color: var(--accent);
   letter-spacing: -0.02em;
+  text-shadow: 0 0 24px rgba(62, 191, 198, 0.3);
 }
-.stat-v small { font-size: 14px; color: var(--ink-muted); font-family: var(--font-mono); }
+.stat-v small { font-size: 15px; color: color-mix(in oklab, var(--accent) 60%, var(--ink-muted)); font-family: var(--font-mono); }
 .stat-l {
   display: block; margin-top: 7px;
   font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.07em;
@@ -464,14 +438,16 @@ html.js .prerendered { display: none; }
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--ink-faint);
 }
+/* the proof column: same accent-teal instrument treatment as .stat-v */
 .sw-stat dd {
-  margin: 0; font-family: var(--font-mono); font-weight: 500;
-  font-size: 17px; color: var(--ink); white-space: nowrap;
+  margin: 0; font-family: var(--font-mono); font-weight: 600;
+  font-size: 20px; color: var(--accent); white-space: nowrap;
   letter-spacing: -0.01em;
+  text-shadow: 0 0 24px rgba(62, 191, 198, 0.3);
 }
 @media (max-width: 820px) {
   .sw-grid { grid-template-columns: 1fr; }
-  .sw-stat dd { font-size: 19px; white-space: normal; }
+  .sw-stat dd { font-size: 21px; white-space: normal; }
 }
 
 .adapters { margin-top: 20px; }
@@ -677,4 +653,3 @@ html.js .prerendered { display: none; }
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
   color: var(--ink-faint);
 }
-.footer-coords { color: var(--ink-faint); }

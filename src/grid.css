@@ -258,7 +258,7 @@ html.grid-mode, html.grid-mode body {
 
 /* ── the bench: photo + navigation chart as ONE composed plate ──
    Two instruments in a single frame: shared bottom baseline,
-   dashed internal divider, one caption rail running under both. */
+   dashed internal divider, a quiet usage hint under the map. */
 .gv-bench {
   position: relative;
   border: 1px solid var(--line);
@@ -280,13 +280,12 @@ html.grid-mode, html.grid-mode body {
   width: 100%; height: auto;
   filter: saturate(0.88) contrast(1.02);
 }
-/* surveyor's plate coordinates, filling the quiet air above the photo */
-.gv-fig-coord {
-  position: absolute; top: 14px; left: 16px;
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
-  line-height: 1.9; color: var(--ink-faint);
+.gv-bench-map { padding: 18px 16px 14px; min-width: 0; }
+.gv-map-hint {
+  display: block; margin-top: 12px; text-align: center;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faint);
 }
-.gv-bench-map { padding: 18px 16px 16px; min-width: 0; }
 /* the chart must fit its half of the bench: cells shrink, never overflow */
 .gv-bench-map .gv-map.lg {
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -297,19 +296,6 @@ html.grid-mode, html.grid-mode body {
 .gv-bench-map .gv-cell-name { font-size: 8.5px; letter-spacing: 0.04em; }
 .gv-bench-map .gv-cell-code { font-size: 9px; }
 .gv-bench-map .gv-cell-here { font-size: 7.5px; }
-
-/* the shared caption rail */
-.gv-bench-rail {
-  display: grid;
-  grid-template-columns: minmax(132px, 0.38fr) minmax(0, 0.62fr);
-  border-top: 1px solid var(--line);
-  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.11em;
-  color: var(--ink-faint);
-}
-.gv-rail-cap { padding: 9px 12px 8px; line-height: 1.7; }
-.gv-rail-cap:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gv-rail-cap:first-child { border-right: 1px dashed var(--line); }
-.gv-rail-cap.wide { color: var(--ink-muted); }
 
 /* ════════════════ room-specific pieces ════════════════ */
 
@@ -405,15 +391,20 @@ html.grid-mode, html.grid-mode body {
   border: 2px dashed var(--accent-deep); background: var(--bg);
 }
 .gv-route-list { margin-left: 26px; position: relative; }
-.gv-route-list::before {
-  content: ""; position: absolute; left: -27px; top: -36px; bottom: 26px;
-  width: 2px;
-  background:
-    linear-gradient(to bottom,
-      transparent 0, transparent 4px,
-      color-mix(in oklab, var(--accent-deep) 70%, transparent) 36px,
-      color-mix(in oklab, var(--accent-deep) 70%, transparent) 100%);
+/* the route line: a faint full-length track plus a teal line that the
+   scroll handler draws downward (scaleY, origin top) */
+.gv-route-track, .gv-route-line {
+  position: absolute; left: -27px; top: -36px; bottom: 26px;
+  width: 2px; pointer-events: none;
 }
+.gv-route-track { background: color-mix(in oklab, var(--accent-deep) 22%, transparent); }
+.gv-route-line {
+  background: color-mix(in oklab, var(--accent-deep) 80%, transparent);
+  transform-origin: top;
+}
+/* until the scroll handler arms (`gv-route-anim`), and under reduced
+   motion, the line reads fully drawn */
+.gv-route-anim .gv-route-line { transform: scaleY(0); }
 .gv-stop { position: relative; }
 .gv-stop::before {
   content: ""; position: absolute; left: -31px; top: 32px;
@@ -428,6 +419,22 @@ html.grid-mode, html.grid-mode body {
   transform: rotate(-90deg); transform-origin: center;
 }
 .gv-stop:first-child::before { border-color: var(--accent); box-shadow: 0 0 10px rgba(62, 191, 198, 0.4); }
+/* scroll-linked reveal: stops wait greyed for the line to reach them */
+.gv-route-anim .gv-stop {
+  opacity: 0.32;
+  filter: saturate(0.35);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+.gv-route-anim .gv-stop.lit { opacity: 1; filter: none; }
+.gv-route-anim .gv-stop.lit::before {
+  background: var(--accent); border-color: var(--accent);
+  animation: gvNodePing 0.7s ease-out;
+}
+@keyframes gvNodePing {
+  0% { box-shadow: 0 0 0 0 rgba(62, 191, 198, 0.55); }
+  100% { box-shadow: 0 0 0 13px rgba(62, 191, 198, 0); }
+}
+.gv-route-anim .gv-stop.lit:first-child::before { box-shadow: 0 0 10px rgba(62, 191, 198, 0.4); }
 
 /* S1 contact — relocation arc */
 .gv-arc {
@@ -451,10 +458,6 @@ html.grid-mode, html.grid-mode body {
 .gv-arc-city {
   font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.18em;
   fill: var(--ink-muted);
-}
-.gv-arc-coord {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-  fill: var(--ink-faint);
 }
 
 /* S2 field log — photo plates, room-sized grid */
@@ -501,7 +504,6 @@ html.grid-mode, html.grid-mode body {
   .gv-edge-w .gv-edge-label, .gv-edge-e .gv-edge-label { display: none; }
   .gv-edge-w { left: 6px; }
   .gv-edge-e { right: 6px; }
-  .gv-brand-tail { display: none; }
 
   .gv-homebtn { top: 10px; left: 10px; padding: 8px 11px; font-size: 10px; }
   .gv-brand { top: 10px; left: 10px; font-size: 10px; }
@@ -517,11 +519,9 @@ html.grid-mode, html.grid-mode body {
   }
   .gv-home-title { font-size: clamp(38px, 11vw, 52px); }
   .gv-bench-row { grid-template-columns: minmax(108px, 0.36fr) minmax(0, 0.64fr); }
-  .gv-bench-rail { grid-template-columns: minmax(108px, 0.36fr) minmax(0, 0.64fr); }
   .gv-bench-fig { padding: 12px; }
-  .gv-bench-map { padding: 12px 10px; }
-  .gv-rail-cap { padding: 8px 10px 7px; font-size: 8px; letter-spacing: 0.1em; }
-  .gv-rail-cap:first-child { white-space: normal; overflow: visible; }
+  .gv-bench-map { padding: 12px 10px 10px; }
+  .gv-map-hint { font-size: 8px; letter-spacing: 0.1em; margin-top: 9px; }
   .gv-map.lg { grid-template-columns: repeat(5, minmax(40px, 1fr)); gap: 5px; }
   .gv-map.lg .gv-cell { min-height: 42px; padding: 5px 2px; }
   .gv-cell-name { font-size: 7.5px; letter-spacing: 0.02em; }
@@ -535,7 +535,7 @@ html.grid-mode, html.grid-mode body {
   .gv-route-next { margin-left: 18px; font-size: 15px; }
   .gv-route-next::before { left: -23px; }
   .gv-route-list { margin-left: 18px; }
-  .gv-route-list::before { left: -19px; }
+  .gv-route-track, .gv-route-line { left: -19px; }
   .gv-stop::before { left: -23px; }
 }
 
@@ -549,4 +549,8 @@ html.grid-mode, html.grid-mode body {
   .gv-roomwrap.gv-out, .gv-roomwrap.gv-in { animation: none; }
   .gv-cell-here { animation: none; }
   .gv-plate { transition: none; }
+  /* route: fully drawn, nothing greyed, no ping */
+  .gv-route-line { transform: none !important; }
+  .gv-route-anim .gv-stop { opacity: 1; filter: none; transition: none; }
+  .gv-route-anim .gv-stop.lit::before { animation: none; }
 }
