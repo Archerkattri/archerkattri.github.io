@@ -38,10 +38,10 @@ export const PORTFOLIO_DATA = {
       flagship: {
         href: "#gaussianfeels",
         pre: "GaussianFeels: ",
-        statA: "3.37 mm",
+        statA: "0.83 mm",
         mid: " object tracking during in-hand manipulation, at ",
         statB: "7.6×",
-        post: " the frame rate of the neural-field baseline.",
+        post: " the frame rate of the neural-field baseline (simulation).",
       },
       libraries: [
         { label: "splatreg", href: "#splatreg" },
