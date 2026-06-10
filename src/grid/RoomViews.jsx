@@ -69,12 +69,15 @@ function HomeRoom({ navigate }) {
   return (
     <div className="gv-home">
       <div className="gv-home-id">
-        <p className="hero-kicker">
-          <span className="kicker-dash" aria-hidden="true" />{p.kicker}
+        {/* identity first: the name at display scale, then the role line,
+            then the one-liner (who / what / why inside two seconds) */}
+        <h1 className="gv-home-name">{p.name}</h1>
+        <p className="gv-home-role">
+          <span className="kicker-dash" aria-hidden="true" />{p.roleLine}
         </p>
-        <h1 className="gv-home-title">
-          {p.headlineLines[0]}<br /><em>{p.headlineLines[1]}</em>
-        </h1>
+        <p className="gv-home-tag">
+          {p.headlineLines[0]} <em>{p.headlineLines[1]}</em>
+        </p>
         <p className="hero-sub">{p.sub}</p>
         <ProofLine proof={p.proofLine} />
         <ul className="hero-meta">

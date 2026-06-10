@@ -9,7 +9,9 @@
 export const PORTFOLIO_DATA = {
   profile: {
     name: "Krishi Attri",
-    kicker: "Robotics & AI · Visuo-Tactile Perception",
+    // Identity block, in reading order: name (display scale) → role line →
+    // the one-liner. A first-time visitor gets who/what/why in two seconds.
+    roleLine: "Robotics and AI researcher. M.S. SNU, incoming Ph.D. UCF.",
     headlineLines: ["I give robots", "a sense of touch."],
     sub: "Perception systems that see, feel, and reconstruct the world in real time: visuo-tactile SLAM on 3D Gaussian Splatting maps, plus the open-source tools that make the stack verifiable and fast.",
     meta: [
@@ -37,9 +39,9 @@ export const PORTFOLIO_DATA = {
         href: "#gaussianfeels",
         pre: "GaussianFeels: ",
         statA: "3.37 mm",
-        mid: " in-hand tracking on real hardware, ",
+        mid: " object tracking during in-hand manipulation, at ",
         statB: "7.6×",
-        post: " the neural-field baseline.",
+        post: " the frame rate of the neural-field baseline.",
       },
       libraries: [
         { label: "splatreg", href: "#splatreg" },
