@@ -76,8 +76,16 @@ export function roomFromHash(hash) {
   return null;
 }
 
-/* hash → in-room section anchor (scrolled to after the room lands) */
-const SECTION_TARGETS = { adapters: "adapter-constellation" };
+/* hash → in-room section anchor (scrolled to after the room lands).
+   The card ids exist on both render targets (ResearchCard / SoftwareCard
+   carry id={item.id}), so the hero proof line can deep-link to them. */
+const SECTION_TARGETS = {
+  adapters: "adapter-constellation",
+  gaussianfeels: "gaussianfeels",
+  splatreg: "splatreg",
+  mathlas: "mathlas",
+  "hicache-pp": "hicache-pp",
+};
 
 export function sectionFromHash(hash) {
   const id = (hash || "").replace(/^#/, "");

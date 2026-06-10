@@ -1,5 +1,6 @@
 // Shell — Icon, Nav, Hero
 import { useState } from "react";
+import { ProofLine } from "./Sections";
 
 export function Icon({ name, size = 15 }) {
   const paths = {
@@ -63,7 +64,6 @@ export function Hero({ profile }) {
     { label: "GitHub", href: c.github, icon: "github", ext: true },
     { label: "Email", href: `mailto:${c.email}`, icon: "mail" },
     { label: "LinkedIn", href: c.linkedin, icon: "linkedin", ext: true },
-    { label: "Thesis site", href: c.thesisSite, icon: "external", ext: true },
     { label: "CV", href: c.cv, icon: "file", ext: true },
   ];
   return (
@@ -78,6 +78,7 @@ export function Hero({ profile }) {
             <span className="line-mask"><span>a <em>sense of touch.</em></span></span>
           </h1>
           <p className="hero-sub">{profile.sub}</p>
+          <ProofLine proof={profile.proofLine} />
           <ul className="hero-meta">
             {profile.meta.map((m, i) => <li key={i}>{m}</li>)}
           </ul>

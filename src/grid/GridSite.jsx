@@ -19,9 +19,13 @@ import { RoomContent, GridMap } from "./RoomViews";
 const SLIDE_MS = 520;       // cardinal slide
 const SLIDE_DIAG_MS = 640;  // mini-map diagonal jump (single oblique slide)
 
+const BASE_TITLE = "Krishi Attri · Robotics & AI Researcher";
+const roomTitle = r => r.name.charAt(0) + r.name.slice(1).toLowerCase();
+
 export default function GridSite({ reduced }) {
   const [room, setRoom] = useState("home");
   const [trans, setTrans] = useState(null); // { to, dx, dy, dur }
+  const [edgeHint, setEdgeHint] = useState(null); // { dir, name }
   const roomRef = useRef(room);
   roomRef.current = room;
   const transRef = useRef(null);
@@ -29,6 +33,23 @@ export default function GridSite({ reduced }) {
   const pendingRef = useRef(null);
   const scrollerRef = useRef(null);
   const liveRef = useRef(null);
+  const hintTimerRef = useRef(0);
+
+  /* brief "press again to continue" cue when a held ↑/↓ parks at the
+     scroll edge (the swallowed key-repeat presses; a fresh press at the
+     edge navigates immediately, see the keyboard contract) */
+  const showEdgeHint = useCallback((dir, name) => {
+    window.clearTimeout(hintTimerRef.current);
+    setEdgeHint({ dir, name });
+    hintTimerRef.current = window.setTimeout(() => setEdgeHint(null), 1200);
+  }, []);
+
+  /* per-room document titles ("Research · Krishi Attri") */
+  useEffect(() => {
+    document.title = room === "home"
+      ? BASE_TITLE
+      : `${roomTitle(ROOM_MAP[room])} · Krishi Attri`;
+  }, [room]);
 
   const announce = useCallback(id => {
     const r = ROOM_MAP[id];
@@ -50,6 +71,8 @@ export default function GridSite({ reduced }) {
     const a = ROOM_MAP[roomRef.current];
     const b = ROOM_MAP[to];
     if (push) setHash(to, true);
+    window.clearTimeout(hintTimerRef.current);
+    setEdgeHint(null);
     announce(to);
     if (reduced) { setRoom(to); return; }
     const dx = Math.sign(b.col - a.col);
@@ -120,21 +143,27 @@ export default function GridSite({ reduced }) {
         const n = neighborOf(cur, d);
         if (n) navRef.current(n.id);
       };
+      /* at a scroll edge: a fresh press steps to the neighbor at once;
+         swallowed key-repeats (a held key) flash the continue cue */
+      const edge = d => {
+        if (!e.repeat) { go(d); return; }
+        const n = neighborOf(cur, d);
+        if (n) showEdgeHint(d, n.name);
+      };
       const sc = scrollerRef.current;
       switch (e.key) {
         case "ArrowLeft": e.preventDefault(); go("w"); break;
         case "ArrowRight": e.preventDefault(); go("e"); break;
         case "ArrowUp": {
           e.preventDefault();
-          if (sc && sc.scrollTop <= 1) { if (!e.repeat) go("n"); }
+          if (sc && sc.scrollTop <= 1) edge("n");
           else sc?.scrollBy({ top: -90 });
           break;
         }
         case "ArrowDown": {
           e.preventDefault();
-          if (sc && sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2) {
-            if (!e.repeat) go("s");
-          } else sc?.scrollBy({ top: 90 });
+          if (sc && sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2) edge("s");
+          else sc?.scrollBy({ top: 90 });
           break;
         }
         default: break;
@@ -142,7 +171,7 @@ export default function GridSite({ reduced }) {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, []);
+  }, [showEdgeHint]);
 
   /* initial focus so PgUp/PgDn/space scroll the room immediately */
   useEffect(() => {
@@ -224,6 +253,12 @@ export default function GridSite({ reduced }) {
       <div className="gv-corner-map">
         <GridMap cur={room} navigate={navigate} />
       </div>
+
+      {edgeHint && (
+        <div className={`gv-edgehint gv-edgehint-${edgeHint.dir}`} aria-hidden="true">
+          {DIRS[edgeHint.dir].arrow} again · {edgeHint.name}
+        </div>
+      )}
 
       <div className="gv-caption" aria-hidden="true">
         {cur.code} · {cur.name} · © {new Date().getFullYear()} KRISHI ATTRI
