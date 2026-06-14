@@ -35,7 +35,7 @@ are deliberately self-explanatory — reading the title tells you what's inside:
                    [S2 GALLERY     ]
 ```
 
-- **E1 PERSONAL PROJECTS** — the four released-software datasheets (splatreg / mathlas / CERT-FLOW / HiCache++) with the 14-repo HiCache accelerator constellation as the room's closing section (`#adapter-constellation`): 13 accelerator repos (12 HiCache/HiCache++ adapters + the fast-trellis2 TaylorSeer baseline) + the ComfyUI-HiCache node, grouped by model family with an "Integrations" group.
+- **E1 PERSONAL PROJECTS** — the four released-software datasheets (splatreg / mathlas / CERT-FLOW / HiCache++) with the 16-repo HiCache accelerator constellation as the room's closing section (`#adapter-constellation`): 13 accelerator repos (12 HiCache/HiCache++ adapters + the fast-trellis2 TaylorSeer baseline) + 3 ComfyUI nodes (ComfyUI-HiCache for Hunyuan3D, ComfyUI-TRELLIS-HiCache, ComfyUI-TRELLIS2-HiCache), grouped by model family with an "Integrations" group.
 - **E2 SCHOOL PROJECTS** — the FMC-sponsored capstone (featured, with demo/award/photos links) + the "Earlier builds" archive (CV-complete: includes the robotic arm, SOLIDWORKS scooter, basketball-prediction entries).
 - **W2 SCHOOL** — education (with REAL-lab / Diploma links), honors & fellowships (linked proofs), **leadership** (CubeSat / VISO / SASE / ASME), documents (CV/resume/PDFs, with Drive mirrors via the `drive` field), the condensed stack.
 - **W1 EXPERIENCE** — the route (per-stop proof links from the CV: EOD robot, drone, Silo demo, certificates, host letter) + the compact "Also held, Villanova" earlier-roles block. The UCF stop renders as a penciled margin note (`.gv-route-next`), not a boxed pill.
