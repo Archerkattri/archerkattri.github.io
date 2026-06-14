@@ -158,7 +158,7 @@ function PublicationsRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="N2" label="Publications" title="On the" em="record."
-          sub="The list grows as the thesis work reaches formal venues." />
+          sub="The M.S. thesis, a course paper, and the solo-author engrXiv preprints behind the released libraries (splatreg, HiCache++, CERT-FLOW). The list grows as the thesis work reaches formal venues." />
         <div className="gv-pubs">
           {D.publications.map((p, i) => (
             <article key={i} className="gv-pub">

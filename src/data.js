@@ -26,6 +26,7 @@ export const PORTFOLIO_DATA = {
       email: "krishiattriwork@gmail.com",
       github: "https://github.com/Archerkattri",
       linkedin: "https://linkedin.com/in/krishi-attri15",
+      orcid: "https://orcid.org/0009-0005-4695-6467",
       cv: "assets/docs/Krishi_Attri_CV.pdf",
       resume: "assets/docs/Krishi_Attri_Resume.pdf",
       siteSource: "https://github.com/Archerkattri/archerkattri.github.io",
@@ -154,6 +155,27 @@ export const PORTFOLIO_DATA = {
       status: "release upcoming",
     },
     {
+      title: "Registering Gaussian Splats Without the Point-Cloud Detour: Accuracy, Representation Semantics, and a Negative Result on Hypothesis-Stage Transfer",
+      venue: "K. Attri · engrXiv preprint · companion software: splatreg",
+      date: "2026",
+      href: "https://doi.org/10.31224/7313",
+      status: "engrXiv · DOI 10.31224/7313",
+    },
+    {
+      title: "No Single Basis Wins: A Cross-Family Study of Diffusion Feature Forecasting and the Limits of Training-Free Basis Selection",
+      venue: "K. Attri · engrXiv preprint · companion software: HiCache++",
+      date: "2026",
+      href: "https://doi.org/10.31224/7309",
+      status: "engrXiv · DOI 10.31224/7309",
+    },
+    {
+      title: "CERT: Certified Route Planning under Drifting Costs, Conformal Certificates, Sense-to-Certify, and the Price of Staleness",
+      venue: "K. Attri · engrXiv preprint · companion software: CERT-FLOW",
+      date: "2026",
+      href: "https://doi.org/10.31224/7306",
+      status: "engrXiv · DOI 10.31224/7306",
+    },
+    {
       title: "PoP-SLAM: Point Cloud Projection for SLAM",
       venue: "S. Jung, K. Attri, J. Marchand, M. L. Paolicchi · course project, SNU",
       date: "2024",
@@ -182,6 +204,7 @@ export const PORTFOLIO_DATA = {
         { label: "Docs & guide", href: "https://archerkattri.github.io/splatreg/" },
         { label: "PyPI", href: "https://pypi.org/project/splatreg/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/splatreg" },
+        { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7313" },
         { label: "DOI 10.5281/zenodo.20618389", href: "https://doi.org/10.5281/zenodo.20618389" },
       ],
     },
@@ -208,8 +231,8 @@ export const PORTFOLIO_DATA = {
     {
       id: "cert-flow",
       name: "CERT-FLOW",
-      install: "gh repo clone Archerkattri/CERT-FLOW",
-      spec: "v1.0.0 · MIT · 223 tests · 16 reproduction pipelines · preprint forthcoming",
+      install: "pip install certflow",
+      spec: "v1.0.0 · MIT · 227 tests · 16 reproduction pipelines · engrXiv preprint",
       oneliner: "Certified route planning under drifting costs.",
       summary:
         "A robot replanning through a world whose costs drift never knows how good its current route is once the map goes stale; classical planners silently trust the stale map. CERT-FLOW answers with a proof every round: a high-probability certificate LB ≤ OPT ≤ UB on the optimal route cost, built from age-weighted non-exchangeable conformal prediction over drift-adjusted residuals, and it spends paid sensing exactly where the certificate says the gap shrinks fastest. When the certificate proves the map tight, that proof licenses ns-to-µs preprocessed queries that self-expire the instant drift exceeds tolerance. Seven theorems (coverage through an impossibility result on lower bounds), validated on 17 synthetic regimes, game maps, and real traffic (METR-LA, PEMS-BAY); the failed hypotheses stay documented in the record.",
@@ -219,7 +242,9 @@ export const PORTFOLIO_DATA = {
         { value: "2 – 3×", label: "lower sensing regret than freshness, uncertainty, or random at equal budget" },
       ],
       links: [
+        { label: "PyPI", href: "https://pypi.org/project/certflow/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/CERT-FLOW" },
+        { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7306" },
         { label: "Results, per experiment", href: "https://github.com/Archerkattri/CERT-FLOW/tree/main/docs/results" },
         { label: "DOI 10.5281/zenodo.20631476", href: "https://doi.org/10.5281/zenodo.20631476" },
       ],
@@ -240,6 +265,7 @@ export const PORTFOLIO_DATA = {
       links: [
         { label: "PyPI", href: "https://pypi.org/project/hicache-pp/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" },
+        { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7309" },
         { label: "DOI 10.5281/zenodo.20618824", href: "https://doi.org/10.5281/zenodo.20618824" },
       ],
       adaptersNote: "Per-model adapter cluster",
