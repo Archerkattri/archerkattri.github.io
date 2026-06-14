@@ -492,6 +492,7 @@ export function ContactSection({ data, index = "06", children }) {
             {[
               { label: "GitHub", val: "github.com/Archerkattri", href: c.github, icon: "github" },
               { label: "LinkedIn", val: "linkedin.com/in/krishi-attri15", href: c.linkedin, icon: "linkedin" },
+              { label: "ORCID", val: "0009-0005-4695-6467", href: c.orcid, icon: "orcid" },
               { label: "CV", val: "Krishi_Attri_CV.pdf", href: c.cv, icon: "file" },
               { label: "Resume", val: "Krishi_Attri_Resume.pdf", href: c.resume, icon: "file" },
               { label: "This site", val: "source on GitHub", href: c.siteSource, icon: "github" },
