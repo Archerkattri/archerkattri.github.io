@@ -186,7 +186,7 @@ function AdapterCluster({ adapters }) {
   // native <details>: works in the no-JS prerender too
   return (
     <details className="adapters">
-      <summary className="adapters-toggle">+ The 14-repo accelerator family</summary>
+      <summary className="adapters-toggle">+ The 16-repo accelerator family</summary>
       <div className="adapters-grid">
         {adapters.map(a => (
           <a key={a.name} href={a.url} target="_blank" rel="noopener" className="adapter">
@@ -234,7 +234,7 @@ export function PersonalProjectsSection({ data }) {
     <section id="personal-projects" className="section">
       <div className="container">
         <SectionHead index="02" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source research software, versioned and shipping: three libraries on PyPI, a certified-planning research stack, and a 14-repo accelerator family. Every number is measured and reproducible from the repos." />
+          sub="Open-source research software, versioned and shipping: three libraries on PyPI, a certified-planning research stack, and a 16-repo accelerator family. Every number is measured and reproducible from the repos." />
         <div className="sw-stack">
           {data.software.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
         </div>
