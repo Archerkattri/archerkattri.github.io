@@ -253,10 +253,10 @@ export const PORTFOLIO_DATA = {
       id: "hicache-pp",
       name: "HiCache++",
       install: "pip install hicache-pp",
-      spec: "v1.1.0 · MIT · training-free · 14-repo accelerator family",
+      spec: "v1.1.0 · MIT · training-free · 16-repo accelerator family",
       oneliner: "Diffusion acceleration by feature forecasting, honestly selected.",
       summary:
-        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. Deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus a ComfyUI node (beta, 35 tests, Comfy Registry submission held until GPU validation).",
+        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. Deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2; beta, Comfy Registry submission held until GPU validation).",
       stats: [
         { value: "0.860 vs 0.735", label: "F-score at skip-interval 5, exponential vs polynomial arm, Hunyuan3D-2.1" },
         { value: "1.56×", label: "geometry-lossless (F1 = 1.000) through interval 6, SAM 3D Objects" },
@@ -274,7 +274,7 @@ export const PORTFOLIO_DATA = {
 
   // HiCache accelerator family — the constellation closing the
   // PERSONAL PROJECTS room (expandable cluster under HiCache++ in doc view).
-  // 13 accelerator repos (12 adapters + the TaylorSeer baseline) + 1 ComfyUI node.
+  // 13 accelerator repos (12 adapters + the TaylorSeer baseline) + 3 ComfyUI nodes.
   adapters: [
     { name: "hunyuan2.1-plus-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus-plus", desc: "HiCache++ (DMD) · Hunyuan3D-2.1" },
     { name: "hunyuan2.1-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus", desc: "HiCache (Hermite) · Hunyuan3D-2.1" },
@@ -290,6 +290,8 @@ export const PORTFOLIO_DATA = {
     { name: "fastsam3d-plus-plus", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", desc: "HiCache++ (DMD) · Fast-SAM3D" },
     { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", desc: "HiCache (Hermite) · Fast-SAM3D" },
     { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 35 tests" },
+    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless" },
+    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", desc: "ComfyUI node · TRELLIS.2 via HiCache · ~2×, near-lossless" },
   ],
 
   /* ──────────────── 03 / EXPERIENCE ──────────────── */

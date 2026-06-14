@@ -212,7 +212,7 @@ function PersonalProjectsRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="E1" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source research software, versioned and shipping: three libraries on PyPI, a certified-planning research stack, and a 14-repo accelerator family. Every number on this page is measured and reproducible from the repos." />
+          sub="Open-source research software, versioned and shipping: three libraries on PyPI, a certified-planning research stack, and a 16-repo accelerator family. Every number on this page is measured and reproducible from the repos." />
         <div className="sw-stack">
           {D.software.map(s => (
             <SoftwareCard
@@ -232,7 +232,7 @@ function PersonalProjectsRoom({ navigate }) {
         {/* closing section: the HiCache accelerator constellation */}
         <div id="adapter-constellation" className="gv-constellation">
           <SectionHead index="E1·b" label="Accelerator family" title="The HiCache++" em="constellation."
-            sub="Fourteen repos around one idea: thirteen accelerators (each generator paired with HiCache++ DMD or HiCache Hermite, plus the TaylorSeer baseline) and a ComfyUI node (beta, 35 tests, registry submission awaiting GPU validation). Drop-in and training-free." />
+            sub="Sixteen repos around one idea: thirteen accelerators (each generator paired with HiCache++ DMD or HiCache Hermite, plus the TaylorSeer baseline) and three ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2; beta, registry submission awaiting GPU validation). Drop-in and training-free." />
           {families.map(f => (
             <div key={f.name} className="gv-family">
               <div className="bg-label">{f.name}</div>
