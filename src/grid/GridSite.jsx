@@ -26,6 +26,14 @@ export default function GridSite({ reduced }) {
   const [room, setRoom] = useState("home");
   const [trans, setTrans] = useState(null); // { to, dx, dy, dur }
   const [edgeHint, setEdgeHint] = useState(null); // { dir, name }
+  // cold-open flag: scopes the home landing settle (grid.css gvRise) to the
+  // first paint; dropped after the stagger finishes so later returns home
+  // (which re-key the room wrapper) never replay it
+  const [boot, setBoot] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setBoot(false), 1100);
+    return () => clearTimeout(t);
+  }, []);
   const roomRef = useRef(room);
   roomRef.current = room;
   const transRef = useRef(null);
@@ -203,7 +211,7 @@ export default function GridSite({ reduced }) {
     : undefined;
 
   return (
-    <div className="gridview" data-room={room} data-moving={trans ? "" : undefined}>
+    <div className={"gridview" + (boot ? " gv-boot" : "")} data-room={room} data-moving={trans ? "" : undefined}>
       <div className="gv-stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <div
           key={room}

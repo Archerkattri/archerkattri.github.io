@@ -153,9 +153,12 @@ export function ResearchSection({ data }) {
             <div key={i} className="pub-row">
               <span className="pub-title">{p.title}</span>
               <span className="pub-meta">{p.venue} · {p.date}</span>
-              {p.href
-                ? <a className="pub-link" href={p.href} target="_blank" rel="noopener">{p.status} <Icon name="external" size={10} /></a>
-                : <span className="pub-status">{p.status}</span>}
+              <span className="pub-linkcell">
+                {p.href
+                  ? <a className="pub-link" href={p.href} target="_blank" rel="noopener">{p.status} <Icon name="external" size={10} /></a>
+                  : <span className="pub-status">{p.status}</span>}
+                {p.page && <a className="pub-link" href={p.page} target="_blank" rel="noopener">{p.pageLabel} <Icon name="external" size={10} /></a>}
+              </span>
             </div>
           ))}
         </div>

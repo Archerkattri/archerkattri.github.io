@@ -25,7 +25,7 @@ export const PORTFOLIO_DATA = {
     contact: {
       email: "krishiattriwork@gmail.com",
       github: "https://github.com/Archerkattri",
-      linkedin: "https://linkedin.com/in/krishi-attri15",
+      linkedin: "https://www.linkedin.com/in/krishi-attri15/",
       orcid: "https://orcid.org/0009-0005-4695-6467",
       cv: "assets/docs/Krishi_Attri_CV.pdf",
       resume: "assets/docs/Krishi_Attri_Resume.pdf",
@@ -39,9 +39,9 @@ export const PORTFOLIO_DATA = {
       flagship: {
         href: "#gaussianfeels",
         pre: "GaussianFeels: ",
-        statA: "0.83 mm",
+        statA: "1.13 mm",
         mid: " object tracking during in-hand manipulation, at ",
-        statB: "7.6×",
+        statB: "7.0–12.4×",
         post: " the frame rate of the neural-field baseline (simulation).",
       },
       libraries: [
@@ -72,20 +72,20 @@ export const PORTFOLIO_DATA = {
         caption: "Live: the Gaussian map forming during in-hand manipulation. Raw camera input · the reconstruction forming · the accumulated map orbiting, tactile contacts in magenta.",
       },
       stats: [
-        { value: "0.83", unit: "mm", label: "median ADD-S · simulation" },
-        { value: "3.37", unit: "mm", label: "median ADD-S · real hardware" },
-        { value: "7.6×", unit: "", label: "frame rate vs NeuralFeels" },
-        { value: "94%", unit: "", label: "sim F-score retained on real" },
+        { value: "1.13", unit: "mm", label: "pose ADD-S · simulation · 50 FPS" },
+        { value: "2.42", unit: "mm", label: "pose ADD-S · real hardware · 37 FPS" },
+        { value: "0.997", unit: "", label: "map F-score@5 mm · sim (0.950 real)" },
+        { value: "7.0–12.4×", unit: "", label: "frame rate vs NeuralFeels · sim" },
       ],
       // Expanded-card copy distilled from the thesis abstract.
       details: [
         "One map, every job: a single object-centric 3D Gaussian state serves training, rendering, frozen-map SDF pose tracking, reconstruction evaluation, and manipulation-facing geometry. It replaces the neural-implicit SDF as the shared representation for online, model-free visuo-tactile object SLAM.",
         "Pose is recovered by a multi-residual Levenberg-Marquardt optimiser solving SE(3) against a frozen dual-sigma Gaussian-density anchor SDF, fusing synchronized RGB-D, tactile, and proprioceptive observations in one canonical frame.",
         "A frame-zero branch generates a shape estimate from a single RGB crop with an image-to-3D model, then progressively replaces generated geometry with measured geometry as the episode progresses.",
-        "Real time, no CAD model: map and pose modes clear the 25 FPS target; slam mode runs ≈28 FPS in simulation and ≈23.5 FPS on real hardware across the 14-cell FeelSight primary sweep (multi-seed medians).",
-        "Sim-to-real is strong reconstruction transfer with a harder real tracking bottleneck: 94% of simulation F-score@5mm is retained on real hardware (0.946 → 0.888), versus 80% for NeuralFeels (0.898 → 0.716).",
-        "Frame-matched against model-free NeuralFeels: more accurate in simulation (0.91 vs 2.51 mm ADD-S), real-hardware parity (3.34 vs 3.42 mm), at ≈7.6× the mean frame rate (frame-matched protocol, hence the small shift from the 0.83 / 3.37 mm headline medians). The implicit baseline wins only when handed an exact CAD model.",
-        "Paired tactile ablation isolates a domain-dependent finding: tactile improves reconstruction in simulation but degrades it on real hardware (noisy DIGIT depth drags the map), while pose accuracy stays near-neutral in both domains.",
+        "Evaluated on the FeelSight benchmark (8 simulation + 6 real-robot objects) across its simulation, real-robot, and occlusion splits, against the NeuralFeels and V-HOP baselines.",
+        "Pose mode: ADD-S 1.13 mm in simulation at 50 FPS and 2.42 mm on coverage-adequate real objects at 37 FPS, on a single RTX 5090. Map mode: observed-surface F-score@5 mm of 0.997 (sim) / 0.950 (real).",
+        "Lower pose error than NeuralFeels on every simulation aggregate at 7.0–12.4× the per-frame speed (5.8–8.3× on real); full-surface F-score 0.997 vs 0.908 on the matched object, cutting reconstruction time from ≈52 min to 12 s.",
+        "Edges V-HOP on occlusion-split ADD-S (1.45 vs 1.46 mm) at 48.8 vs 32 FPS, all with no supplied CAD model.",
         "Developed inside Korea's national “Alchemist” humanoid programme (MOTIE), bringing visuo-tactile SLAM from research prototype to the Phase-2 full-scale humanoid.",
       ],
       tools: ["3D Gaussian Splatting", "PyTorch", "CUDA", "gsplat", "LM SE(3)", "UR5e", "Allegro Hand", "DIGIT tactile", "NVIDIA Omniverse"],
@@ -159,21 +159,27 @@ export const PORTFOLIO_DATA = {
       venue: "K. Attri · engrXiv preprint · companion software: splatreg",
       date: "2026",
       href: "https://doi.org/10.31224/7313",
-      status: "engrXiv · DOI 10.31224/7313",
+      status: "DOI 10.31224/7313",
+      page: "https://engrxiv.org/preprint/view/7313",
+      pageLabel: "engrXiv page",
     },
     {
       title: "No Single Basis Wins: A Cross-Family Study of Diffusion Feature Forecasting and the Limits of Training-Free Basis Selection",
       venue: "K. Attri · engrXiv preprint · companion software: HiCache++",
       date: "2026",
       href: "https://doi.org/10.31224/7309",
-      status: "engrXiv · DOI 10.31224/7309",
+      status: "DOI 10.31224/7309",
+      page: "https://engrxiv.org/preprint/view/7309",
+      pageLabel: "engrXiv page",
     },
     {
       title: "CERT: Certified Route Planning under Drifting Costs, Conformal Certificates, Sense-to-Certify, and the Price of Staleness",
       venue: "K. Attri · engrXiv preprint · companion software: CERT-FLOW",
       date: "2026",
       href: "https://doi.org/10.31224/7306",
-      status: "engrXiv · DOI 10.31224/7306",
+      status: "DOI 10.31224/7306",
+      page: "https://engrxiv.org/preprint/view/7306",
+      pageLabel: "engrXiv page",
     },
     {
       title: "PoP-SLAM: Point Cloud Projection for SLAM",
@@ -193,7 +199,7 @@ export const PORTFOLIO_DATA = {
       spec: "v1.3.0 · BSD-3-Clause · pure PyTorch · CLI + API",
       oneliner: "Register Gaussian splats.",
       summary:
-        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges, or aligns without merging: the CLI bakes the recovered pose into the source so both scans stay separate PLYs in one frame. Baked-in transforms rotate the higher-order spherical-harmonic colour with the splat (real-basis Wigner-D); photometric refinement with exposure compensation handles the poses geometry cannot see; every builtin solve reports pose covariance for pose-graph weighting, never faked. The MAC maximal-clique seed handles contaminated correspondence sets, with the honest measured verdict kept: a wash on the official 3DMatch split, a decisive win on structured decoys.",
+        "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges, or aligns without merging: the CLI bakes the recovered pose into the source so both scans stay separate PLYs in one frame. Baked-in transforms rotate the higher-order spherical-harmonic colour with the splat (real-basis Wigner-D); photometric refinement with exposure compensation handles the poses geometry cannot see; every builtin solve reports pose covariance for pose-graph weighting, never faked. Recall matches the GeoTransformer point-cloud baseline on official 3DMatch (91.5% mean / 93.5% pooled) and 3DLoMatch (72.5% / 74.4%) while adding the Sim(3) scale DoF the baseline lacks, and rotation lands 2.9× tighter than existing splat tools (5.2° vs 15.3°). The MAC maximal-clique seed handles contaminated correspondence sets, with the honest measured verdict kept: a wash on the official 3DMatch split, a decisive win on structured decoys.",
       stats: [
         { value: "91.5%", label: "official 3DMatch registration recall, 1279 pairs" },
         { value: "2.4e-15", label: "SH Wigner-rotation error vs an independent evaluator" },
@@ -219,7 +225,7 @@ export const PORTFOLIO_DATA = {
       stats: [
         { value: "18/18 vs 15/18", label: "the same agent on 18 math tasks, with vs without mathlas" },
         { value: "59.1 vs 45.0", label: "Hit@20 vs TheoremSearch, on its own 110 human queries" },
-        { value: "3.68M", label: "documents indexed; 1.9 GB quantized tier, recall-lossless" },
+        { value: "3.68M", label: "documents indexed; dual-channel R@10 0.999; 1.9 GB quantized tier" },
       ],
       links: [
         { label: "PyPI", href: "https://pypi.org/project/mathlas-mcp/" },
@@ -256,7 +262,7 @@ export const PORTFOLIO_DATA = {
       spec: "v1.1.0 · MIT · training-free · 16-repo accelerator family",
       oneliner: "Diffusion acceleration by feature forecasting, honestly selected.",
       summary:
-        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. Deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2; beta, Comfy Registry submission held until GPU validation).",
+        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. The same study surfaced a benchmark-integrity find: a one-character sign error that left a published baseline anti-extrapolative yet invisible to every end-to-end metric, answered with directional closed-form regression tests. Deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2; beta, Comfy Registry submission held until GPU validation).",
       stats: [
         { value: "0.860 vs 0.735", label: "F-score at skip-interval 5, exponential vs polynomial arm, Hunyuan3D-2.1" },
         { value: "1.56×", label: "geometry-lossless (F1 = 1.000) through interval 6, SAM 3D Objects" },
@@ -304,7 +310,7 @@ export const PORTFOLIO_DATA = {
       date: "2024 – 2026",
       summary: "GSFS Scholar. GaussianFeels thesis; PoP-SLAM; perception integration for the Phase-2 “Alchemist” humanoid (MOTIE).",
       bullets: [
-        "Built GaussianFeels: online visuo-tactile reconstruction and pose tracking on an object-centric 3DGS map. 0.83 mm ADD-S sim / 3.37 mm real at ≈28 / ≈23.5 FPS, matching or beating model-free NeuralFeels at ≈7.6× the frame rate with no CAD model.",
+        "Built GaussianFeels: online visuo-tactile reconstruction and pose tracking on an object-centric 3DGS map. Pose ADD-S 1.13 mm sim (50 FPS) / 2.42 mm real (37 FPS), beating NeuralFeels on every sim aggregate at 7.0–12.4× the frame rate, with no CAD model.",
         "Co-developed PoP-SLAM: projection-first dense visual SLAM, 0.75 cm ATE RMSE on TUM-RGBD on a consumer GPU.",
         "Leading integration of visuo-tactile SLAM and dexterous in-hand manipulation into the Phase-2 full-scale humanoid prototype of Korea's “Alchemist” programme.",
       ],
