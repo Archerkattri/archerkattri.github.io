@@ -182,6 +182,15 @@ export const PORTFOLIO_DATA = {
       pageLabel: "engrXiv page",
     },
     {
+      title: "ToothPrint: A Certified, Partial-Overlap-Robust System for Dental Biometric Identification",
+      venue: "K. Attri · engrXiv preprint · companion software: ToothPrint",
+      date: "2026",
+      href: "https://doi.org/10.31224/7403",
+      status: "DOI 10.31224/7403",
+      page: "https://engrxiv.org/preprint/view/7403",
+      pageLabel: "engrXiv page",
+    },
+    {
       title: "PoP-SLAM: Point Cloud Projection for SLAM",
       venue: "S. Jung, K. Attri, J. Marchand, M. L. Paolicchi · course project, SNU",
       date: "2024",
@@ -196,7 +205,7 @@ export const PORTFOLIO_DATA = {
       id: "splatreg",
       name: "splatreg",
       install: "pip install splatreg",
-      spec: "v1.3.0 · BSD-3-Clause · pure PyTorch · CLI + API",
+      spec: "v1.4.0 · BSD-3-Clause · pure PyTorch · CLI + API",
       oneliner: "Register Gaussian splats.",
       summary:
         "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges, or aligns without merging: the CLI bakes the recovered pose into the source so both scans stay separate PLYs in one frame. Baked-in transforms rotate the higher-order spherical-harmonic colour with the splat (real-basis Wigner-D); photometric refinement with exposure compensation handles the poses geometry cannot see; every builtin solve reports pose covariance for pose-graph weighting, never faked. Recall matches the GeoTransformer point-cloud baseline on official 3DMatch (91.5% mean / 93.5% pooled) and 3DLoMatch (72.5% / 74.4%) while adding the Sim(3) scale DoF the baseline lacks, and rotation lands 2.9× tighter than existing splat tools (5.2° vs 15.3°). The MAC maximal-clique seed handles contaminated correspondence sets, with the honest measured verdict kept: a wash on the official 3DMatch split, a decisive win on structured decoys.",
@@ -218,7 +227,7 @@ export const PORTFOLIO_DATA = {
       id: "mathlas",
       name: "mathlas",
       install: "pip install mathlas-mcp",
-      spec: "v1.1.2 · Apache-2.0 · 12 MCP tools · no LLM inside, no API key · official MCP registry · Glama grade A",
+      spec: "v1.5.0 · Apache-2.0 · 12 MCP tools · no LLM inside, no API key · official MCP registry · Glama grade A",
       oneliner: "Airtight math tools an AI uses.",
       summary:
         "Language models hallucinate theorems, and prose is not verification. mathlas is an MCP server of 12 deterministic, data-returning tools an AI agent drives: search over a 3.68M-document index (dense + BM25 + rank fusion), PSLQ constant identification, OEIS sequence lookup, and real Lean-kernel checks that now verify full proofs, returning the kernel's error verbatim so the agent can repair and re-call. A quantized laptop tier serves the same index from 1.9 GB at 2.4 s/query on 4 CPU threads, measured recall-lossless. The discipline is airtight-or-nothing: every verification tier returns an independently checkable fact or an honest nothing, with zero false positives measured across all tiers.",
@@ -238,7 +247,7 @@ export const PORTFOLIO_DATA = {
       id: "cert-flow",
       name: "CERT-FLOW",
       install: "pip install certflow",
-      spec: "v1.0.0 · MIT · 227 tests · 16 reproduction pipelines · engrXiv preprint",
+      spec: "v1.1.0 · MIT · 227 tests · 16 reproduction pipelines · engrXiv preprint",
       oneliner: "Certified route planning under drifting costs.",
       summary:
         "A robot replanning through a world whose costs drift never knows how good its current route is once the map goes stale; classical planners silently trust the stale map. CERT-FLOW answers with a proof every round: a high-probability certificate LB ≤ OPT ≤ UB on the optimal route cost, built from age-weighted non-exchangeable conformal prediction over drift-adjusted residuals, and it spends paid sensing exactly where the certificate says the gap shrinks fastest. When the certificate proves the map tight, that proof licenses ns-to-µs preprocessed queries that self-expire the instant drift exceeds tolerance. Seven theorems (coverage through an impossibility result on lower bounds), validated on 17 synthetic regimes, game maps, and real traffic (METR-LA, PEMS-BAY); the failed hypotheses stay documented in the record.",
@@ -248,6 +257,7 @@ export const PORTFOLIO_DATA = {
         { value: "2 – 3×", label: "lower sensing regret than freshness, uncertainty, or random at equal budget" },
       ],
       links: [
+        { label: "Docs & guide", href: "https://archerkattri.github.io/CERT-FLOW/" },
         { label: "PyPI", href: "https://pypi.org/project/certflow/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/CERT-FLOW" },
         { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7306" },
@@ -256,13 +266,49 @@ export const PORTFOLIO_DATA = {
       ],
     },
     {
+      id: "toothprint",
+      name: "ToothPrint",
+      install: "git clone https://github.com/Archerkattri/toothprint",
+      spec: "v1.1.0 · PolyForm Noncommercial · certification core: numpy/scipy, no GPU · engrXiv preprint",
+      oneliner: "Certified dental identity, change, and surface.",
+      summary:
+        "Three reads of one durable signal, each returning a certificate instead of a guess: identity (person ID from a 3D intraoral scan or a 2D radiograph), change (certified longitudinal bone-level change), and surface (certified 3D surface change, ~0.264 mm median, 38.9% better than 3DGS). Every verdict is conformal: it fires only when the interval around the measurement lies entirely past the threshold, so the false-match rate is bounded by the chosen error rate α in finite samples, and it abstains when the query falls outside the validated regime. It is the only dental-ID system pairing a distribution-free finite-sample FMR bound with open-set abstention and partial-overlap robustness, lifting 50%-tooth-loss identification from 0.23 (rigid GICP) to 0.87. Honest ceiling: every headline number is measured on synthetic re-scans and crops of single-timepoint public data (Teeth3DS+, Poseidon3D), so they read as in-simulation ceilings until a clinical or forensic partner supplies real cross-session longitudinal data, the one gate still open. Priority staked by the engrXiv preprint.",
+      stats: [
+        { value: "0.995 / 0.5%", label: "Rank-1 / EER · identity at full coverage, N=200 · synthetic" },
+        { value: "0.23 → 0.87", label: "50%-tooth-loss identification, learned matcher vs rigid GICP" },
+        { value: "0.264 mm", label: "median surface-change error, 38.9% better than 3DGS" },
+      ],
+      links: [
+        { label: "Docs & guide", href: "https://archerkattri.github.io/toothprint/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/toothprint" },
+        { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7403" },
+      ],
+    },
+    {
+      id: "aura",
+      name: "AURA",
+      install: "git clone https://github.com/Archerkattri/aura",
+      spec: "v0.1.0 · research preview · MIT · KHR + OpenUSD 26.03 export",
+      oneliner: "The radiance-asset layer after 3DGS.",
+      summary:
+        "AURA (Adaptive Unified Radiance Asset) turns posed captures into a typed, queryable, engine-ready radiance asset, keeping the fast Gaussian and DBS-Beta renderers where they are strong and adding the asset layer they do not provide. Its distinguishing property is a calibrated, certified per-carrier confidence channel exported inside the splat file itself, in KHR_gaussian_splatting GLB and the official OpenUSD 26.03 schema, a reliability signal no bare splat ships. Across four scenes (Truck, Garden, Kitchen, Room) an export-time color-agreement feature predicts held-out per-carrier reliability at r = 0.91–0.98, isotonic calibration cuts expected calibration error by ~300–900×, and calibrated selection lands within 1–4% of the oracle at budgets where opacity pruning is at or below random. Honest caveats: this is a research preview; the matched-budget quality control is a frozen-β DBS ablation rather than full gsplat 3DGS, and the accompanying +dB figure reproduces a published DBS result rather than a new one; the documented negatives (adaptive per-carrier β does not beat a good global β) stay in the record, not hidden.",
+      stats: [
+        { value: "r = 0.91–0.98", label: "export-time feature predicts held-out reliability · 4 scenes" },
+        { value: "~300–900×", label: "calibration error (ECE) reduction after isotonic calibration" },
+        { value: "1M → 52 MB", label: "confidence-annotated KHR GLB, plus OpenUSD 26.03 export" },
+      ],
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/aura" },
+      ],
+    },
+    {
       id: "hicache-pp",
       name: "HiCache++",
       install: "pip install hicache-pp",
-      spec: "v1.1.0 · MIT · training-free · 16-repo accelerator family",
+      spec: "v1.2.0 · MIT · training-free · DMD calibrator merged into cache-dit · 16-repo accelerator family",
       oneliner: "Diffusion acceleration by feature forecasting, honestly selected.",
       summary:
-        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. The same study surfaced a benchmark-integrity find: a one-character sign error that left a published baseline anti-extrapolative yet invisible to every end-to-end metric, answered with directional closed-form regression tests. Deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2; beta, Comfy Registry submission held until GPU validation).",
+        "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. The same study surfaced a benchmark-integrity find: a one-character sign error that left a published baseline anti-extrapolative yet invisible to every end-to-end metric, answered with directional closed-form regression tests. The exponential-basis DMD calibrator is now upstream: it was merged into vipshop/cache-dit (PR #1053, 2026-06-14) and ships in cache-dit v1.5.0, behind SGLang-Diffusion, vLLM-Omni, and ComfyUI. Also deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three GPU-validated ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2).",
       stats: [
         { value: "0.860 vs 0.735", label: "F-score at skip-interval 5, exponential vs polynomial arm, Hunyuan3D-2.1" },
         { value: "1.56×", label: "geometry-lossless (F1 = 1.000) through interval 6, SAM 3D Objects" },
@@ -271,6 +317,7 @@ export const PORTFOLIO_DATA = {
       links: [
         { label: "PyPI", href: "https://pypi.org/project/hicache-pp/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" },
+        { label: "Merged into cache-dit (PR #1053)", href: "https://github.com/vipshop/cache-dit/pull/1053" },
         { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7309" },
         { label: "DOI 10.5281/zenodo.20618824", href: "https://doi.org/10.5281/zenodo.20618824" },
       ],
