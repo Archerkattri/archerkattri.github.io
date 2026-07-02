@@ -522,7 +522,7 @@ html.js .prerendered { display: none; }
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 0 3px var(--accent-soft);
 }
 .install-ps1 { color: var(--accent); }
-.install code { flex: 1; font-family: inherit; }
+.install code { flex: 1; min-width: 0; font-family: inherit; overflow-wrap: anywhere; word-break: break-all; line-height: 1.5; }
 .install-copy { color: var(--ink-faint); display: inline-flex; }
 .install:hover .install-copy { color: var(--accent); }
 .sw-spec {
