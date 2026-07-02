@@ -305,7 +305,7 @@ export const PORTFOLIO_DATA = {
       id: "hicache-pp",
       name: "HiCache++",
       install: "pip install hicache-pp",
-      spec: "v1.2.0 · MIT · training-free · DMD calibrator merged into cache-dit · 16-repo accelerator family",
+      spec: "v1.2.1 · MIT · training-free · DMD calibrator merged into cache-dit · 16-repo accelerator family",
       oneliner: "Diffusion acceleration by feature forecasting, honestly selected.",
       summary:
         "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. The same study surfaced a benchmark-integrity find: a one-character sign error that left a published baseline anti-extrapolative yet invisible to every end-to-end metric, answered with directional closed-form regression tests. The exponential-basis DMD calibrator is now upstream: it was merged into vipshop/cache-dit (PR #1053, 2026-06-14) and ships in cache-dit v1.5.0, behind SGLang-Diffusion, vLLM-Omni, and ComfyUI. Also deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three GPU-validated ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2).",
