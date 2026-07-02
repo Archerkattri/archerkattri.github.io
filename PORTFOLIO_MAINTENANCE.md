@@ -82,7 +82,7 @@ Stat values (`.stat-v` on research sheets, `.sw-stat dd` on software datasheets)
 ## 1) Content Update Checklist
 
 - [ ] Profile headline/tagline reflects current role (SNU M.S. → UCF Ph.D. as timeline evolves).
-- [ ] GaussianFeels numbers match the **thesis abstract** (currently: 0.83 mm sim / 3.37 mm real ADD-S, ≈28 / ≈23.5 FPS, 7.6×, 94% F-score retention).
+- [ ] GaussianFeels numbers match the **thesis abstract / CV** (2026-07 sync: pose ADD-S 1.13 mm sim @ 50 FPS / 2.42 mm coverage-adequate real @ 37 FPS on one RTX 5090; map F-score@5 mm 0.997 sim / 0.950 real; beats NeuralFeels on every sim pose aggregate at 7.0–12.4× per-frame speed, 5.8–8.3× real; full-surface F-score 0.997 vs 0.908, ≈52 min → 12 s; edges V-HOP on occlusion ADD-S 1.45 vs 1.46 mm at 48.8 vs 32 FPS; no CAD model).
 - [ ] Selected Work has only high-signal projects with proof.
 - [ ] Experience reflects latest academic/professional role changes.
 - [ ] Contact links valid; CV/Resume links point to latest PDFs in `public/assets/docs/`.
@@ -152,7 +152,7 @@ npm run preview
 - [ ] Mini-map (corner / home centerpiece) jumps anywhere, incl. single diagonal slides (e.g. W2 → E1).
 - [ ] Mobile (~420 px): compact chevron tabs (side tabs thumb-height), horizontal swipe = E/W, no brand/button overlap at the top.
 - [ ] Legacy URLs still land on the map: `/?view=chart` and `/?view=doc` show the map; old anchors (`/#gaussianfeels`, `/#software`, `/#adapter-3`, `/#log-2`) land in the right rooms.
-- [ ] No-JS fallback: key numbers present in `dist/index.html` (grep: GaussianFeels, 0.83, 3.37, 91.5%, 3.68M, CERT-FLOW, HiCache++); with JS the prerender stays hidden.
+- [ ] No-JS fallback: key numbers present in `dist/index.html` (grep: GaussianFeels, 1.13, 2.42, 0.997, 12.4, 91.5%, 3.68M, CERT-FLOW, HiCache++); with JS the prerender stays hidden.
 - [ ] Reduced motion: the map loads (no document fallback), pages swap instantly (no slides).
 - [ ] GitHub Pages deployment succeeds (push to `main` triggers `.github/workflows/deploy.yml`).
 
@@ -175,7 +175,18 @@ npm run preview
 - **W2 documents** fold behind one `<details>` expander ("Documents and certificates (N)", count auto-derived); education/honors/leadership stay visible.
 - **No home video echo**: judged against — the home rail is photo + map and the proof line already routes to N1 where the clip is the hero.
 
-## 10) Future Work (not yet done)
+## 10) Decided in the 2026-07 makeover (CV sync + visual refresh)
+- **Content synced to the July 2026 CV/Resume** (new thesis benchmark story: pose/map modes, V-HOP baseline, RTX 5090; splatreg 3DLoMatch + 2.9× rotation; mathlas R@10 0.999; HiCache++ sign-error integrity find). The four-library software truth (versions, 227 tests, 16-repo constellation) stays synced from **live GitHub state**, which supersedes the CV where they disagree.
+- **Design tokens, not one-off values**: radii (`--r-card` 12 / `--r-ui` 8 / `--r-chip` 6), elevation (`--shadow-card`, `--shadow-hud`), top sheen (`--card-sheen`), accent glow (`--accent-glow`). Plates/cards are rounded material now, not flat outlines; 1px-gap mosaics (stats, edu, compact, adapters) round + clip the **container only**.
+- **The survey graticule** (`--graticule`, 52px) is the ground of both render targets (body::before + .gv-room). It is the one background pattern; don't stack more.
+- **North bearing on the home map** (`.gv-compass`, rendered only on the lg map): sits in the top-left corner quadrant (the plus-lattice dead space, where charts park the rose). Room codes are compass-true, so it encodes real information; it is not decoration to expand (no full NESW ring: S collides with the map hint).
+- **Cold-open settle** (`gvRise`, scoped under `.gv-boot`, ~0.85 s total): plays once on first paint only; the boot class drops after 1.1 s so re-keyed returns home never replay it. Reduced motion: none.
+- **Route track is dashed** (untraveled survey line); the scroll-drawn teal line inks it. Node/ping mechanics unchanged.
+- **HUD glass**: all fixed instruments share blur(14px) + `--shadow-hud` + 10px radius.
+- **Palette drift, same identity**: bg #0c0d10 → #0a0c10 (cooler carbon), ink #e9e4d6 → #ebe6d8; accent teal unchanged (#3ebfc6, still the only accent). `theme-color` mirrors #0A0C10.
+- Photo/gallery plates desaturate at rest (0.88/0.9) and reach full saturation on hover.
+
+## 11) Future Work (not yet done)
 - [ ] **GaussianFeels results gallery** — reconstruction images/video in N1 when public.
 - [ ] **PoP-SLAM benchmark table** — expanded card table when the paper is public.
 - [ ] **Publications growth** — formal venues when published.
