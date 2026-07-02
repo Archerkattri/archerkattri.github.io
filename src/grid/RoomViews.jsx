@@ -22,6 +22,7 @@ export function GridMap({ cur, navigate, large = false }) {
     >
       <span className="gv-map-axis h" aria-hidden="true" />
       <span className="gv-map-axis v" aria-hidden="true" />
+      {large && <span className="gv-compass" aria-hidden="true">N</span>}
       {ROOMS.map(r => (
         <button
           key={r.id}
@@ -164,13 +165,20 @@ function PublicationsRoom({ navigate }) {
             <article key={i} className="gv-pub">
               <h3 className="gv-pub-title">{p.title}</h3>
               <div className="gv-pub-meta">{p.venue} · {p.date}</div>
-              {p.href ? (
-                <a className="gv-pub-link" href={p.href} target="_blank" rel="noopener">
-                  {p.status} <Icon name="external" size={10} />
-                </a>
-              ) : (
-                <span className="gv-pub-status">{p.status}</span>
-              )}
+              <div className="gv-pub-links">
+                {p.href ? (
+                  <a className="gv-pub-link" href={p.href} target="_blank" rel="noopener">
+                    {p.status} <Icon name="external" size={10} />
+                  </a>
+                ) : (
+                  <span className="gv-pub-status">{p.status}</span>
+                )}
+                {p.page && (
+                  <a className="gv-pub-link" href={p.page} target="_blank" rel="noopener">
+                    {p.pageLabel} <Icon name="external" size={10} />
+                  </a>
+                )}
+              </div>
             </article>
           ))}
         </div>
