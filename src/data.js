@@ -419,7 +419,7 @@ export const PORTFOLIO_DATA = {
     { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", desc: "HiCache (Hermite) · Fast-SAM3D" },
     { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 41 tests" },
     { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless · 12 tests" },
-    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load safe · 13 tests" },
+    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load lifecycle safe · 15 tests" },
   ],
 
   /* ──────────────── 03 / EXPERIENCE ──────────────── */
