@@ -12,8 +12,8 @@ export const PORTFOLIO_DATA = {
     // Identity block, in reading order: name (display scale) → role line →
     // the one-liner. A first-time visitor gets who/what/why in two seconds.
     roleLine: "Robotics and AI researcher. M.S. SNU, incoming Ph.D. UCF.",
-    headlineLines: ["I give robots", "a sense of touch."],
-    sub: "Perception systems that see, feel, and reconstruct the world in real time: visuo-tactile SLAM on 3D Gaussian Splatting maps, plus the open-source tools that make the stack verifiable and fast.",
+    headlineLines: ["I build systems", "that hold up."],
+    sub: "Open-source systems for geometric registration, certified planning, diffusion acceleration, robot action interfaces, and machine-checkable mathematics, built to be measured, reproducible, and useful.",
     meta: [
       "M.S. Mechanical Engineering · Seoul National University",
       "Soft Robotics & Bionics Laboratory · Advisor: Prof. Yong-Lae Park",
@@ -32,25 +32,18 @@ export const PORTFOLIO_DATA = {
       siteSource: "https://github.com/Archerkattri/archerkattri.github.io",
       location: "Seoul, South Korea → Orlando, FL (Aug 2026)",
     },
-    // Hero proof line: the flagship, its two headline numbers, and the
-    // released libraries; every part deep-links into its room (hashes
-    // resolve through grid.js aliases; the cards carry matching ids).
+    // Hero proof line: the five flagship personal projects, deep-linked
+    // into their cards. School research stays in the academic sections.
     proofLine: {
-      flagship: {
-        href: "#gaussianfeels",
-        pre: "GaussianFeels: ",
-        statA: "1.13 mm",
-        mid: " object tracking during in-hand manipulation, at ",
-        statB: "7.0–12.4×",
-        post: " the frame rate of the neural-field baseline (simulation).",
-      },
+      lead: "Flagship personal work: ",
       libraries: [
         { label: "splatreg", href: "#splatreg" },
-        { label: "mathlas", href: "#mathlas" },
-        { label: "HiCache++", href: "#hicache-pp" },
         { label: "CERT-FLOW", href: "#cert-flow" },
+        { label: "HiCache++", href: "#hicache-pp" },
+        { label: "ActionABI + ActionShift", href: "#action-interface" },
+        { label: "mathlas", href: "#mathlas" },
       ],
-      librariesTail: " on PyPI.",
+      librariesTail: ".",
     },
   },
 

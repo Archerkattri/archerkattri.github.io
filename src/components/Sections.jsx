@@ -49,13 +49,17 @@ export function ProofLine({ proof }) {
   const f = proof.flagship;
   return (
     <p className="hero-proof">
-      <a className="proof-flagship" href={f.href}>
-        <strong>{f.pre}</strong>
-        <span className="proof-stat">{f.statA}</span>
-        {f.mid}
-        <span className="proof-stat">{f.statB}</span>
-        {f.post}
-      </a>{" "}
+      {f ? (
+        <>
+          <a className="proof-flagship" href={f.href}>
+            <strong>{f.pre}</strong>
+            <span className="proof-stat">{f.statA}</span>
+            {f.mid}
+            <span className="proof-stat">{f.statB}</span>
+            {f.post}
+          </a>{" "}
+        </>
+      ) : <strong className="proof-lead">{proof.lead}</strong>}
       <span className="proof-libs">
         {proof.libraries.map((l, i) => (
           <span key={l.label}>

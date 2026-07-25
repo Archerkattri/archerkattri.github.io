@@ -11,6 +11,12 @@ const expectedFeatured = [
 ];
 
 assert.deepEqual(data.featuredSoftwareIds, expectedFeatured);
+assert.equal(JSON.stringify(data.profile).includes("GaussianFeels"), false);
+assert.deepEqual(
+  data.profile.proofLine.libraries.map((item) => item.label),
+  ["splatreg", "CERT-FLOW", "HiCache++", "ActionABI + ActionShift", "mathlas"],
+);
+assert.equal(data.research.some((item) => item.id === "gaussianfeels"), true);
 
 const softwareIds = data.software.map((item) => item.id);
 assert.equal(softwareIds.includes("forge"), false);
@@ -33,6 +39,15 @@ if (existsSync(new URL("../dist/index.html", import.meta.url))) {
   assert.match(html, /class="school-crossref" href="#gaussianfeels"/);
   assert.match(html, /EOD \/ GNSS-denied robot platform/);
   assert.match(html, /CV object-detection web app/);
+  assert.match(html, /class="live-stats"/);
+  assert.match(html, /Public repos/);
+  assert.match(html, /Authored commits/);
+  assert.match(html, /PyPI/);
+  assert.match(html, /Hugging Face/);
+  assert.match(html, /Comfy Registry/);
+  assert.match(html, /Zenodo/);
+  assert.match(html, /GitHub Releases/);
+  assert.match(html, /MCP directories/);
 }
 
 console.log("Project hierarchy checks passed.");

@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "17 */6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -35,6 +37,11 @@ jobs:
 
       - name: Audit dependencies
         run: npm audit
+
+      - name: Refresh public adoption metrics
+        run: npm run stats:update
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Build site
         run: npm run build
