@@ -554,6 +554,57 @@ html.js .prerendered { display: none; }
   .sw-stat dd { font-size: 21px; white-space: normal; }
 }
 
+.project-fold {
+  margin-top: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--bg-raised);
+  overflow: clip;
+}
+.project-fold-toggle {
+  min-height: 72px;
+  padding: 18px 22px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  cursor: pointer; list-style: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.project-fold-toggle::-webkit-details-marker { display: none; }
+.project-fold-toggle:hover { background: var(--accent-soft); }
+.project-fold-toggle > span:first-child { display: grid; gap: 5px; }
+.project-fold-count {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.project-fold-toggle .sum-mark {
+  flex: 0 0 auto; font-size: 24px; color: var(--accent);
+  transition: transform 0.24s ease;
+}
+.project-fold[open] .project-fold-toggle .sum-mark { transform: rotate(45deg); }
+.project-compact-list { border-top: 1px solid var(--line); }
+.project-compact-row {
+  padding: 18px 22px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px; align-items: center;
+  border-bottom: 1px solid var(--line-faint);
+}
+.project-compact-row:last-child { border-bottom: 0; }
+.project-compact-copy h3 {
+  font-family: var(--font-display); font-size: 20px; font-weight: 430;
+}
+.project-compact-copy p { margin-top: 3px; color: var(--ink-muted); font-size: 14px; }
+.project-compact-copy > span {
+  display: block; margin-top: 7px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.project-compact-row .ext-links { justify-content: flex-end; }
+.adapter-fold { margin-top: 58px; }
+.adapter-fold-body { padding: 4px 22px 24px; border-top: 1px solid var(--line); }
+@media (max-width: 700px) {
+  .project-compact-row { grid-template-columns: 1fr; gap: 12px; }
+  .project-compact-row .ext-links { justify-content: flex-start; }
+}
+
 .adapters { margin-top: 20px; }
 .adapters-toggle {
   font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase;
@@ -686,6 +737,54 @@ html.js .prerendered { display: none; }
 .skill-group h4 {
   margin: 0 0 10px; font-family: var(--font-mono); font-weight: 500;
   font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted);
+}
+
+.school-crossref {
+  position: relative;
+  margin-bottom: 28px;
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: minmax(150px, 0.42fr) minmax(0, 1fr) auto;
+  grid-template-areas:
+    "kicker note date"
+    "title note link";
+  gap: 4px 28px; align-items: center;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-ui);
+  background: var(--card-sheen), var(--bg-raised);
+  transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+}
+.school-crossref:hover {
+  border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px);
+}
+.school-crossref-kicker {
+  grid-area: kicker; font-family: var(--font-mono); font-size: 9.5px;
+  letter-spacing: 0.11em; text-transform: uppercase; color: var(--accent);
+}
+.school-crossref-title {
+  grid-area: title; font-family: var(--font-display); font-size: 22px; color: var(--ink);
+}
+.school-crossref-note { grid-area: note; color: var(--ink-muted); font-size: 14px; line-height: 1.55; }
+.school-crossref-link {
+  grid-area: link; justify-self: end; font-family: var(--font-mono);
+  font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent);
+}
+.school-crossref-date {
+  grid-area: date; justify-self: end; align-self: start;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-faint);
+}
+@media (max-width: 760px) {
+  .school-crossref {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "kicker date"
+      "title title"
+      "note note"
+      "link link";
+    gap: 6px 14px;
+  }
+  .school-crossref-link { justify-self: start; margin-top: 5px; }
 }
 
 .archive { margin-top: 52px; }

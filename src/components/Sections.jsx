@@ -24,11 +24,19 @@ export function SectionHead({ index, label, title, em, sub }) {
 function ExtLinks({ links }) {
   return (
     <div className="ext-links">
-      {links.map(l => (
-        <a key={l.label} href={l.href} target="_blank" rel="noopener">
-          {l.label} <Icon name="external" size={10} />
-        </a>
-      ))}
+      {links.map(l => {
+        const external = !l.href.startsWith("#");
+        return (
+          <a
+            key={l.label}
+            href={l.href}
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener" : undefined}
+          >
+            {l.label} {external ? <Icon name="external" size={10} /> : <span aria-hidden="true">→</span>}
+          </a>
+        );
+      })}
     </div>
   );
 }
@@ -232,15 +240,54 @@ export function SoftwareCard({ item, adapters, adaptersAction }) {
   );
 }
 
+export function getFeaturedSoftware(data) {
+  const byId = new Map(data.software.map(item => [item.id, item]));
+  return data.featuredSoftwareIds.map(id => byId.get(id)).filter(Boolean);
+}
+
+export function getCompactSoftware(data) {
+  const featured = new Set(data.featuredSoftwareIds);
+  return data.software.filter(item => !featured.has(item.id));
+}
+
+export function CompactProjects({ items }) {
+  return (
+    <details className="project-fold">
+      <summary className="project-fold-toggle">
+        <span>
+          <span className="bg-label">More personal projects</span>
+          <span className="project-fold-count">{items.length} compact entries</span>
+        </span>
+        <span className="sum-mark" aria-hidden="true">+</span>
+      </summary>
+      <div className="project-compact-list">
+        {items.map(item => (
+          <article className="project-compact-row" id={item.id} key={item.id}>
+            <div className="project-compact-copy">
+              <h3>{item.name}</h3>
+              <p>{item.oneliner}</p>
+              <span>{item.spec}</span>
+            </div>
+            {item.links?.length > 0 && <ExtLinks links={item.links} />}
+          </article>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 export function PersonalProjectsSection({ data }) {
+  const featured = getFeaturedSoftware(data);
+  const compact = getCompactSoftware(data);
   return (
     <section id="personal-projects" className="section">
       <div className="container">
         <SectionHead index="02" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source research software, versioned and shipping: three libraries on PyPI, a certified-planning stack, a certified dental-imaging system, a post-3DGS radiance-asset layer, and a 16-repo accelerator family. Every number is measured and reproducible from the repos." />
+          sub="Five flagship systems with measured results, followed by a compact archive of earlier and supporting work." />
         <div className="sw-stack">
-          {data.software.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
+          {featured.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
         </div>
+        <CompactProjects items={compact} />
       </div>
     </section>
   );
@@ -397,11 +444,19 @@ export function SchoolSection({ data, index = "04" }) {
 /* ──────────────── 05 / SCHOOL PROJECTS ──────────────── */
 export function SchoolProjectsSection({ data, index = "05", footer = null }) {
   const [capstone, ...earlier] = data.archive;
+  const { gaussianFeels, eod } = data.schoolHighlights;
   return (
     <section id="school-projects" className="section">
       <div className="container">
         <SectionHead index={index} label="School projects" title="Built at" em="university."
-          sub="The FMC-sponsored capstone and the earlier hands-on builds from the undergraduate years." />
+          sub="The SNU thesis cross-reference, two undergraduate flagships, and the earlier hands-on builds." />
+        <a className="school-crossref" href={gaussianFeels.href}>
+          <span className="school-crossref-kicker">SNU · Graduate research</span>
+          <span className="school-crossref-title">{gaussianFeels.title}</span>
+          <span className="school-crossref-note">{gaussianFeels.note}</span>
+          <span className="school-crossref-link">{gaussianFeels.linkLabel} →</span>
+          <span className="school-crossref-date">{gaussianFeels.date}</span>
+        </a>
         <div className="sheet-stack">
           <article className="sheet flagship">
             <header className="sheet-head">
@@ -416,6 +471,22 @@ export function SchoolProjectsSection({ data, index = "05", footer = null }) {
             </header>
             <footer className="sheet-foot">
               <ExtLinks links={data.capstoneLinks} />
+            </footer>
+          </article>
+          <article className="sheet flagship" id="eod-robot">
+            <header className="sheet-head">
+              <div>
+                <h3 className="sheet-title">{eod.title}</h3>
+                <p className="sheet-subtitle">{eod.role}</p>
+              </div>
+              <div className="sheet-meta">
+                <span className="pill">B.S. research flagship</span>
+                <span className="sheet-date">{eod.date}</span>
+              </div>
+            </header>
+            <p className="sheet-body">{eod.note}</p>
+            <footer className="sheet-foot">
+              <ExtLinks links={eod.links} />
             </footer>
           </article>
         </div>

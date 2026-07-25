@@ -200,6 +200,13 @@ export const PORTFOLIO_DATA = {
   ],
 
   /* ──────── E1 / PERSONAL PROJECTS — released research software ──────── */
+  featuredSoftwareIds: [
+    "splatreg",
+    "cert-flow",
+    "hicache-pp",
+    "action-interface",
+    "mathlas",
+  ],
   software: [
     {
       id: "splatreg",
@@ -241,24 +248,6 @@ export const PORTFOLIO_DATA = {
         { label: "GitHub", href: "https://github.com/Archerkattri/mathlas" },
         { label: "Glama (MCP)", href: "https://glama.ai/mcp/servers/Archerkattri/mathlas" },
         { label: "DOI 10.5281/zenodo.20618603", href: "https://doi.org/10.5281/zenodo.20618603" },
-      ],
-    },
-    {
-      id: "forge",
-      name: "Forge",
-      install: "pip install -e '.[test]'",
-      spec: "v2 development · Apache-2.0 · 13 engineering domains · fail-closed CEM",
-      oneliner: "One truthful tool for all of engineering.",
-      summary:
-        "Forge is a gated Computational Engineering Model that turns engineering intent into sized, generated, simulated, and explicitly judged hardware across mechanical, electrical, embedded, biomechanics, fluids, rocketry, robotics, materials, and astrophysics. It orchestrates real open-source solvers such as CalculiX, ngspice, KiCad, OpenFOAM, OpenSim, FEBio, and MuJoCo, reads their artifacts back from disk, and applies fail-closed gates. A missing result is a BLOCK, never a narrated success; physics is judged instead of process exit codes. The current clean audit exercises the portable core with 1,244 passing tests and three honest environment-dependent skips.",
-      stats: [
-        { value: "13", label: "solver-backed engineering domains" },
-        { value: "1,244", label: "clean-audit core tests passing" },
-        { value: "32 / 34", label: "buildable F1 gates green under full-run load; overall result BLOCK" },
-      ],
-      links: [
-        { label: "GitHub", href: "https://github.com/Archerkattri/forge" },
-        { label: "Verification report", href: "https://github.com/Archerkattri/forge/blob/master/docs/VERIFICATION_REPORT_2026-07-24.md" },
       ],
     },
     {
@@ -304,6 +293,7 @@ export const PORTFOLIO_DATA = {
     },
     {
       id: "clyde",
+      compact: true,
       name: "Clyde",
       install: "Download the arm64 APK",
       spec: "v0.1.52 · Android 12+ · Jetpack Compose + Claude Agent SDK · 61 safety tests",
@@ -323,6 +313,7 @@ export const PORTFOLIO_DATA = {
     },
     {
       id: "stepback",
+      compact: true,
       name: "stepback",
       install: "pip install stepback",
       spec: "v0.1.0 · MIT · Python 3.11+ · agent-agnostic filesystem checkpoints",
@@ -342,6 +333,7 @@ export const PORTFOLIO_DATA = {
     },
     {
       id: "toothprint",
+      compact: true,
       name: "ToothPrint",
       install: "git clone https://github.com/Archerkattri/toothprint",
       spec: "v1.1.0 · PolyForm Noncommercial · certification core: numpy/scipy, no GPU · engrXiv preprint",
@@ -361,6 +353,7 @@ export const PORTFOLIO_DATA = {
     },
     {
       id: "aura",
+      compact: true,
       name: "AURA",
       install: "git clone https://github.com/Archerkattri/aura",
       spec: "v0.1.0 · research preview · MIT · KHR + OpenUSD 26.03 export",
@@ -397,6 +390,17 @@ export const PORTFOLIO_DATA = {
         { label: "DOI 10.5281/zenodo.20618824", href: "https://doi.org/10.5281/zenodo.20618824" },
       ],
       adaptersNote: "Per-model adapter cluster",
+    },
+    {
+      id: "cv-object-detection",
+      compact: true,
+      name: "CV object-detection web app",
+      spec: "Deprecated practice project · 2024 · React + Flask",
+      oneliner:
+        "An early five-detector COCO comparison app built while learning open-source contribution workflows.",
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/computervisionproj" },
+      ],
     },
   ],
 
@@ -590,10 +594,29 @@ export const PORTFOLIO_DATA = {
     { label: "Award (PDF)", href: "assets/docs/Capstone.pdf" },
     { label: "Build photos", href: "https://drive.google.com/drive/folders/1OnC6WH0cYxu9iah17IazbRR_e9FZAVe_" },
   ],
+  schoolHighlights: {
+    gaussianFeels: {
+      title: "GaussianFeels",
+      date: "2024 – 2026",
+      note:
+        "SNU M.S. thesis: real-time visuo-tactile 3D Gaussian SLAM for model-free in-hand reconstruction and 6-DoF pose tracking.",
+      href: "#gaussianfeels",
+      linkLabel: "Full research case study",
+    },
+    eod: {
+      title: "EOD / GNSS-denied robot platform",
+      date: "2023 – 2024",
+      role: "B.S. laboratory research · Robotics & Mechatronics Researcher · Villanova University",
+      note:
+        "A quad-wheel research robot for autonomous localisation and navigation without GPS. Built a ROS navigation stack with path planning and obstacle avoidance, used LiDAR-camera fusion for CNN features, point-cloud mapping, and visual odometry, and integrated Arduino and Raspberry Pi control for real-time operation.",
+      links: [
+        { label: "EOD robot (video)", href: "https://drive.google.com/file/d/1j4MmrqF4hBtm72m31q-CMhZi1sH-XFUF/view" },
+        { label: "Research case study", href: "#gnss-denied" },
+      ],
+    },
+  },
   archive: [
     { title: "Plant-lifting device for 3D imaging", date: "2024", note: "FMC-sponsored capstone: 1st place, Most Innovative Solution. Team lead.", href: "assets/docs/Capstone.pdf" },
-    { title: "CV object-detection web app", date: "2024", note: "React + Flask; benchmarked five detectors on COCO.", href: "https://github.com/Archerkattri/computervisionproj" },
-    { title: "EOD robot platform", date: "2023", note: "Explosive-ordnance-disposal robotics; teleoperation and manipulation." },
     { title: "Arduino puzzle box", date: "2022", note: "Randomised solution algorithm; glitter-spray penalty for wrong inputs." },
     { title: "Beetle-Bot combat robot", date: "2021", note: "3rd place, Villanova mechatronics. Four-person scratch build.", href: "https://drive.google.com/file/d/12ev4UjjLiQ6n4_rTCk3_GcAre4CsAFtV/view" },
     { title: "Wi-Fi drone + swarm coordination", date: "2021", note: "Custom stability firmware; multi-drone sync experiments.", href: "https://drive.google.com/drive/folders/1bzEPNABtsGoq2RYjYHbbVUkUtQjvijcg" },

@@ -6,7 +6,7 @@
 
 **Architecture:** Keep `src/data.js` as the source of truth. Add shared compact-project and school-highlight renderers in `src/components/Sections.jsx`, then reuse them from both the document fallback and `src/grid/RoomViews.jsx`. Extend the existing editorial stylesheet without changing the site's room navigation model.
 
-**Tech Stack:** React 19, Vite 8, native HTML `details`, CSS, Node test/build scripts.
+**Tech Stack:** React 18, Vite 8, native HTML `details`, CSS, Node test/build scripts.
 
 ---
 

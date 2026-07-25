@@ -7,7 +7,8 @@ import { useEffect, useRef } from "react";
 import { PORTFOLIO_DATA as D } from "../data";
 import { Icon } from "../components/Shell";
 import {
-  SectionHead, ResearchCard, SoftwareCard, XpRow, EarlierRoles,
+  SectionHead, ResearchCard, SoftwareCard, CompactProjects,
+  getFeaturedSoftware, getCompactSoftware, XpRow, EarlierRoles,
   SchoolSection, SchoolProjectsSection, ContactSection, ProofLine,
 } from "../components/Sections";
 import { ROOMS, ROOM_MAP, DIRS } from "./grid";
@@ -197,10 +198,16 @@ const FAMILY_OF = name =>
 
 /* in-room pointer: scrolls to a section further down the same room */
 function SectionJump({ target, label }) {
+  const reveal = () => {
+    const section = document.getElementById(target);
+    if (!section) return;
+    if (section instanceof HTMLDetailsElement) section.open = true;
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   return (
     <button
       className="gv-xref"
-      onClick={() => document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+      onClick={reveal}
     >
       <span className="gv-xref-dir">↓ BELOW</span>
       <span className="gv-xref-label">{label}</span>
@@ -209,6 +216,8 @@ function SectionJump({ target, label }) {
 }
 
 function PersonalProjectsRoom({ navigate }) {
+  const featured = getFeaturedSoftware(D);
+  const compact = getCompactSoftware(D);
   const families = [];
   for (const a of D.adapters) {
     const f = FAMILY_OF(a.name);
@@ -220,9 +229,9 @@ function PersonalProjectsRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="E1" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source systems for robot perception, engineering, action interfaces, agent recovery, and Android automation, plus a 16-repo diffusion-accelerator family. Every number on this page is measured and traceable to the repos." />
+          sub="Five flagship systems with measured results, followed by a compact archive of earlier and supporting work." />
         <div className="sw-stack">
-          {D.software.map(s => (
+          {featured.map(s => (
             <SoftwareCard
               key={s.id}
               item={s}
@@ -236,25 +245,33 @@ function PersonalProjectsRoom({ navigate }) {
             />
           ))}
         </div>
+        <CompactProjects items={compact} />
 
         {/* closing section: the HiCache accelerator constellation */}
-        <div id="adapter-constellation" className="gv-constellation">
-          <SectionHead index="E1·b" label="Accelerator family" title="The HiCache++" em="constellation."
-            sub="Sixteen repos around one idea: thirteen accelerators (each generator paired with HiCache++ DMD or HiCache Hermite, plus the TaylorSeer baseline) and three GPU-validated ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2; beta). Drop-in and training-free." />
-          {families.map(f => (
-            <div key={f.name} className="gv-family">
-              <div className="bg-label">{f.name}</div>
-              <div className="gv-adapters">
-                {f.items.map(a => (
-                  <a key={a.name} className="gv-adapter" href={a.url} target="_blank" rel="noopener">
-                    <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
-                    <span className="adapter-desc">{a.desc}</span>
-                  </a>
-                ))}
+        <details id="adapter-constellation" className="gv-constellation project-fold adapter-fold">
+          <summary className="project-fold-toggle">
+            <span>
+              <span className="bg-label">HiCache++ accelerator family</span>
+              <span className="project-fold-count">16 compact integrations</span>
+            </span>
+            <span className="sum-mark" aria-hidden="true">+</span>
+          </summary>
+          <div className="adapter-fold-body">
+            {families.map(f => (
+              <div key={f.name} className="gv-family">
+                <div className="bg-label">{f.name}</div>
+                <div className="gv-adapters">
+                  {f.items.map(a => (
+                    <a key={a.name} className="gv-adapter" href={a.url} target="_blank" rel="noopener">
+                      <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
+                      <span className="adapter-desc">{a.desc}</span>
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </details>
         <RoomXRef to="school-projects" dir="e" label="School projects, one room east" navigate={navigate} />
       </div>
     </section>
