@@ -220,7 +220,7 @@ function PersonalProjectsRoom({ navigate }) {
     <section className="section">
       <div className="container">
         <SectionHead index="E1" label="Personal projects" title="Released &" em="installable."
-          sub="Open-source research software, versioned and shipping: three libraries on PyPI, a certified-planning stack, a certified dental-imaging system, a post-3DGS radiance-asset layer, and a 16-repo accelerator family. Every number on this page is measured and reproducible from the repos." />
+          sub="Open-source systems for robot perception, engineering, action interfaces, agent recovery, and Android automation, plus a 16-repo diffusion-accelerator family. Every number on this page is measured and traceable to the repos." />
         <div className="sw-stack">
           {D.software.map(s => (
             <SoftwareCard

@@ -11,12 +11,15 @@ function prerenderDocument() {
   return {
     name: 'prerender-document',
     apply: 'build',
-    async closeBundle() {
+    async writeBundle() {
       const { createServer } = await import('vite');
       const server = await createServer({
         configFile: false,
         plugins: [react()],
-        server: { middlewareMode: true },
+        // This server only transforms one SSR module during a production build.
+        // Disable file watching so prerendering stays reliable in CI and other
+        // low-inotify environments.
+        server: { middlewareMode: true, watch: null },
         appType: 'custom',
         logLevel: 'error',
       });

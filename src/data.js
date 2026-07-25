@@ -244,10 +244,28 @@ export const PORTFOLIO_DATA = {
       ],
     },
     {
+      id: "forge",
+      name: "Forge",
+      install: "pip install -e '.[test]'",
+      spec: "v2 development · Apache-2.0 · 13 engineering domains · fail-closed CEM",
+      oneliner: "One truthful tool for all of engineering.",
+      summary:
+        "Forge is a gated Computational Engineering Model that turns engineering intent into sized, generated, simulated, and explicitly judged hardware across mechanical, electrical, embedded, biomechanics, fluids, rocketry, robotics, materials, and astrophysics. It orchestrates real open-source solvers such as CalculiX, ngspice, KiCad, OpenFOAM, OpenSim, FEBio, and MuJoCo, reads their artifacts back from disk, and applies fail-closed gates. A missing result is a BLOCK, never a narrated success; physics is judged instead of process exit codes. The current clean audit exercises the portable core with 1,244 passing tests and three honest environment-dependent skips.",
+      stats: [
+        { value: "13", label: "solver-backed engineering domains" },
+        { value: "1,244", label: "clean-audit core tests passing" },
+        { value: "32 / 34", label: "buildable F1 gates green under full-run load; overall result BLOCK" },
+      ],
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/forge" },
+        { label: "Verification report", href: "https://github.com/Archerkattri/forge/blob/master/docs/VERIFICATION_REPORT_2026-07-24.md" },
+      ],
+    },
+    {
       id: "cert-flow",
       name: "CERT-FLOW",
       install: "pip install certflow",
-      spec: "v1.1.0 · MIT · 227 tests · 16 reproduction pipelines · engrXiv preprint",
+      spec: "v1.1.0 · MIT · 256 core tests passing · 32 data-gated skips · 16 reproduction pipelines",
       oneliner: "Certified route planning under drifting costs.",
       summary:
         "A robot replanning through a world whose costs drift never knows how good its current route is once the map goes stale; classical planners silently trust the stale map. CERT-FLOW answers with a proof every round: a high-probability certificate LB ≤ OPT ≤ UB on the optimal route cost, built from age-weighted non-exchangeable conformal prediction over drift-adjusted residuals, and it spends paid sensing exactly where the certificate says the gap shrinks fastest. When the certificate proves the map tight, that proof licenses ns-to-µs preprocessed queries that self-expire the instant drift exceeds tolerance. Seven theorems (coverage through an impossibility result on lower bounds), validated on 17 synthetic regimes, game maps, and real traffic (METR-LA, PEMS-BAY); the failed hypotheses stay documented in the record.",
@@ -263,6 +281,63 @@ export const PORTFOLIO_DATA = {
         { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7306" },
         { label: "Results, per experiment", href: "https://github.com/Archerkattri/CERT-FLOW/tree/main/docs/results" },
         { label: "DOI 10.5281/zenodo.20631476", href: "https://doi.org/10.5281/zenodo.20631476" },
+      ],
+    },
+    {
+      id: "action-interface",
+      name: "ActionABI + ActionShift",
+      install: "pip install actionshift",
+      spec: "C++20 forensic tool + Python 3.11 benchmark · MIT · shared seven-field contract grammar",
+      oneliner: "Find the hidden contract between a policy and a robot.",
+      summary:
+        "A robot policy can emit the right numbers through the wrong interface and move confidently in the wrong direction. ActionABI attacks that failure offline: it recovers undocumented action-tensor semantics from logged trajectories, retains calibrated equivalence sets, and refuses to emit a converter when the evidence cannot identify one. ActionShift attacks it online: frozen ManiSkill policies face hidden permutations, signs, scales, target modes, frames, lag, and gripper conventions, then adapt through bounded probes. The pair shares one grammar and one scorer, with ActionABI's C++ evidence core running inside ActionShift's belief loop.",
+      stats: [
+        { value: "25 / 25", label: "ambiguous synthetic cases correctly abstained, zero false uniques" },
+        { value: "0.000 → 0.987", label: "PickCube success, no adaptation to pool-belief adaptation" },
+        { value: "52%", label: "fewer probe steps for DualABI at matched success" },
+      ],
+      links: [
+        { label: "ActionABI", href: "https://github.com/Archerkattri/actionabi" },
+        { label: "ActionShift", href: "https://github.com/Archerkattri/actionshift" },
+        { label: "ActionShift on PyPI", href: "https://pypi.org/project/actionshift/" },
+      ],
+    },
+    {
+      id: "clyde",
+      name: "Clyde",
+      install: "Download the arm64 APK",
+      spec: "v0.1.52 · Android 12+ · Jetpack Compose + Claude Agent SDK · 61 safety tests",
+      oneliner: "Claude, with hands, on Android.",
+      summary:
+        "Clyde is an Android assistant shell for Claude on a user's own Pro or Max subscription: voice, overlay, planning, and a tiered control ladder from intents through accessibility, Shizuku, and root. It drives any app rather than a vendor whitelist, while consequential actions require a single-use confirmation token bound to the exact tool and arguments. Money movement is a hard stop, API-key billing fails loud, and the loopback secret is encrypted under an Android Keystore key. On-device Kokoro speech keeps the voice local.",
+      stats: [
+        { value: "T0 → T3", label: "intents, accessibility, Shizuku, root" },
+        { value: "61 / 61", label: "brain safety contract tests passing" },
+        { value: "0", label: "production npm vulnerabilities after the clean audit" },
+      ],
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/clyde-android" },
+        { label: "Latest APK", href: "https://github.com/Archerkattri/clyde-android/releases/latest" },
+        { label: "Architecture", href: "https://github.com/Archerkattri/clyde-android/blob/main/docs/architecture.md" },
+      ],
+    },
+    {
+      id: "stepback",
+      name: "stepback",
+      install: "pip install stepback",
+      spec: "v0.1.0 · MIT · Python 3.11+ · agent-agnostic filesystem checkpoints",
+      oneliner: "Git time-travel for any AI coding agent.",
+      summary:
+        "stepback wraps Codex, Claude Code, aider, or any other process and snapshots each edit burst into an isolated Git ref without touching the real branch, index, staging area, or history. Rewind restores additions, deletions, binaries, symlinks, and unusual paths atomically, previews the change first, and records a redo point before modifying the tree. Optional conversation adapters also restore supported agent session files, while safely degrading to file-only recovery when a private transcript format changes.",
+      stats: [
+        { value: "0", label: "changes to the real Git history or staging area" },
+        { value: "2", label: "file rewind plus best-effort conversation rewind layers" },
+        { value: "any", label: "CLI agent or process can run inside the watcher" },
+      ],
+      links: [
+        { label: "PyPI", href: "https://pypi.org/project/stepback/" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/stepback" },
+        { label: "DOI", href: "https://doi.org/10.5281/zenodo.21536385" },
       ],
     },
     {
@@ -342,9 +417,9 @@ export const PORTFOLIO_DATA = {
     { name: "sam3d-plus", url: "https://github.com/Archerkattri/sam3d-plus", desc: "HiCache (Hermite) · SAM 3D Objects" },
     { name: "fastsam3d-plus-plus", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", desc: "HiCache++ (DMD) · Fast-SAM3D" },
     { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", desc: "HiCache (Hermite) · Fast-SAM3D" },
-    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 35 tests" },
-    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless" },
-    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", desc: "ComfyUI node · TRELLIS.2 via HiCache · ~2×, near-lossless" },
+    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 41 tests" },
+    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless · 12 tests" },
+    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load safe · 13 tests" },
   ],
 
   /* ──────────────── 03 / EXPERIENCE ──────────────── */
@@ -504,8 +579,8 @@ export const PORTFOLIO_DATA = {
   skills: {
     "Perception & SLAM": ["3D Gaussian Splatting", "visuo-tactile SLAM", "RGB-D reconstruction", "SE(3)/Sim(3) registration", "pose tracking", "sensor fusion"],
     "ML & acceleration": ["PyTorch", "CUDA kernels", "diffusion / flow models", "image-to-3D", "feature caching (DMD)", "differentiable rendering"],
-    "Agents & formal methods": ["MCP servers", "dense + BM25 retrieval", "Lean 4 kernel", "PSLQ / OEIS"],
-    "Robotics & hardware": ["ROS", "UR5e", "Allegro Hand", "DIGIT tactile", "LiDAR + IMU + RTK", "Arduino / Raspberry Pi", "NVIDIA Omniverse"],
+    "Agents & formal methods": ["MCP servers", "dense + BM25 retrieval", "Lean 4 kernel", "PSLQ / OEIS", "fail-closed engineering gates"],
+    "Robotics & hardware": ["ROS", "UR5e", "Allegro Hand", "DIGIT tactile", "LiDAR + IMU + RTK", "action-interface contracts", "Arduino / Raspberry Pi", "NVIDIA Omniverse"],
     "Languages & tools": ["Python", "C/C++", "MATLAB", "LaTeX", "SOLIDWORKS", "Linux", "Git"],
   },
 
