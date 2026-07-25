@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --test scripts/live-stats.test.mjs && node scripts/check-project-hierarchy.mjs",
-    "stats:update": "node scripts/collect-live-stats.mjs",
+    "test": "node scripts/check-project-hierarchy.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

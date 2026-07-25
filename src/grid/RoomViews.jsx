@@ -6,7 +6,6 @@
 import { useEffect, useRef } from "react";
 import { PORTFOLIO_DATA as D } from "../data";
 import { Icon } from "../components/Shell";
-import { LiveStats } from "../components/LiveStats";
 import {
   SectionHead, ResearchCard, SoftwareCard, CompactProjects,
   getFeaturedSoftware, getCompactSoftware, XpRow, EarlierRoles,
@@ -87,7 +86,6 @@ function HomeRoom({ navigate }) {
       </p>
       <p className="hero-sub">{p.sub}</p>
       <ProofLine proof={p.proofLine} />
-      <LiveStats />
       <ul className="hero-meta">
         {p.meta.map((m, i) => <li key={i}>{m}</li>)}
       </ul>

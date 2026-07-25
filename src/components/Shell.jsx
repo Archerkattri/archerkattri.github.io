@@ -1,7 +1,6 @@
 // Shell — Icon, Nav, Hero
 import { useState } from "react";
 import { ProofLine } from "./Sections";
-import { LiveStats } from "./LiveStats";
 
 export function Icon({ name, size = 15 }) {
   const paths = {
@@ -82,7 +81,6 @@ export function Hero({ profile }) {
           </p>
           <p className="hero-sub">{profile.sub}</p>
           <ProofLine proof={profile.proofLine} />
-          <LiveStats />
           <ul className="hero-meta">
             {profile.meta.map((m, i) => <li key={i}>{m}</li>)}
           </ul>
