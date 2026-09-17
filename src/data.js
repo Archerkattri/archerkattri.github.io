@@ -212,7 +212,7 @@ export const PORTFOLIO_DATA = {
       id: "splatreg",
       name: "splatreg",
       install: "pip install splatreg",
-      spec: "v1.4.0 · BSD-3-Clause · pure PyTorch · CLI + API",
+      spec: "v1.5.0 · BSD-3-Clause · pure PyTorch · CLI + API",
       oneliner: "Register Gaussian splats.",
       summary:
         "Aligning independently captured 3D Gaussian-Splatting scans usually means falling back to point-cloud registration that throws away the splat structure. splatreg registers natively on the Gaussian representation (a Gaussian-SDF residual with a closed-form Jacobian over SE(3)/Sim(3)), then merges, or aligns without merging: the CLI bakes the recovered pose into the source so both scans stay separate PLYs in one frame. Baked-in transforms rotate the higher-order spherical-harmonic colour with the splat (real-basis Wigner-D); photometric refinement with exposure compensation handles the poses geometry cannot see; every builtin solve reports pose covariance for pose-graph weighting, never faked. Recall matches the GeoTransformer point-cloud baseline on official 3DMatch (91.5% mean / 93.5% pooled) and 3DLoMatch (72.5% / 74.4%) while adding the Sim(3) scale DoF the baseline lacks, and rotation lands 2.9× tighter than existing splat tools (5.2° vs 15.3°). The MAC maximal-clique seed handles contaminated correspondence sets, with the honest measured verdict kept: a wash on the official 3DMatch split, a decisive win on structured decoys.",
@@ -286,6 +286,8 @@ export const PORTFOLIO_DATA = {
         { value: "52%", label: "fewer probe steps for DualABI at matched success" },
       ],
       links: [
+        { label: "ActionABI guide", href: "https://archerkattri.github.io/actionabi/" },
+        { label: "ActionShift guide", href: "https://archerkattri.github.io/actionshift/" },
         { label: "ActionABI", href: "https://github.com/Archerkattri/actionabi" },
         { label: "ActionShift", href: "https://github.com/Archerkattri/actionshift" },
         { label: "ActionShift on PyPI", href: "https://pypi.org/project/actionshift/" },
@@ -316,7 +318,7 @@ export const PORTFOLIO_DATA = {
       compact: true,
       name: "stepback",
       install: "pip install stepback",
-      spec: "v0.1.0 · MIT · Python 3.11+ · agent-agnostic filesystem checkpoints",
+      spec: "v0.2.0 · MIT · Python 3.11+ · agent-agnostic filesystem checkpoints",
       oneliner: "Git time-travel for any AI coding agent.",
       summary:
         "stepback wraps Codex, Claude Code, aider, or any other process and snapshots each edit burst into an isolated Git ref without touching the real branch, index, staging area, or history. Rewind restores additions, deletions, binaries, symlinks, and unusual paths atomically, previews the change first, and records a redo point before modifying the tree. Optional conversation adapters also restore supported agent session files, while safely degrading to file-only recovery when a private transcript format changes.",
@@ -326,6 +328,7 @@ export const PORTFOLIO_DATA = {
         { value: "any", label: "CLI agent or process can run inside the watcher" },
       ],
       links: [
+        { label: "Docs & guide", href: "https://archerkattri.github.io/stepback/" },
         { label: "PyPI", href: "https://pypi.org/project/stepback/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/stepback" },
         { label: "DOI", href: "https://doi.org/10.5281/zenodo.21536385" },
@@ -356,7 +359,7 @@ export const PORTFOLIO_DATA = {
       compact: true,
       name: "AURA",
       install: "git clone https://github.com/Archerkattri/aura",
-      spec: "v0.1.0 · research preview · MIT · KHR + OpenUSD 26.03 export",
+      spec: "v1.1.0 · research preview · MIT · KHR + OpenUSD 26.03 export",
       oneliner: "The radiance-asset layer after 3DGS.",
       summary:
         "AURA (Adaptive Unified Radiance Asset) turns posed captures into a typed, queryable, engine-ready radiance asset, keeping the fast Gaussian and DBS-Beta renderers where they are strong and adding the asset layer they do not provide. Its distinguishing property is a calibrated, certified per-carrier confidence channel exported inside the splat file itself, in KHR_gaussian_splatting GLB and the official OpenUSD 26.03 schema, a reliability signal no bare splat ships. Across four scenes (Truck, Garden, Kitchen, Room) an export-time color-agreement feature predicts held-out per-carrier reliability at r = 0.91–0.98, isotonic calibration cuts expected calibration error by ~300–900×, and calibrated selection lands within 1–4% of the oracle at budgets where opacity pruning is at or below random. Honest caveats: this is a research preview; the matched-budget quality control is a frozen-β DBS ablation rather than full gsplat 3DGS, and the accompanying +dB figure reproduces a published DBS result rather than a new one; the documented negatives (adaptive per-carrier β does not beat a good global β) stay in the record, not hidden.",
@@ -366,6 +369,7 @@ export const PORTFOLIO_DATA = {
         { value: "1M → 52 MB", label: "confidence-annotated KHR GLB, plus OpenUSD 26.03 export" },
       ],
       links: [
+        { label: "Docs & guide", href: "https://archerkattri.github.io/aura/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/aura" },
       ],
     },
@@ -373,7 +377,7 @@ export const PORTFOLIO_DATA = {
       id: "hicache-pp",
       name: "HiCache++",
       install: "pip install hicache-pp",
-      spec: "v1.2.1 · MIT · training-free · DMD calibrator merged into cache-dit · 16-repo accelerator family",
+      spec: "v1.3.0 · MIT · training-free · DMD calibrator merged into cache-dit · 16-repo accelerator family",
       oneliner: "Diffusion acceleration by feature forecasting, honestly selected.",
       summary:
         "Feature caches skip the network on most denoising steps and forecast the cached features instead. HiCache++ ships the exponential (Dynamic Mode Decomposition / Prony) basis, exact on the local feature-ODE class where polynomial bases (TaylorSeer, Hermite) diverge, and the honest finding the benchmarks forced: no single forecast basis wins across diffusion families. The exponential basis wins on flow-matching 3D generators; polynomials hold DiT-class denoising. So the product is the selector: backend auto backcasts a held-out snapshot with both bases at every compute step and serves whichever demonstrably wins, at zero extra model calls. The same study surfaced a benchmark-integrity find: a one-character sign error that left a published baseline anti-extrapolative yet invisible to every end-to-end metric, answered with directional closed-form regression tests. The exponential-basis DMD calibrator is now upstream: it was merged into vipshop/cache-dit (PR #1053, 2026-06-14) and ships in cache-dit v1.5.0, behind SGLang-Diffusion, vLLM-Omni, and ComfyUI. Also deployed through per-model adapters across TRELLIS, Hunyuan3D, and SAM 3D, plus three GPU-validated ComfyUI nodes (Hunyuan3D, TRELLIS, TRELLIS.2).",
@@ -383,6 +387,7 @@ export const PORTFOLIO_DATA = {
         { value: "120/120", label: "holdout auto detects basis misfit and serves the winning arm" },
       ],
       links: [
+        { label: "Docs & guide", href: "https://archerkattri.github.io/hicache-plus-plus/" },
         { label: "PyPI", href: "https://pypi.org/project/hicache-pp/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/hicache-plus-plus" },
         { label: "Merged into cache-dit (PR #1053)", href: "https://github.com/vipshop/cache-dit/pull/1053" },
@@ -408,22 +413,22 @@ export const PORTFOLIO_DATA = {
   // PERSONAL PROJECTS room (expandable cluster under HiCache++ in doc view).
   // 13 accelerator repos (12 adapters + the TaylorSeer baseline) + 3 ComfyUI nodes.
   adapters: [
-    { name: "hunyuan2.1-plus-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus-plus", desc: "HiCache++ (DMD) · Hunyuan3D-2.1" },
-    { name: "hunyuan2.1-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus", desc: "HiCache (Hermite) · Hunyuan3D-2.1" },
-    { name: "hunyuan2-plus-plus", url: "https://github.com/Archerkattri/hunyuan2-plus-plus", desc: "HiCache++ (DMD) · Hunyuan3D-2 mini" },
-    { name: "hunyuan2-plus", url: "https://github.com/Archerkattri/hunyuan2-plus", desc: "HiCache (Hermite) · Hunyuan3D-2 mini" },
-    { name: "hermit-trellis2-plus-plus", url: "https://github.com/Archerkattri/hermit-trellis2-plus-plus", desc: "HiCache++ (DMD) · TRELLIS.2-4B" },
+    { name: "hunyuan2.1-plus-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus-plus", guide: "https://archerkattri.github.io/hunyuan2.1-plus-plus/", desc: "HiCache++ (DMD) · Hunyuan3D-2.1" },
+    { name: "hunyuan2.1-plus", url: "https://github.com/Archerkattri/hunyuan2.1-plus", guide: "https://archerkattri.github.io/hunyuan2.1-plus/", desc: "HiCache (Hermite) · Hunyuan3D-2.1" },
+    { name: "hunyuan2-plus-plus", url: "https://github.com/Archerkattri/hunyuan2-plus-plus", guide: "https://archerkattri.github.io/hunyuan2-plus-plus/", desc: "HiCache++ (DMD) · Hunyuan3D-2 mini" },
+    { name: "hunyuan2-plus", url: "https://github.com/Archerkattri/hunyuan2-plus", guide: "https://archerkattri.github.io/hunyuan2-plus/", desc: "HiCache (Hermite) · Hunyuan3D-2 mini" },
+    { name: "hermit-trellis2-plus-plus", url: "https://github.com/Archerkattri/hermit-trellis2-plus-plus", guide: "https://archerkattri.github.io/hermit-trellis2-plus-plus/", desc: "HiCache++ (DMD) · TRELLIS.2-4B" },
     { name: "hermit-trellis2", url: "https://github.com/Archerkattri/hermit-trellis2", desc: "HiCache (Hermite) · TRELLIS.2-4B" },
     { name: "fast-trellis2", url: "https://github.com/Archerkattri/fast-trellis2", desc: "TaylorSeer baseline · TRELLIS.2-4B" },
     { name: "faster-trellis-plus-plus", url: "https://github.com/Archerkattri/faster-trellis-plus-plus", desc: "HiCache++ (DMD) · TRELLIS v1" },
     { name: "faster-trellis", url: "https://github.com/Archerkattri/faster-trellis", desc: "HiCache (Hermite) · TRELLIS v1" },
-    { name: "sam3d-plus-plus", url: "https://github.com/Archerkattri/sam3d-plus-plus", desc: "HiCache++ (DMD) · SAM 3D Objects" },
-    { name: "sam3d-plus", url: "https://github.com/Archerkattri/sam3d-plus", desc: "HiCache (Hermite) · SAM 3D Objects" },
-    { name: "fastsam3d-plus-plus", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", desc: "HiCache++ (DMD) · Fast-SAM3D" },
-    { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", desc: "HiCache (Hermite) · Fast-SAM3D" },
-    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 41 tests" },
-    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless · 12 tests" },
-    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load lifecycle safe · 15 tests" },
+    { name: "sam3d-plus-plus", url: "https://github.com/Archerkattri/sam3d-plus-plus", guide: "https://archerkattri.github.io/sam3d-plus-plus/", desc: "HiCache++ (DMD) · SAM 3D Objects" },
+    { name: "sam3d-plus", url: "https://github.com/Archerkattri/sam3d-plus", guide: "https://archerkattri.github.io/sam3d-plus/", desc: "HiCache (Hermite) · SAM 3D Objects" },
+    { name: "fastsam3d-plus-plus", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", guide: "https://archerkattri.github.io/fastsam3d-plus-plus/", desc: "HiCache++ (DMD) · Fast-SAM3D" },
+    { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", guide: "https://archerkattri.github.io/fastsam3d-plus/", desc: "HiCache (Hermite) · Fast-SAM3D" },
+    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", guide: "https://archerkattri.github.io/ComfyUI-HiCache/", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 41 tests" },
+    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", guide: "https://archerkattri.github.io/ComfyUI-TRELLIS-HiCache/", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless · 12 tests" },
+    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", guide: "https://archerkattri.github.io/ComfyUI-TRELLIS2-HiCache/", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load lifecycle safe · 15 tests" },
   ],
 
   /* ──────────────── 03 / EXPERIENCE ──────────────── */

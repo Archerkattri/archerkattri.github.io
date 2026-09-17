@@ -476,6 +476,9 @@ html.grid-mode, html.grid-mode body {
 }
 .gv-adapter .adapter-name { font-size: 13px; }
 .gv-adapter .adapter-desc { font-size: 11px; }
+.gv-adapter .adapter-main { display: flex; flex-direction: column; gap: 7px; color: inherit; text-decoration: none; }
+.gv-adapter .adapter-guide { font-family: var(--font-mono); font-size: 11px; color: var(--accent); text-decoration: none; }
+.gv-adapter .adapter-guide:hover { text-decoration: underline; }
 
 /* W1 experience — route styling */
 .gv-route { position: relative; }

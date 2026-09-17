@@ -262,10 +262,13 @@ function PersonalProjectsRoom({ navigate }) {
                 <div className="bg-label">{f.name}</div>
                 <div className="gv-adapters">
                   {f.items.map(a => (
-                    <a key={a.name} className="gv-adapter" href={a.url} target="_blank" rel="noopener">
-                      <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
-                      <span className="adapter-desc">{a.desc}</span>
-                    </a>
+                    <div key={a.name} className="gv-adapter">
+                      <a className="adapter-main" href={a.url} target="_blank" rel="noopener">
+                        <span className="adapter-name"><Icon name="github" size={12} /> {a.name}</span>
+                        <span className="adapter-desc">{a.desc}</span>
+                      </a>
+                      {a.guide && <a className="adapter-guide" href={a.guide} target="_blank" rel="noopener">Docs & guide</a>}
+                    </div>
                   ))}
                 </div>
               </div>

@@ -200,10 +200,13 @@ function AdapterCluster({ adapters }) {
       <summary className="adapters-toggle">+ The 16-repo accelerator family</summary>
       <div className="adapters-grid">
         {adapters.map(a => (
-          <a key={a.name} href={a.url} target="_blank" rel="noopener" className="adapter">
-            <span className="adapter-name"><Icon name="github" size={11} /> {a.name}</span>
-            <span className="adapter-desc">{a.desc}</span>
-          </a>
+          <div key={a.name} className="adapter">
+            <a href={a.url} target="_blank" rel="noopener" className="adapter-main">
+              <span className="adapter-name"><Icon name="github" size={11} /> {a.name}</span>
+              <span className="adapter-desc">{a.desc}</span>
+            </a>
+            {a.guide && <a href={a.guide} target="_blank" rel="noopener" className="adapter-guide">Docs & guide</a>}
+          </div>
         ))}
       </div>
     </details>
