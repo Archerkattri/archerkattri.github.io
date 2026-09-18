@@ -254,13 +254,13 @@ export const PORTFOLIO_DATA = {
       id: "cert-flow",
       name: "CERT-FLOW",
       install: "pip install certflow",
-      spec: "v1.1.0 · MIT · 256 core tests passing · 32 data-gated skips · 16 reproduction pipelines",
+      spec: "v1.2.0 · MIT · 337 tests passing · 0 skips · 16 reproduction pipelines",
       oneliner: "Certified route planning under drifting costs.",
       summary:
         "A robot replanning through a world whose costs drift never knows how good its current route is once the map goes stale; classical planners silently trust the stale map. CERT-FLOW answers with a proof every round: a high-probability certificate LB ≤ OPT ≤ UB on the optimal route cost, built from age-weighted non-exchangeable conformal prediction over drift-adjusted residuals, and it spends paid sensing exactly where the certificate says the gap shrinks fastest. When the certificate proves the map tight, that proof licenses ns-to-µs preprocessed queries that self-expire the instant drift exceeds tolerance. Seven theorems (coverage through an impossibility result on lower bounds), validated on 17 synthetic regimes, game maps, and real traffic (METR-LA, PEMS-BAY); the failed hypotheses stay documented in the record.",
       stats: [
         { value: "0.95 – 1.00", label: "coverage on every condition ever run; classical replanning 0.02 – 0.59" },
-        { value: "269 ns", label: "certificate-gated static cost query; 3.7 ms p50 full certified round, one CPU core" },
+        { value: "269 ns", label: "certificate-gated static cost query; 15.1 ms p50 full certified round (60×60), one CPU core" },
         { value: "2 – 3×", label: "lower sensing regret than freshness, uncertainty, or random at equal budget" },
       ],
       links: [
