@@ -14,7 +14,9 @@
 // ════════════════════════════════════════════════════════════
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ROOMS, ROOM_MAP, DIRS, neighborOf, roomFromHash, sectionFromHash } from "./grid";
-import { RoomContent, GridMap } from "./RoomViews";
+import { RoomContent, GridMap, ScrollBeam, SectionRail } from "./RoomViews";
+import { useReveals, useSpotlight } from "../motion/reveal";
+import { Palette } from "../motion/Palette";
 
 const SLIDE_MS = 520;       // cardinal slide
 const SLIDE_DIAG_MS = 640;  // mini-map diagonal jump (single oblique slide)
@@ -29,6 +31,7 @@ export default function GridSite({ reduced }) {
   // cold-open flag: scopes the home landing settle (grid.css gvRise) to the
   // first paint; dropped after the stagger finishes so later returns home
   // (which re-key the room wrapper) never replay it
+  const [palette, setPalette] = useState(false);
   const [boot, setBoot] = useState(true);
   useEffect(() => {
     const t = setTimeout(() => setBoot(false), 1100);
@@ -38,6 +41,9 @@ export default function GridSite({ reduced }) {
   roomRef.current = room;
   const transRef = useRef(null);
   transRef.current = trans;
+  /* View-Transitions flight flag (separate ref: the line above re-syncs
+     transRef from state on every render, so it can't hold VT state) */
+  const vtRef = useRef(false);
   const pendingRef = useRef(null);
   const scrollerRef = useRef(null);
   const liveRef = useRef(null);
@@ -75,7 +81,7 @@ export default function GridSite({ reduced }) {
   /* navigate — `push` adds a history entry (false for back/forward/deep-link) */
   const navigate = useCallback((to, { push = true } = {}) => {
     if (!ROOM_MAP[to] || to === roomRef.current) return;
-    if (transRef.current) { pendingRef.current = { to, push }; return; }
+    if (transRef.current || vtRef.current) { pendingRef.current = { to, push }; return; }
     const a = ROOM_MAP[roomRef.current];
     const b = ROOM_MAP[to];
     if (push) setHash(to, true);
@@ -85,6 +91,30 @@ export default function GridSite({ reduced }) {
     if (reduced) { setRoom(to); return; }
     const dx = Math.sign(b.col - a.col);
     const dy = Math.sign(b.row - a.row);
+    /* View Transitions fast path: native directional slide (direction via
+       --gv-vtx/--gv-vty on <html>, read by the vtIn/vtOut keyframes). The
+       classic keyframe slide below stays as the fallback for unsupported
+       browsers and for any throw; transRef guards both paths alike so a
+       second move queues instead of colliding mid-flight. */
+    if (typeof document.startViewTransition === "function") {
+      try {
+        const root = document.documentElement;
+        root.style.setProperty("--gv-vtx", dx);
+        root.style.setProperty("--gv-vty", dy);
+        vtRef.current = true;
+        const done = () => {
+          vtRef.current = false;
+          requestAnimationFrame(() => scrollerRef.current?.focus({ preventScroll: true }));
+          const p = pendingRef.current;
+          pendingRef.current = null;
+          if (p && p.to !== to) navigate(p.to, { push: p.push });
+        };
+        document.startViewTransition(() => { setRoom(to); }).finished.then(done, done);
+        return;
+      } catch {
+        vtRef.current = false;
+      }
+    }
     const dur = dx && dy ? SLIDE_DIAG_MS : SLIDE_MS;
     setTrans({ to, dx, dy, dur });
     window.setTimeout(() => {
@@ -139,6 +169,11 @@ export default function GridSite({ reduced }) {
   /* keyboard */
   useEffect(() => {
     const key = e => {
+      if ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setPalette(o => !o);
+        return;
+      }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.target.matches?.("input, textarea, select")) return;
       const cur = ROOM_MAP[roomRef.current];
@@ -250,6 +285,8 @@ export default function GridSite({ reduced }) {
         })}
       </nav>
 
+      <SectionRail key={room} roomId={room} scrollerRef={scrollerRef} />
+
       {/* Identity anchor: on HOME the hero name is the only name on screen
           (no corner brand). In every other room the top-left control is the
           name itself acting as the home link, so each page stays signed and
@@ -281,6 +318,18 @@ export default function GridSite({ reduced }) {
         {room !== "home" && <> · © {new Date().getFullYear()} KRISHI ATTRI</>}
       </div>
 
+      {!palette && (
+        <button
+          className="gv-palette-btn"
+          onClick={() => setPalette(true)}
+          aria-label="Jump to room or card (Control or Command K)"
+          title="Jump to room or card (Ctrl/⌘ K)"
+        >
+          ⌘K
+        </button>
+      )}
+      <Palette open={palette} onClose={() => setPalette(false)} navigate={navigate} reduced={reduced} />
+
       <span className="gv-live" role="status" aria-live="polite" ref={liveRef} />
     </div>
   );
@@ -289,8 +338,11 @@ export default function GridSite({ reduced }) {
 /* ── one room = full-viewport page with native vertical scroll ── */
 function RoomShell({ id, navigate, scrollerRef }) {
   const def = ROOM_MAP[id];
+  useReveals(scrollerRef);
+  useSpotlight(scrollerRef);
   return (
     <section className="gv-room" aria-label={`${def.code} · ${def.name}`}>
+      <ScrollBeam scrollerRef={scrollerRef} />
       <div className="gv-scroll" ref={scrollerRef} tabIndex={-1}>
         <div className="gv-inner">
           <RoomContent id={id} navigate={navigate} />

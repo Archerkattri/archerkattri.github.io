@@ -11,14 +11,15 @@ export const PORTFOLIO_DATA = {
     name: "Krishi Attri",
     // Identity block, in reading order: name (display scale) → role line →
     // the one-liner. A first-time visitor gets who/what/why in two seconds.
-    roleLine: "Robotics and AI researcher. M.S. SNU, incoming Ph.D. UCF.",
+    roleLine: "Robotics and AI researcher. Ph.D. student, UCF.",
     headlineLines: ["I give robots", "a sense of touch."],
     sub: "Perception systems that see, feel, and reconstruct the world in real time: visuo-tactile SLAM on 3D Gaussian Splatting maps, plus the open-source tools that make the stack verifiable and fast.",
     meta: [
-      "M.S. Mechanical Engineering · Seoul National University",
-      "Soft Robotics & Bionics Laboratory · Advisor: Prof. Yong-Lae Park",
-      "Incoming Ph.D. · University of Central Florida · ORCGS Doctoral Fellow · Aug 2026",
+      "Ph.D. Mechanical Engineering · University of Central Florida",
+      "ARC Lab · Advisor: Prof. Yunjun Xu · ORCGS Doctoral Fellow",
+      "M.S. Mechanical Engineering · Seoul National University · Aug 2026",
     ],
+    availability: "Open to research collaborations",
     headshot: "assets/images/headshot-sm.png",
     headshotWebp: "assets/images/headshot-sm.webp",
     figcaption: "Krishi Attri · Seoul, 2025",
@@ -30,7 +31,7 @@ export const PORTFOLIO_DATA = {
       cv: "assets/docs/Krishi_Attri_CV.pdf",
       resume: "assets/docs/Krishi_Attri_Resume.pdf",
       siteSource: "https://github.com/Archerkattri/archerkattri.github.io",
-      location: "Seoul, South Korea → Orlando, FL (Aug 2026)",
+      location: "Orlando, FL, USA",
     },
     // Hero proof line: the flagship, its two headline numbers, and the
     // released libraries; every part deep-links into its room (hashes
@@ -39,7 +40,8 @@ export const PORTFOLIO_DATA = {
       flagship: {
         href: "#gaussianfeels",
         pre: "GaussianFeels: ",
-        statA: "1.13 mm",
+        statA: "1.13",
+        statAUnit: "mm",
         mid: " object tracking during in-hand manipulation, at ",
         statB: "7.0–12.4×",
         post: " the frame rate of the neural-field baseline (simulation).",
@@ -95,7 +97,7 @@ export const PORTFOLIO_DATA = {
       id: "popslam",
       title: "PoP-SLAM",
       subtitle: "Point-cloud projection for dense visual SLAM",
-      role: "Co-author · with S. Jung, J. Marchand, M. L. Paolicchi · Seoul National University",
+      role: "Co-author · S. Jung (SNU AI), J. Marchand (École des Mines), M. L. Paolicchi (VU Amsterdam)",
       date: "Sept – Dec 2024",
       tag: "Paper",
       summary:
@@ -150,8 +152,8 @@ export const PORTFOLIO_DATA = {
   publications: [
     {
       title: "GaussianFeels: Object-Centric Gaussian SLAM for Visuo-Tactile In-Hand Manipulation",
-      venue: "M.S. Thesis · Seoul National University",
-      date: "2026",
+      venue: "M.S. Dissertation · Seoul National University",
+      date: "Aug 2026",
       status: "release upcoming",
     },
     {
@@ -276,7 +278,7 @@ export const PORTFOLIO_DATA = {
       id: "action-interface",
       name: "ActionABI + ActionShift",
       install: "pip install actionshift",
-      spec: "C++20 forensic tool + Python 3.11 benchmark · MIT · shared seven-field contract grammar",
+      spec: "C++20/CUDA/pybind11 forensic tool + Python 3.11 PPO/ManiSkill benchmark · MIT · shared seven-field contract grammar",
       oneliner: "Find the hidden contract between a policy and a robot.",
       summary:
         "A robot policy can emit the right numbers through the wrong interface and move confidently in the wrong direction. ActionABI attacks that failure offline: it recovers undocumented action-tensor semantics from logged trajectories, retains calibrated equivalence sets, and refuses to emit a converter when the evidence cannot identify one. ActionShift attacks it online: frozen ManiSkill policies face hidden permutations, signs, scales, target modes, frames, lag, and gripper conventions, then adapt through bounded probes. The pair shares one grammar and one scorer, with ActionABI's C++ evidence core running inside ActionShift's belief loop.",
@@ -397,6 +399,46 @@ export const PORTFOLIO_DATA = {
       adaptersNote: "Per-model adapter cluster",
     },
     {
+      id: "progressbeam",
+      compact: true,
+      name: "ProgressBeam",
+      install: "npm install progressbeam",
+      spec: "v1.0.2 · MIT · zero-dep · ESM/CJS/browser + TS types",
+      oneliner: "Slim, accessible progress bar for browser apps.",
+      summary:
+        "ProgressBeam continues NProgress (unmaintained) with its API intact: zero runtime dependencies, ESM/CommonJS/direct-browser builds, type-tested TypeScript declarations, valid progressbar semantics with labeled status and reduced-motion support, lifecycle events plus explicit fail/cancel/pause/reset, and adapters for fetch, routers, React, Next.js, Vue, and TanStack. Verified in real Chromium, Firefox, and WebKit with enforced size budgets; safe to import during SSR.",
+      stats: [
+        { value: "0", label: "runtime dependencies; ESM, CJS, and browser builds" },
+        { value: "6", label: "adapters: fetch, routers, React, Next.js, Vue, TanStack" },
+        { value: "3", label: "browser engines verified: Chromium, Firefox, WebKit" },
+      ],
+      links: [
+        { label: "npm", href: "https://www.npmjs.com/package/progressbeam" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/progressbeam" },
+        { label: "DOI 10.5281/zenodo.22821135", href: "https://doi.org/10.5281/zenodo.22821135" },
+      ],
+    },
+    {
+      id: "vue-mini-bridge",
+      compact: true,
+      name: "vue-mini-bridge",
+      install: "npm install vue-mini-bridge",
+      spec: "v2.0.8 · MIT · Vue 2 runtime + template compiler · 4 mini-program targets",
+      oneliner: "Vue 2 single-file components, compiled to mini programs.",
+      summary:
+        "Independently maintained Vue-compatible runtime and template compiler for mini-program targets, continuing the useful parts of mpvue (dormant since 2022) with a rebuilt toolchain, English documentation, and regression coverage: one Vue template compiles to WeChat, Alipay, Baidu, and ByteDance targets, verified against the vendors' September 2026 documentation.",
+      stats: [
+        { value: "4", label: "targets: WeChat, Alipay, Baidu, ByteDance" },
+        { value: "235", label: "regression checks across the ssr, weex, and mpvue suites" },
+        { value: "2", label: "published packages: runtime + template compiler" },
+      ],
+      links: [
+        { label: "npm", href: "https://www.npmjs.com/package/vue-mini-bridge" },
+        { label: "GitHub", href: "https://github.com/Archerkattri/vue-mini-bridge" },
+        { label: "DOI 10.5281/zenodo.22821137", href: "https://doi.org/10.5281/zenodo.22821137" },
+      ],
+    },
+    {
       id: "cv-object-detection",
       compact: true,
       name: "CV object-detection web app",
@@ -438,7 +480,7 @@ export const PORTFOLIO_DATA = {
       title: "Graduate Research Student",
       org: "Soft Robotics & Bionics Laboratory, Seoul National University",
       location: "Seoul, KR",
-      date: "2024 – 2026",
+      date: "Sept 2024 – Aug 2026",
       summary: "GSFS Scholar. GaussianFeels thesis; PoP-SLAM; perception integration for the Phase-2 “Alchemist” humanoid (MOTIE).",
       bullets: [
         "Built GaussianFeels: online visuo-tactile reconstruction and pose tracking on an object-centric 3DGS map. Pose ADD-S 1.13 mm sim (50 FPS) / 2.42 mm real (37 FPS), beating NeuralFeels on every sim aggregate at 7.0–12.4× the frame rate, with no CAD model.",
@@ -451,7 +493,7 @@ export const PORTFOLIO_DATA = {
       title: "Robotics & Mechatronics Researcher",
       org: "Villanova University",
       location: "Villanova, PA",
-      date: "2023 – 2024",
+      date: "Aug 2023 – May 2024",
       summary: "SLAM for GNSS-denied navigation with a Ph.D. dissertation project: quad-wheel outdoor robot.",
       bullets: [
         "Full ROS navigation stack: LiDAR-camera fusion with CNN feature extraction and visual odometry; path planning and obstacle avoidance.",
@@ -479,7 +521,7 @@ export const PORTFOLIO_DATA = {
       title: "Indoor Farm Robotics Intern",
       org: "Area2Farms",
       location: "Arlington, VA",
-      date: "Summer 2023",
+      date: "June – Aug 2023",
       summary: "“Silo” vertical-farming automation: extruded-aluminium construction, pneumatics, industrial robotics, Arduino/Raspberry Pi, irrigation systems.",
       bullets: [],
       links: [
@@ -491,7 +533,7 @@ export const PORTFOLIO_DATA = {
       title: "Product Design Intern",
       org: "Ampere LLC",
       location: "Remote, USA",
-      date: "Summer 2022",
+      date: "June – Aug 2022",
       summary: "3D product modelling for consumer technology; structural-integrity and physics analysis.",
       bullets: [],
       links: [
@@ -522,24 +564,23 @@ export const PORTFOLIO_DATA = {
       id: "ucf",
       degree: "Ph.D., Mechanical Engineering",
       school: "University of Central Florida",
-      date: "from Aug 2026",
-      note: "ORCGS Doctoral Fellow · Rehabilitation Engineering & Assistive Device Lab · Prof. Hwan Choi",
-      status: "incoming",
-      links: [{ label: "REAL lab", href: "https://mae.ucf.edu/REAL/" }],
+      date: "Aug 2026 – Present",
+      note: "ORCGS Doctoral Fellow · ARC Lab · Prof. Yunjun Xu",
+      status: "current",
     },
     {
       id: "snu",
       degree: "M.S., Mechanical Engineering",
       school: "Seoul National University",
-      date: "2024 – 2026",
+      date: "Sept 2024 – Aug 2026",
       note: "GSFS Scholar · Soft Robotics & Bionics Laboratory · Prof. Yong-Lae Park",
-      status: "current",
+      status: "complete",
     },
     {
       id: "villanova",
       degree: "B.S., Mechanical Engineering",
       school: "Villanova University",
-      date: "2020 – 2024",
+      date: "Aug 2020 – May 2024",
       note: "Minor in Mechatronics · Concentration: Control & Dynamics",
       status: "complete",
       links: [{ label: "Diploma", href: "https://drive.google.com/file/d/1uuABMpQOmXiOJIfSTqjgK9fICTAbfD8I/view" }],
@@ -548,7 +589,7 @@ export const PORTFOLIO_DATA = {
       id: "yonsei",
       degree: "Exchange year, Mechanical Engineering",
       school: "Yonsei University",
-      date: "2022 – 2023",
+      date: "Aug 2022 – June 2023",
       note: "Controls · vibrations · circuit theory · probability",
       status: "complete",
     },
@@ -589,8 +630,8 @@ export const PORTFOLIO_DATA = {
     "Perception & SLAM": ["3D Gaussian Splatting", "visuo-tactile SLAM", "RGB-D reconstruction", "SE(3)/Sim(3) registration", "pose tracking", "sensor fusion"],
     "ML & acceleration": ["PyTorch", "CUDA kernels", "diffusion / flow models", "image-to-3D", "feature caching (DMD)", "differentiable rendering"],
     "Agents & formal methods": ["MCP servers", "dense + BM25 retrieval", "Lean 4 kernel", "PSLQ / OEIS", "fail-closed engineering gates"],
-    "Robotics & hardware": ["ROS", "UR5e", "Allegro Hand", "DIGIT tactile", "LiDAR + IMU + RTK", "action-interface contracts", "Arduino / Raspberry Pi", "NVIDIA Omniverse"],
-    "Languages & tools": ["Python", "C/C++", "MATLAB", "LaTeX", "SOLIDWORKS", "Linux", "Git"],
+    "Robotics & hardware": ["ROS", "UR5e", "Allegro Hand", "DIGIT tactile", "LiDAR + IMU + RTK", "action-interface contracts", "ManiSkill", "LeRobot", "Arduino / Raspberry Pi", "NVIDIA Omniverse"],
+    "Languages & tools": ["Python", "C/C++", "pybind11", "MATLAB", "LaTeX", "SOLIDWORKS", "Linux", "Git"],
   },
 
   /* ──────── E2 / SCHOOL PROJECTS — capstone first, then earlier builds ──────── */

@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex" />
 <meta name="theme-color" content="#0C0D10" />
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/images/favicon.png" />
-<script>location.replace("/#home");</script>
 <meta http-equiv="refresh" content="2; url=/#home" />
 <style>
   html, body { height: 100%; margin: 0; }
@@ -21,13 +20,33 @@
   .code { color: #3ebfc6; font-size: 28px; letter-spacing: 0.18em; margin-bottom: 14px; }
   p { margin: 0 0 18px; color: #a39e8f; line-height: 1.8; }
   a { color: #3ebfc6; text-decoration: underline; text-underline-offset: 4px; }
+  #tcur { display: inline-block; width: 8px; height: 1em; background: #3ebfc6; vertical-align: -0.15em; margin-left: 3px; }
+  #tcur:empty { display: none; }
 </style>
 </head>
 <body>
 <main>
   <div class="code">404</div>
-  <p>Off the map. Returning to HOME.</p>
+  <p><span id="tmsg">Off the map. Returning to HOME.</span><span id="tcur" aria-hidden="true"></span></p>
   <a href="/#home">Take me there now</a>
 </main>
+<script>
+(function () {
+  var msg = document.getElementById("tmsg");
+  var cur = document.getElementById("tcur");
+  var full = msg.textContent;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var go = function () { location.replace("/#home"); };
+  if (reduce) { window.setTimeout(go, 300); return; }
+  msg.textContent = "";
+  cur.textContent = "\u00A0";
+  var i = 0;
+  var tick = function () {
+    if (i <= full.length) { msg.textContent = full.slice(0, i++); window.setTimeout(tick, 26); }
+    else { window.setTimeout(go, 450); }
+  };
+  tick();
+})();
+</script>
 </body>
 </html>

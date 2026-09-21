@@ -3,7 +3,7 @@
 // reads from data.js (single source of truth shared with the
 // document view and the chart).
 // ════════════════════════════════════════════════════════════
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PORTFOLIO_DATA as D } from "../data";
 import { Icon } from "../components/Shell";
 import {
@@ -77,7 +77,13 @@ function HomeRoom({ navigate }) {
     <div className="gv-home-id">
       {/* identity first: the name at display scale, then the role line,
           then the one-liner (who / what / why inside two seconds) */}
-      <h1 className="gv-home-name">{p.name}</h1>
+      <h1 className="gv-home-name" aria-label={p.name}>
+        {p.name.split("").map((ch, i) => (
+          <span key={i} className="gv-char" style={{ "--ch": i }} aria-hidden="true">
+            {ch === " " ? "\u00A0" : ch}
+          </span>
+        ))}
+      </h1>
       <p className="gv-home-role">
         <span className="kicker-dash" aria-hidden="true" />{p.roleLine}
       </p>
@@ -96,6 +102,7 @@ function HomeRoom({ navigate }) {
           </a>
         ))}
       </div>
+      <p className="hero-avail"><span className="avail-dot" aria-hidden="true" />{p.availability}</p>
     </div>
   );
   const photo = (
@@ -163,7 +170,7 @@ function PublicationsRoom({ navigate }) {
           sub="The M.S. thesis, a course paper, and the solo-author engrXiv preprints behind the released software (splatreg, HiCache++, CERT-FLOW, ToothPrint). The list grows as the thesis work reaches formal venues." />
         <div className="gv-pubs">
           {D.publications.map((p, i) => (
-            <article key={i} className="gv-pub">
+            <article key={i} className="gv-pub reveal">
               <h3 className="gv-pub-title">{p.title}</h3>
               <div className="gv-pub-meta">{p.venue} · {p.date}</div>
               <div className="gv-pub-links">
@@ -231,10 +238,11 @@ function PersonalProjectsRoom({ navigate }) {
         <SectionHead index="E1" label="Personal projects" title="Released &" em="installable."
           sub="Five flagship systems with measured results, followed by a compact archive of earlier and supporting work." />
         <div className="sw-stack">
-          {featured.map(s => (
+          {featured.map((s, i) => (
             <SoftwareCard
               key={s.id}
               item={s}
+              index={i}
               adapters={D.adapters}
               adaptersAction={
                 s.adaptersNote ? (
@@ -345,10 +353,10 @@ function ExperienceRoom() {
         <SectionHead index="W1" label="Experience" title="Lab, field &" em="industry."
           sub="The route so far, newest first. Seoul now, Orlando next." />
         <div className="gv-route" ref={routeRef}>
-          {/* penciled-in margin note: the stop that isn't on the route yet */}
-          <div className="gv-route-next" aria-label="Next stop: UCF Ph.D., ORCGS Doctoral Fellow, August 2026">
-            <span className="gv-note-caret" aria-hidden="true">^</span>
-            <span className="gv-note-text">next stop UCF, Ph.D. · ORCGS fellow · Aug 2026</span>
+          {/* the current stop, inked above the route line (arrived Aug 2026) */}
+          <div className="gv-route-now" aria-label="Current stop: UCF Ph.D., ORCGS Doctoral Fellow, from August 2026">
+            <span className="gv-now-pill" aria-hidden="true">NOW</span>
+            <span>UCF, Ph.D. · ORCGS fellow · from Aug 2026</span>
           </div>
           <div className="xp-list gv-route-list">
             <span className="gv-route-track" aria-hidden="true" />
@@ -378,7 +386,7 @@ function RelocationArc() {
       <svg viewBox="0 0 640 158" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <path className="gv-arc-path" d="M 60 122 Q 320 8 580 122" />
         <circle className="gv-arc-dot" cx="60" cy="122" r="4" />
-        <circle className="gv-arc-dot hollow" cx="580" cy="122" r="4" />
+        <circle className="gv-arc-dot" cx="580" cy="122" r="4" />
         <text className="gv-arc-mid" x="320" y="46" textAnchor="middle">≈12,100 KM · AUG 2026</text>
         <text className="gv-arc-city" x="60" y="146" textAnchor="start">SEOUL</text>
         <text className="gv-arc-city" x="580" y="146" textAnchor="end">ORLANDO</text>
@@ -422,6 +430,94 @@ function GalleryRoom() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* scroll-linked progress beam: a thin teal line down the room's
+   left edge, spring-smoothed (Tracing Beam pattern, vanilla rAF lerp).
+   Hidden on home (nothing to scroll) and under reduced motion. */
+export function ScrollBeam({ scrollerRef }) {
+  const beamRef = useRef(null);
+  useEffect(() => {
+    const scroller = scrollerRef?.current;
+    const beam = beamRef.current;
+    if (!scroller || !beam) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let shown = -1;
+    const update = () => {
+      raf = 0;
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      if (max <= 4) { beam.style.opacity = "0"; return; }
+      const target = Math.min(1, Math.max(0, scroller.scrollTop / max));
+      shown = shown < 0 ? target : shown + (target - shown) * 0.18;
+      beam.style.opacity = "1";
+      beam.style.transform = `scaleY(${Math.max(0.02, shown)})`;
+      if (Math.abs(target - shown) > 0.0005) {
+        raf = requestAnimationFrame(update);
+      }
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [scrollerRef]);
+  return <span className="gv-beam" ref={beamRef} aria-hidden="true" />;
+}
+
+/* in-room section rail: dot navigation for the long card rooms.
+   Dots for each id-bearing sheet/datasheet + the adapter constellation
+   (rooms with fewer than 3 stops get no rail); scrollspy-lit via IO,
+   click scrolls (opening folds as needed). Wide desktop only. */
+export function SectionRail({ roomId, scrollerRef }) {
+  const [stops, setStops] = useState([]);
+  const [active, setActive] = useState(null);
+  useEffect(() => {
+    const scroller = scrollerRef?.current;
+    if (!scroller) return;
+    const els = Array.from(scroller.querySelectorAll(".sheet[id], .sw[id], #adapter-constellation"));
+    if (els.length < 3) { setStops([]); return; }
+    setStops(els.map(el => ({
+      id: el.id,
+      label: el.id === "adapter-constellation"
+        ? "Accelerator family"
+        : (el.querySelector(".sheet-title, .sw-name")?.textContent?.trim() || el.id),
+    })));
+    const io = new IntersectionObserver(entries => {
+      for (const e of entries) {
+        if (e.isIntersecting) setActive(e.target.id);
+      }
+    }, { root: scroller, rootMargin: "-30% 0px -60% 0px", threshold: 0 });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, [roomId, scrollerRef]);
+  if (stops.length < 3) return null;
+  const jump = id => {
+    const section = document.getElementById(id);
+    if (!section) return;
+    if (section instanceof HTMLDetailsElement) section.open = true;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    section.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  };
+  return (
+    <nav className="gv-rail" aria-label="Sections in this room">
+      {stops.map(s => (
+        <button
+          key={s.id}
+          className={"gv-rail-dot" + (s.id === active ? " on" : "")}
+          onClick={() => jump(s.id)}
+          aria-label={`Scroll to ${s.label}`}
+          title={s.label}
+        >
+          <span className="gv-rail-label" aria-hidden="true">{s.label}</span>
+        </button>
+      ))}
+    </nav>
   );
 }
 

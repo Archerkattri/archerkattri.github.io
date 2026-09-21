@@ -38,7 +38,7 @@ are deliberately self-explanatory — reading the title tells you what's inside:
 - **E1 PERSONAL PROJECTS** — the four released-software datasheets (splatreg / mathlas / CERT-FLOW / HiCache++) with the 16-repo HiCache accelerator constellation as the room's closing section (`#adapter-constellation`): 13 accelerator repos (12 HiCache/HiCache++ adapters + the fast-trellis2 TaylorSeer baseline) + 3 ComfyUI nodes (ComfyUI-HiCache for Hunyuan3D, ComfyUI-TRELLIS-HiCache, ComfyUI-TRELLIS2-HiCache), grouped by model family with an "Integrations" group.
 - **E2 SCHOOL PROJECTS** — the FMC-sponsored capstone (featured, with demo/award/photos links) + the "Earlier builds" archive (CV-complete: includes the robotic arm, SOLIDWORKS scooter, basketball-prediction entries).
 - **W2 SCHOOL** — education (with REAL-lab / Diploma links), honors & fellowships (linked proofs), **leadership** (CubeSat / VISO / SASE / ASME), documents (CV/resume/PDFs, with Drive mirrors via the `drive` field), the condensed stack.
-- **W1 EXPERIENCE** — the route (per-stop proof links from the CV: EOD robot, drone, Silo demo, certificates, host letter) + the compact "Also held, Villanova" earlier-roles block. The UCF stop renders as a penciled margin note (`.gv-route-next`), not a boxed pill.
+- **W1 EXPERIENCE** — the route (per-stop proof links from the CV: EOD robot, drone, Silo demo, certificates, host letter) + the compact "Also held, Villanova" earlier-roles block. The UCF current stop renders as a solid instrument row with a NOW pill (`.gv-route-now`) above the route line.
 - **S2 GALLERY** — the photo/video plates (formerly "Field log").
 - Legacy hash slugs stay as **redirect aliases** (don't remove): `#software` → E1, `#adapters` → E1's constellation section, `#background` → W2, `#fieldlog` / `#field-log` → S2, plus every retired chart-station id (`#gaussianfeels`, `#splatreg`, `#log-3`, `#adapter-7`, …) → its owning room. New canonical slugs: `#personal-projects`, `#school-projects`, `#school`, `#gallery`.
 
@@ -108,7 +108,7 @@ Add to **Research** or **Personal projects** (software datasheets) only with cle
 
 ## 4) Experience Items
 - Role, Organisation, Date range, Location; 2–4 impact bullets (results, not task lists).
-- Experience renders as the **route** in W1 (newest first, penciled UCF margin note). Keep `data.js` order newest-first.
+- Experience renders as the **route** in W1 (newest first, solid UCF current-stop row on top). Keep `data.js` order newest-first.
 
 ## 5) Visual Consistency Rules
 - One accent. Mono for instrument copy, Fraunces for titles. No new fonts/colors.
@@ -186,9 +186,32 @@ npm run preview
 - **Palette drift, same identity**: bg #0c0d10 → #0a0c10 (cooler carbon), ink #e9e4d6 → #ebe6d8; accent teal unchanged (#3ebfc6, still the only accent). `theme-color` mirrors #0A0C10.
 - Photo/gallery plates desaturate at rest (0.88/0.9) and reach full saturation on hover.
 
-## 11) Future Work (not yet done)
+## 11) Decided 2026-09: de-slop + motion upgrades
+- **De-slop removals (don't re-add):** the steel-blue second-hue atmospheric wash (atmosphere is teal-only now, enforced in `npm test`), the 3px accent bar on `.school-crossref` (the kicker carries the accent; also test-enforced), and the ungrammatical meta description ("gives robots a sense of touch"). Copy audit: zero em dashes in `data.js` strings (test-enforced via recursive scan), zero slop-lexicon hits. HUD blur stays: it is functional legibility over scrolling rooms, not decorative glass.
+- **Motion system (`src/motion/reveal.js`):** `useReveals` (IntersectionObserver, once, armed per room in `RoomShell`) lands `.reveal` cards with a 14px rise; `isCountable`/`formatCount` drive count-ups on plain-numeric `.stat-v` only (ranges/fractions stay static). Hidden states are `html.js`-gated, reduced-motion and no-IO render final state, SSR prerender always ships final numbers. Restraint rule: `.reveal` on sheets/software/pubs only, never everything.
+- **InstallLine:** clipboard guarded (no throw when unavailable), dynamic aria-label + polite live "Copied" announcement.
+
+## 12) Future Work (not yet done)
 - [ ] **GaussianFeels results gallery** — reconstruction images/video in N1 when public.
 - [ ] **PoP-SLAM benchmark table** — expanded card table when the paper is public.
 - [ ] **Publications growth** — formal venues when published.
-- [ ] **Update role to UCF Ph.D.** — profile/meta/experience + flip the route's penciled UCF note to a solid stop (Aug 2026).
-- [ ] **OG image refresh** — consider a map-styled OG image.
+- [x] **Update role to UCF Ph.D.** — done 2026-09-21 (Ph.D. student, ARC Lab / Yunjun Xu per Sep-16 CV+resume; SNU conferred; solid NOW stop; Orlando arrival). Lab correction: portfolio previously said REAL/Hwan Choi; both Sep-16 docs say ARC/Yunjun Xu.
+- [x] **OG image refresh** — done 2026-09-21: map-styled 1200×630 (name + tagline + plus-lattice, rendered by `/tmp/og-make.py` with headless Chromium; rerun it to regenerate).
+
+## 13) Decided 2026-09: UI-research upgrades (recommended + optional)
+- **Command palette** (`src/motion/Palette.jsx`, Ctrl/⌘K + HUD button): jumps to any room or card via the grid router, then reveals the card (opening folds). Desktop button only; shortcut works everywhere.
+- **Section rail** (N1/E1, ≥1200px): dot navigation for id-bearing sheets/datasheets + the constellation, scrollspy-lit, labels on hover.
+- **Tracing beam**: thin teal line at the room's left edge, scroll-linked with rAF-lerp smoothing; hidden on home and reduced-motion.
+- **Word-mask section titles**: `.sec-title` rises into a mask on room land (replays per visit; once in the prerender).
+- **SYS.01–05 numerals** on the software datasheets, positional from the featured order.
+- **Card spotlight**: faint cursor-following teal light on sheets/software/pubs (delegated pointermove, hover-only).
+- **Print stylesheet**: light token theme, HUD hidden, map unrolled, folds forced open, cards kept whole.
+- **Animated folds**: `details::details-content` height animation where supported, instant elsewhere.
+- **Proof count-up**: hero `1.13 mm` counts (statA split into value/unit in `data.js`); ranges stay static.
+- **Email copy chip** next to the contact email (Copy → Copied + live region).
+- **Availability pill** (`profile.availability`) under the hero links; static square marker, never a pulse.
+- **Split-char hero name**: letter-by-letter rise on cold boot only (map home; screen-reader name via aria-label).
+- **Lamp cone**: soft conic beam above the home identity, fades in on boot, static after.
+- **404 typewriter**: types the line then redirects (~1.3s); reduced-motion redirects fast; meta-refresh stays the no-JS path.
+- **View Transitions room slides**: native directional slide via `--gv-vtx/--gv-vty`, HUD excluded from the snapshot; classic keyframe slide is the fallback (unsupported/reduced/throw).
+- Registries (MagicUI/Aceternity) and animation libs (GSAP/Motion/Lenis) deliberately NOT adopted: patterns are hand-ported into the dependency-free CSS/IO system.

@@ -91,6 +91,7 @@ export function Hero({ profile }) {
               </a>
             ))}
           </div>
+          <p className="hero-avail"><span className="avail-dot" aria-hidden="true" />{profile.availability}</p>
         </div>
         <figure className="hero-fig">
           <picture>

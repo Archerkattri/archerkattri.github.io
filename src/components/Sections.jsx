@@ -1,7 +1,8 @@
 // Sections — Research, Personal projects, Experience, School,
 // School projects, Gallery, Contact, Footer
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "./Shell";
+import { isCountable, formatCount } from "../motion/reveal";
 
 /* ── shared section header ──
    `index` doubles as the grid coordinate in map view (e.g. "N1"). */
@@ -51,7 +52,7 @@ export function ProofLine({ proof }) {
     <p className="hero-proof">
       <a className="proof-flagship" href={f.href}>
         <strong>{f.pre}</strong>
-        <span className="proof-stat">{f.statA}</span>
+        <StatValue value={f.statA} unit={f.statAUnit} className="proof-stat" />
         {f.mid}
         <span className="proof-stat">{f.statB}</span>
         {f.post}
@@ -69,12 +70,49 @@ export function ProofLine({ proof }) {
   );
 }
 
+/* Instrument readout with a count-up landing for plain numerics.
+   SSR / no-JS / reduced-motion render the final value (the proof must
+   read without animation); anything non-numeric stays static. */
+function StatValue({ value, unit, className = "stat-v", smallClass = null }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(null);
+  const countable = isCountable(value);
+  useEffect(() => {
+    if (!countable || !ref.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!("IntersectionObserver" in window)) return;
+    const decimals = (value.split(".")[1] || "").length;
+    const target = parseFloat(value.replace(/,/g, ""));
+    setShown(formatCount(target, decimals, 0));
+    let raf = 0;
+    const io = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      io.disconnect();
+      const t0 = performance.now();
+      const dur = 1100;
+      const tick = now => {
+        const t = Math.min(1, (now - t0) / dur);
+        setShown(formatCount(target, decimals, t));
+        if (t < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    io.observe(ref.current);
+    return () => { io.disconnect(); if (raf) cancelAnimationFrame(raf); };
+  }, [countable, value]);
+  return (
+    <span className={className} ref={ref}>
+      {shown ?? value}{unit ? <small className={smallClass}> {unit}</small> : null}
+    </span>
+  );
+}
+
 function StatRow({ stats }) {
   return (
     <div className="stat-row">
       {stats.map((s, i) => (
         <div key={i} className="stat">
-          <span className="stat-v">{s.value}{s.unit ? <small> {s.unit}</small> : null}</span>
+          <StatValue value={s.value} unit={s.unit} />
           <span className="stat-l">{s.label}</span>
         </div>
       ))}
@@ -85,7 +123,7 @@ function StatRow({ stats }) {
 /* ──────────────── 01 / RESEARCH ──────────────── */
 export function ResearchCard({ item }) {
   return (
-    <article className={"sheet" + (item.flagship ? " flagship" : "")} id={item.id}>
+    <article className={"sheet reveal" + (item.flagship ? " flagship" : "")} id={item.id}>
       {item.media && (
         <figure className="sheet-media">
           <video
@@ -179,16 +217,23 @@ export function ResearchSection({ data }) {
 function InstallLine({ cmd }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
-    navigator.clipboard?.writeText(cmd).then(() => {
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(cmd).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
-    });
+    }).catch(() => {});
   };
   return (
-    <button className="install" onClick={copy} title="Copy to clipboard">
+    <button
+      className="install"
+      onClick={copy}
+      title={copied ? "Copied" : "Copy to clipboard"}
+      aria-label={copied ? "Copied to clipboard" : `Copy ${cmd} to clipboard`}
+    >
       <span className="install-ps1" aria-hidden="true">$</span>
       <code>{cmd}</code>
       <span className="install-copy">{copied ? <Icon name="check" size={13} /> : <Icon name="copy" size={13} />}</span>
+      <span className="gv-live" aria-live="polite">{copied ? "Copied" : ""}</span>
     </button>
   );
 }
@@ -215,11 +260,12 @@ function AdapterCluster({ adapters }) {
 
 /* `adaptersAction` (map view) replaces the inline cluster with a
    pointer to the Adapters room. */
-export function SoftwareCard({ item, adapters, adaptersAction }) {
+export function SoftwareCard({ item, adapters, adaptersAction, index = 0 }) {
   return (
-    <article className="sw" id={item.id}>
+    <article className="sw reveal" id={item.id}>
       <div className="sw-grid">
         <div className="sw-id">
+          <div className="sw-sys">SYS.{String(index + 1).padStart(2, "0")}</div>
           <h3 className="sw-name">{item.name}</h3>
           <p className="sw-oneliner">{item.oneliner}</p>
           <InstallLine cmd={item.install} />
@@ -288,7 +334,7 @@ export function PersonalProjectsSection({ data }) {
         <SectionHead index="02" label="Personal projects" title="Released &" em="installable."
           sub="Five flagship systems with measured results, followed by a compact archive of earlier and supporting work." />
         <div className="sw-stack">
-          {featured.map(s => <SoftwareCard key={s.id} item={s} adapters={data.adapters} />)}
+          {featured.map((s, i) => <SoftwareCard key={s.id} item={s} adapters={data.adapters} index={i} />)}
         </div>
         <CompactProjects items={compact} />
       </div>
@@ -548,6 +594,27 @@ export function GallerySection({ data }) {
 }
 
 /* ──────────────── 06 / CONTACT ──────────────── */
+function CopyChip({ text, label }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    }).catch(() => {});
+  };
+  return (
+    <button
+      className={"contact-copy" + (copied ? " done" : "")}
+      onClick={copy}
+      aria-label={copied ? `${label} copied to clipboard` : `Copy ${label} to clipboard`}
+    >
+      {copied ? "Copied" : "Copy"}
+      <span className="gv-live" aria-live="polite">{copied ? "Copied" : ""}</span>
+    </button>
+  );
+}
+
 export function ContactSection({ data, index = "06", children }) {
   const c = data.profile.contact;
   return (
@@ -556,7 +623,10 @@ export function ContactSection({ data, index = "06", children }) {
         <SectionHead index={index} label="Contact" title="Write" em="first." />
         <div className="contact-grid">
           <div className="contact-main">
-            <a className="contact-email" href={`mailto:${c.email}`}>{c.email}</a>
+            <span className="contact-email-row">
+              <a className="contact-email" href={`mailto:${c.email}`}>{c.email}</a>
+              <CopyChip text={c.email} label="email address" />
+            </span>
             <p className="contact-loc">{c.location}</p>
             <div className="contact-open">
               <div className="bg-label">Open to</div>

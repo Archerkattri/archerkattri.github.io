@@ -20,6 +20,23 @@ html.grid-mode, html.grid-mode body {
 .gv-roomwrap {
   position: absolute; inset: 0;
   will-change: transform;
+  view-transition-name: gv-room;
+}
+/* View Transitions fast path (see navigate): only the room snapshots —
+   the root crossfade is killed so the HUD never moves. Direction comes
+   from --gv-vtx/--gv-vty on <html>, set per move before the snapshot. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+::view-transition-old(gv-room) {
+  animation: vtOut 520ms cubic-bezier(0.45, 0, 0.18, 1) both;
+}
+::view-transition-new(gv-room) {
+  animation: vtIn 520ms cubic-bezier(0.45, 0, 0.18, 1) both;
+}
+@keyframes vtOut {
+  to { transform: translate(calc(var(--gv-vtx, 0) * -100%), calc(var(--gv-vty, 0) * -100%)); }
+}
+@keyframes vtIn {
+  from { transform: translate(calc(var(--gv-vtx, 0) * 100%), calc(var(--gv-vty, 0) * 100%)); }
 }
 .gv-roomwrap.gv-out {
   animation: gvOut var(--gv-dur, 520ms) cubic-bezier(0.45, 0, 0.18, 1) forwards;
@@ -40,9 +57,8 @@ html.grid-mode, html.grid-mode body {
   position: absolute; inset: 0;
   background-image:
     radial-gradient(1100px 620px at 22% -6%, rgba(62, 191, 198, 0.05), transparent 62%),
-    radial-gradient(900px 700px at 100% 110%, rgba(110, 130, 180, 0.045), transparent 60%),
     var(--graticule);
-  background-size: auto, auto, var(--graticule-size);
+  background-size: auto, var(--graticule-size);
   background-color: var(--bg);
 }
 
@@ -138,7 +154,8 @@ html.grid-mode, html.grid-mode body {
 /* freeze the controls mid-slide */
 .gridview[data-moving] .gv-edge,
 .gridview[data-moving] .gv-cell,
-.gridview[data-moving] .gv-homebtn { pointer-events: none; }
+.gridview[data-moving] .gv-homebtn,
+.gridview[data-moving] .gv-rail-dot { pointer-events: none; }
 
 /* identity anchor / home link — top-left, every room except home
    (on home the hero name itself is the identity; the corner stays bare) */
@@ -206,6 +223,113 @@ html.grid-mode, html.grid-mode body {
   border: 1px solid var(--line); border-radius: var(--r-ui);
   box-shadow: var(--shadow-hud);
   padding: 8px 12px;
+}
+
+/* scroll-linked progress beam (see ScrollBeam): a thin teal line at
+   the room's left edge; opacity 0 until the scroll handler arms it */
+.gv-beam {
+  position: absolute; left: 5px; top: 12px; bottom: 12px; width: 2px;
+  background: color-mix(in oklab, var(--accent) 65%, transparent);
+  border-radius: 2px;
+  transform-origin: top; transform: scaleY(0.02);
+  opacity: 0; pointer-events: none; z-index: 5;
+}
+
+/* in-room section rail: dot navigation for long card rooms (N1, E1).
+   Wide desktop only (it docks inside the E edge button's lane);
+   labels slide out on hover like the edge buttons. */
+.gv-rail {
+  position: fixed; right: 54px; top: 50%; transform: translateY(-50%);
+  z-index: 115; display: none; flex-direction: column; gap: 4px;
+  padding: 10px 6px;
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: var(--shadow-hud);
+}
+@media (min-width: 1200px) { .gv-rail { display: flex; } }
+.gv-rail-dot {
+  position: relative; width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+}
+.gv-rail-dot::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  border: 1.5px solid var(--ink-faint);
+  transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.gv-rail-dot:hover::before { border-color: var(--accent); }
+.gv-rail-dot.on::before {
+  background: var(--accent); border-color: var(--accent);
+  box-shadow: 0 0 8px rgba(62, 191, 198, 0.5);
+}
+.gv-rail-label {
+  position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%);
+  max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink);
+  transition: max-width 0.25s ease, opacity 0.2s ease;
+  pointer-events: none;
+}
+.gv-rail-dot:hover .gv-rail-label,
+.gv-rail-dot:focus-visible .gv-rail-label { max-width: 220px; opacity: 1; }
+
+/* command palette: ⌘K jump to any room or card. Trigger docks
+   bottom-right on desktop (mobile corners belong to the E/W pills). */
+.gv-palette-btn {
+  position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  z-index: 120;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: var(--shadow-hud);
+  padding: 10px 14px;
+  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.gv-palette-btn:hover { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+@media (max-width: 760px) { .gv-palette-btn { display: none; } }
+.gv-palette-backdrop {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(6, 8, 9, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex; justify-content: center; align-items: flex-start;
+  padding: 16vh 16px 16px;
+}
+.gv-palette {
+  width: min(560px, 100%);
+  background: color-mix(in oklab, var(--bg-raised) 92%, transparent);
+  border: 1px solid var(--line); border-radius: var(--r-card);
+  box-shadow: var(--shadow-card), 0 30px 80px -30px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+.gv-palette-input {
+  width: 100%; box-sizing: border-box;
+  background: transparent; border: none; border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-body); font-size: 16px;
+  padding: 16px 18px; outline: none;
+}
+.gv-palette-input::placeholder { color: var(--ink-faint); }
+.gv-palette-list { max-height: 320px; overflow-y: auto; padding: 6px; }
+.gv-palette-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  text-align: left; padding: 9px 12px; border-radius: var(--r-ui);
+  color: var(--ink-muted);
+}
+.gv-palette-item.hi { background: var(--accent-soft); color: var(--ink); }
+.gv-palette-kind {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em;
+  color: var(--accent-deep); flex: 0 0 auto; width: 38px;
+}
+.gv-palette-label { font-size: 14.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gv-palette-empty {
+  padding: 18px; text-align: center;
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint);
 }
 
 /* screen-reader page announcements */
@@ -279,6 +403,18 @@ html.grid-mode, html.grid-mode body {
    Identity-first: the eye must land on Krishi (photo + name) before the
    map. The photo is the primary visual mass; the room-grid map is a
    subordinate instrument card (still real navigation, clickable cells). */
+/* lamp cone: a soft conic beam above the home identity, fading in
+   on boot and static after (one scene light, never a second hue) */
+.gv-home { position: relative; }
+.gv-home::before {
+  content: ""; position: absolute; inset: -8vh 0 auto 0; height: 46vh;
+  pointer-events: none;
+  background: conic-gradient(from 180deg at 50% 0%, transparent 42%, rgba(62, 191, 198, 0.07) 50%, transparent 58%);
+  mask-image: radial-gradient(60% 100% at 50% 0%, black, transparent 75%);
+  -webkit-mask-image: radial-gradient(60% 100% at 50% 0%, black, transparent 75%);
+}
+.gv-boot .gv-home::before { animation: gvLamp 1.1s ease 0.15s both; }
+@keyframes gvLamp { from { opacity: 0; } }
 .gv-home {
   min-height: 100%;
   max-width: var(--container);
@@ -294,8 +430,19 @@ html.grid-mode, html.grid-mode body {
    enough (≤0.85 s total) that who/what/why still lands inside two
    seconds, and never replayed on later returns home. Reduced motion
    kills it via the global rule. */
-.gv-boot .gv-home-id > *, .gv-boot .gv-home-rail > * {
+.gv-boot .gv-home-id > :not(.gv-home-name), .gv-boot .gv-home-rail > * {
   animation: gvRise 0.5s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+/* split-char hero: the name rises letter by letter on cold boot only
+   (the whole-name gvRise above skips it); reduced motion kills it */
+.gv-boot .gv-char {
+  display: inline-block;
+  animation: gvChar 0.55s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  animation-delay: calc(0.05s + var(--ch) * 0.028s);
+}
+@keyframes gvChar {
+  from { opacity: 0; transform: translateY(0.55em); }
+  to { opacity: 1; transform: none; }
 }
 .gv-boot .gv-home-id > *:nth-child(1) { animation-delay: 0.03s; }
 .gv-boot .gv-home-id > *:nth-child(2) { animation-delay: 0.08s; }
@@ -304,6 +451,7 @@ html.grid-mode, html.grid-mode body {
 .gv-boot .gv-home-id > *:nth-child(5) { animation-delay: 0.23s; }
 .gv-boot .gv-home-id > *:nth-child(6) { animation-delay: 0.27s; }
 .gv-boot .gv-home-id > *:nth-child(7) { animation-delay: 0.31s; }
+.gv-boot .gv-home-id > *:nth-child(8) { animation-delay: 0.35s; }
 .gv-boot .gv-home-rail > *:nth-child(1) { animation-delay: 0.14s; }
 .gv-boot .gv-home-rail > *:nth-child(2) { animation-delay: 0.25s; }
 @keyframes gvRise {
@@ -482,31 +630,27 @@ html.grid-mode, html.grid-mode body {
 
 /* W1 experience — route styling */
 .gv-route { position: relative; }
-/* the UCF stop, penciled into the margin above the route line:
-   italic display face, slight tilt, dashed underline, caret mark */
-.gv-route-next {
-  display: inline-flex; align-items: baseline; gap: 9px;
-  font-family: var(--font-display); font-style: italic; font-weight: 360;
-  font-size: 17px; letter-spacing: 0.01em;
-  color: color-mix(in oklab, var(--accent) 72%, var(--ink));
+/* the current stop, inked above the route line: an upright instrument
+   row with a solid node and a NOW pill (arrived Aug 2026; was penciled) */
+.gv-route-now {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
   margin: 0 0 24px 26px;
   position: relative;
-  transform: rotate(-1.3deg); transform-origin: left bottom;
 }
-.gv-note-caret {
-  font-family: var(--font-mono); font-style: normal; font-size: 13px;
-  color: var(--accent-deep);
-  align-self: flex-end; transform: translateY(4px);
+.gv-now-pill {
+  font-size: 9.5px; letter-spacing: 0.16em;
+  color: #0a0c10; background: var(--accent);
+  padding: 3px 8px; border-radius: 4px;
 }
-.gv-note-text {
-  border-bottom: 1px dashed color-mix(in oklab, var(--accent) 45%, transparent);
-  padding-bottom: 3px;
-}
-.gv-route-next::before {
+.gv-route-now::before {
   content: ""; position: absolute; left: -31px; top: 50%;
   width: 9px; height: 9px; transform: translateY(-50%);
   border-radius: 50%;
-  border: 2px dashed var(--accent-deep); background: var(--bg);
+  background: var(--accent); border: 2px solid var(--accent);
+  box-shadow: 0 0 10px rgba(62, 191, 198, 0.4);
 }
 .gv-route-list { margin-left: 26px; position: relative; }
 /* the route line: a faint full-length track plus a teal line that the
@@ -534,12 +678,6 @@ html.grid-mode, html.grid-mode body {
   width: 9px; height: 9px;
   border-radius: 50%;
   background: var(--bg); border: 2px solid var(--accent-deep);
-}
-.gv-stop:first-child::after {
-  content: "NOW"; position: absolute; left: -56px; top: 36px;
-  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.14em;
-  color: var(--accent);
-  transform: rotate(-90deg); transform-origin: center;
 }
 .gv-stop:first-child::before { border-color: var(--accent); box-shadow: 0 0 10px rgba(62, 191, 198, 0.4); }
 /* scroll-linked reveal: stops wait greyed for the line to reach them */
@@ -575,7 +713,6 @@ html.grid-mode, html.grid-mode body {
   stroke-dasharray: 10 8;
 }
 .gv-arc-dot { fill: var(--accent); }
-.gv-arc-dot.hollow { fill: var(--bg); stroke: var(--accent); stroke-width: 2; }
 .gv-arc-mid {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em;
   fill: rgba(62, 191, 198, 0.9);
@@ -679,9 +816,8 @@ html.grid-mode, html.grid-mode body {
   .gv-inner .section { padding-top: 64px; }
   .gv-foot { padding-bottom: 76px; }
 
-  .gv-stop:first-child::after { display: none; }
-  .gv-route-next { margin-left: 18px; font-size: 15px; }
-  .gv-route-next::before { left: -23px; }
+  .gv-route-now { margin-left: 18px; font-size: 11px; }
+  .gv-route-now::before { left: -23px; }
   .gv-route-list { margin-left: 18px; }
   .gv-route-track, .gv-route-line { left: -19px; }
   .gv-stop::before { left: -23px; }
