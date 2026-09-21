@@ -109,7 +109,7 @@ function HomeRoom({ navigate }) {
     <figure className="gv-home-fig">
       <picture>
         <source srcSet={p.headshotWebp} type="image/webp" />
-        <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" />
+        <img src={p.headshot} alt="Krishi Attri" width="320" height="412" decoding="async" fetchPriority="high" />
       </picture>
     </figure>
   );
@@ -351,7 +351,7 @@ function ExperienceRoom() {
     <section className="section">
       <div className="container">
         <SectionHead index="W1" label="Experience" title="Lab, field &" em="industry."
-          sub="The route so far, newest first. Seoul now, Orlando next." />
+          sub="The route so far, newest first." />
         <div className="gv-route" ref={routeRef}>
           {/* the current stop, inked above the route line (arrived Aug 2026) */}
           <div className="gv-route-now" aria-label="Current stop: UCF Ph.D., ORCGS Doctoral Fellow, from August 2026">
@@ -379,28 +379,9 @@ function SchoolRoom() {
   return <SchoolSection data={D} index="W2" />;
 }
 
-/* ════════════════ S1 · CONTACT (+ relocation arc) ════════════════ */
-function RelocationArc() {
-  return (
-    <div className="gv-arc" aria-label="Relocation: Seoul to Orlando, August 2026">
-      <svg viewBox="0 0 640 158" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <path className="gv-arc-path" d="M 60 122 Q 320 8 580 122" />
-        <circle className="gv-arc-dot" cx="60" cy="122" r="4" />
-        <circle className="gv-arc-dot" cx="580" cy="122" r="4" />
-        <text className="gv-arc-mid" x="320" y="46" textAnchor="middle">≈12,100 KM · AUG 2026</text>
-        <text className="gv-arc-city" x="60" y="146" textAnchor="start">SEOUL</text>
-        <text className="gv-arc-city" x="580" y="146" textAnchor="end">ORLANDO</text>
-      </svg>
-    </div>
-  );
-}
-
+/* ════════════════ S1 · CONTACT ════════════════ */
 function ContactRoom() {
-  return (
-    <ContactSection data={D} index="S1">
-      <RelocationArc />
-    </ContactSection>
-  );
+  return <ContactSection data={D} index="S1" />;
 }
 
 /* ════════════════ S2 · GALLERY ════════════════ */

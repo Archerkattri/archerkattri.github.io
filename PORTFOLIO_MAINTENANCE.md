@@ -64,7 +64,7 @@ The experience route line is **scroll-linked**: a faint full-length track (`.gv-
 
 ### Numbers are the proof (decided & shipped)
 Stat values (`.stat-v` on research sheets, `.sw-stat dd` on software datasheets) get one consistent emphasis treatment: heavier mono, accent teal, faint teal glow. Keep the two selectors in lockstep if either changes.
-- **`RoomViews.jsx`** — one component per room, reusing `Sections.jsx` pieces (`ResearchCard`, `SoftwareCard`, `SchoolSection`, `SchoolProjectsSection`, `ContactSection`) plus grid-only pieces: the `GridMap` (mini-map + home centerpiece), `RoomXRef` neighbor pointers (must always show the *current* room names), `SectionJump` in-room pointers, the W1 experience route rail, the S1 Seoul→Orlando relocation arc, the S2 photo-plate grid, the E1 adapter constellation grouped by model family.
+- **`RoomViews.jsx`** — one component per room, reusing `Sections.jsx` pieces (`ResearchCard`, `SoftwareCard`, `SchoolSection`, `SchoolProjectsSection`, `ContactSection`) plus grid-only pieces: the `GridMap` (mini-map + home centerpiece), `RoomXRef` neighbor pointers (must always show the *current* room names), `SectionJump` in-room pointers, the W1 experience route rail, the S2 photo-plate grid, the E1 adapter constellation grouped by model family. (The S1 relocation arc was removed 2026-09-21: the move is done, the instrument is history.)
 - **`src/grid.css`** — all grid styling (`gv-` prefix; document/prerender styling lives in `src/styles.css`).
 
 ### Grid input contract (decided & shipped)
@@ -215,3 +215,7 @@ npm run preview
 - **404 typewriter**: types the line then redirects (~1.3s); reduced-motion redirects fast; meta-refresh stays the no-JS path.
 - **View Transitions room slides**: native directional slide via `--gv-vtx/--gv-vty`, HUD excluded from the snapshot; classic keyframe slide is the fallback (unsupported/reduced/throw).
 - Registries (MagicUI/Aceternity) and animation libs (GSAP/Motion/Lenis) deliberately NOT adopted: patterns are hand-ported into the dependency-free CSS/IO system.
+- **Relocation arc removed** (2026-09-21, user ask): the move is done; S1 is contact-only now.
+- **Palette shortcut glyph follows the platform** (⌘K on macOS/iOS, Ctrl K elsewhere; aria/title match).
+- **Glow budget** (2026-09 audit vs anti-slop catalogs): page-wide ambient washes removed (bare graticule ground); readout text-glow 24px→16px and `--accent-glow` 0.3→0.24; the home lamp cone is the single permitted ambient light. Kept as functional (state/focus/feedback, single-hue): flagship ring, edge hover, map cells, route nodes/ping, rail dots, card spotlight, install focus ring.
+- **Visual QA pass** (2026-09-21, 14 screenshots): W1 sub fixed ("Seoul then, Orlando now"); hero clip lazy-mounts on scroll into view with reduced-motion opt-in controls (`LazyClip`); `npm test` now asserts every `assets|figures` path in `data.js` exists under `public/` (all 24 verified present — no 404 media on the site).

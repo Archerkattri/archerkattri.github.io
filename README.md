@@ -1,5 +1,7 @@
 # Krishi Attri — Portfolio
 
+<img src="public/assets/images/favicon.png" width="64" alt="Portfolio site icon — chibi avatar" />
+
 Live site: **https://archerkattri.github.io**
 
 ---

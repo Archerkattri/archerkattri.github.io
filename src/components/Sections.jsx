@@ -107,6 +107,39 @@ function StatValue({ value, unit, className = "stat-v", smallClass = null }) {
   );
 }
 
+/* Hero clip, mounted when scrolled into view: the multi-MB forming
+   clip must not download on room land before the visitor can see it.
+   SSR/no-JS render the poster frame; reduced-motion visitors get the
+   poster plus opt-in controls instead of autoplay. */
+function LazyClip({ media }) {
+  const ref = useRef(null);
+  const [on, setOn] = useState(false);
+  const [reduced] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!("IntersectionObserver" in window)) { setOn(true); return; }
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { setOn(true); io.disconnect(); }
+    }, { rootMargin: "400px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <video
+      ref={ref}
+      src={on ? media.video : undefined}
+      poster={media.poster}
+      autoPlay={on && !reduced}
+      controls={reduced}
+      muted loop playsInline preload="metadata"
+      aria-label={media.caption}
+    />
+  );
+}
+
 function StatRow({ stats }) {
   return (
     <div className="stat-row">
@@ -126,13 +159,7 @@ export function ResearchCard({ item }) {
     <article className={"sheet reveal" + (item.flagship ? " flagship" : "")} id={item.id}>
       {item.media && (
         <figure className="sheet-media">
-          <video
-            src={item.media.video}
-            poster={item.media.poster}
-            autoPlay muted loop playsInline
-            preload="metadata"
-            aria-label={item.media.caption}
-          />
+          <LazyClip media={item.media} />
           <figcaption>{item.media.caption}</figcaption>
         </figure>
       )}

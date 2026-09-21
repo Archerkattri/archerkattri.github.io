@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from "react";
 import GridSite from "./grid/GridSite";
+import Fluid from "./motion/Fluid";
+import Cursor from "./motion/Cursor";
 
 // The map (2D page grid, edge-button navigation) is the one and only
 // interactive experience. The document view survives solely as the
@@ -18,7 +20,9 @@ export default function App() {
 
   return (
     <>
+      <Fluid reduced={reduced} />
       <div className="grain" aria-hidden="true" />
+      <Cursor reduced={reduced} />
       <GridSite reduced={reduced} />
     </>
   );

@@ -91,9 +91,53 @@ for (const [src, marker] of [
 ]) {
   assert.equal(src.includes(marker), true);
 }
+// Every local media file referenced in data must exist (no 404 plates/clips/docs).
+const mediaRefs = new Set(stringsOf(data).filter(s => /^(assets|figures)\//.test(s)));
+for (const ref of mediaRefs) {
+  assert.equal(existsSync(new URL(`../public/${ref}`, import.meta.url)), true);
+}
+
+// Glow budget (2026-09 audit): no page-wide ambient wash, no neon-radius text glow.
+assert.equal(stylesSrc.includes("radial-gradient(1100px"), false);
+assert.equal(gridSrc.includes("radial-gradient(1100px"), false);
+assert.equal(stylesSrc.includes("text-shadow: 0 0 24px"), false);
+const sectionsSrc = readFileSync(new URL("../src/components/Sections.jsx", import.meta.url), "utf8");
+assert.equal(sectionsSrc.includes("function LazyClip"), true);
 assert.equal(typeof data.profile.availability, "string");
 const fourOhFour = readFileSync(new URL("../public/404.html", import.meta.url), "utf8");
 assert.equal(fourOhFour.includes('id="tmsg"'), true);
 assert.equal(existsSync(new URL("../public/assets/images/og-image.png", import.meta.url)), true);
+
+// Ink-fluid background + custom cursor: each ships its marker, and the
+// check-grid ground is gone (no graticule tokens or usages remain).
+const fluidSrc = readFileSync(new URL("../src/motion/Fluid.jsx", import.meta.url), "utf8");
+// Regression: cleanup must never explicitly lose the GL context —
+// StrictMode remounts in dev and a lost context never restores,
+// which silently unmounted the whole canvas (no fluid, no error).
+assert.equal(fluidSrc.includes("loseContext"), false);
+assert.match(fluidSrc, /uCursorOn/);
+assert.match(fluidSrc, /lastInput/);
+assert.match(stylesSrc, /\.fluid-canvas/);
+const cursorSrc = readFileSync(new URL("../src/motion/Cursor.jsx", import.meta.url), "utf8");
+assert.match(cursorSrc, /has-custom-cursor/);
+assert.match(stylesSrc, /\.cursor-ring/);
+assert.equal(stylesSrc.includes("--graticule"), false);
+assert.equal(gridSrc.includes("graticule"), false);
+assert.match(gridSrc, /\.gv-room \{[^}]*background: transparent/);
+// The nav-button magnetic system was removed (2026-09): no fluid event
+// bus, no gather/attract passes, no fill layer anywhere.
+assert.equal(existsSync(new URL("../src/motion/fluidBus.js", import.meta.url)), false);
+assert.equal(fluidSrc.includes("fluid:hover"), false);
+assert.equal(fluidSrc.includes("attract"), false);
+assert.equal(gridSrc.includes("gv-fill"), false);
+const roomViewsSrc = readFileSync(new URL("../src/grid/RoomViews.jsx", import.meta.url), "utf8");
+assert.equal(roomViewsSrc.includes("fluidGather"), false);
+const gridSiteSrc = readFileSync(new URL("../src/grid/GridSite.jsx", import.meta.url), "utf8");
+assert.equal(gridSiteSrc.includes("fluidBurst"), false);
+// Device QA: notch/side safe-areas on all HUD anchors, decorative
+// corner chips hidden on short (landscape-phone) viewports.
+assert.match(gridSrc, /safe-area-inset-top/);
+assert.match(gridSrc, /safe-area-inset-left/);
+assert.match(gridSrc, /max-height: 500px/);
 
 console.log("Project hierarchy checks passed.");

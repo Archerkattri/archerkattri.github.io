@@ -12,7 +12,7 @@
 //                    press (not key-repeat) steps to the neighbor room
 //   H / Esc          return to HOME
 // ════════════════════════════════════════════════════════════
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ROOMS, ROOM_MAP, DIRS, neighborOf, roomFromHash, sectionFromHash } from "./grid";
 import { RoomContent, GridMap, ScrollBeam, SectionRail } from "./RoomViews";
 import { useReveals, useSpotlight } from "../motion/reveal";
@@ -32,6 +32,12 @@ export default function GridSite({ reduced }) {
   // first paint; dropped after the stagger finishes so later returns home
   // (which re-key the room wrapper) never replay it
   const [palette, setPalette] = useState(false);
+  /* shortcut glyph follows the platform (GridSite is client-only, so
+     navigator is always available here) */
+  const isMac = useMemo(
+    () => /mac/i.test(navigator.userAgentData?.platform || navigator.platform || ""),
+    []
+  );
   const [boot, setBoot] = useState(true);
   useEffect(() => {
     const t = setTimeout(() => setBoot(false), 1100);
@@ -322,10 +328,10 @@ export default function GridSite({ reduced }) {
         <button
           className="gv-palette-btn"
           onClick={() => setPalette(true)}
-          aria-label="Jump to room or card (Control or Command K)"
-          title="Jump to room or card (Ctrl/⌘ K)"
+          aria-label={`Jump to room or card (${isMac ? "Command" : "Control"} K)`}
+          title={`Jump to room or card (${isMac ? "⌘" : "Ctrl "}K)`}
         >
-          ⌘K
+          {isMac ? "⌘K" : "Ctrl K"}
         </button>
       )}
       <Palette open={palette} onClose={() => setPalette(false)} navigate={navigate} reduced={reduced} />

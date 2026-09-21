@@ -53,13 +53,11 @@ html.grid-mode, html.grid-mode body {
   to { transform: none; }
 }
 
+/* transparent ground: the fixed fluid canvas behind shows through
+   (see styles.css). Cards keep their own opaque plates for legibility. */
 .gv-room {
   position: absolute; inset: 0;
-  background-image:
-    radial-gradient(1100px 620px at 22% -6%, rgba(62, 191, 198, 0.05), transparent 62%),
-    var(--graticule);
-  background-size: auto, var(--graticule-size);
-  background-color: var(--bg);
+  background: transparent;
 }
 
 /* native vertical scroll INSIDE the page only */
@@ -146,10 +144,10 @@ html.grid-mode, html.grid-mode body {
   padding-right: 0; padding-left: 15px;
 }
 
-.gv-edge-n { top: 14px; left: 50%; transform: translateX(-50%); }
+.gv-edge-n { top: 14px; top: max(14px, env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); }
 .gv-edge-s { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); }
-.gv-edge-w { left: 14px; top: 50%; transform: translateY(-50%); }
-.gv-edge-e { right: 14px; top: 50%; transform: translateY(-50%); }
+.gv-edge-w { left: 14px; left: max(14px, env(safe-area-inset-left, 0px)); top: 50%; transform: translateY(-50%); }
+.gv-edge-e { right: 14px; right: max(14px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); }
 
 /* freeze the controls mid-slide */
 .gridview[data-moving] .gv-edge,
@@ -160,7 +158,9 @@ html.grid-mode, html.grid-mode body {
 /* identity anchor / home link — top-left, every room except home
    (on home the hero name itself is the identity; the corner stays bare) */
 .gv-homebtn {
-  position: fixed; top: 14px; left: 14px; z-index: 120;
+  position: fixed; z-index: 120;
+  top: 14px; top: max(14px, env(safe-area-inset-top, 0px));
+  left: 14px; left: max(14px, env(safe-area-inset-left, 0px));
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.16em;
   color: var(--ink);
@@ -177,7 +177,9 @@ html.grid-mode, html.grid-mode body {
 
 /* corner mini-map — top-right */
 .gv-corner-map {
-  position: fixed; top: 14px; right: 14px; z-index: 120;
+  position: fixed; z-index: 120;
+  top: 14px; top: max(14px, env(safe-area-inset-top, 0px));
+  right: 14px; right: max(14px, env(safe-area-inset-right, 0px));
   padding: 9px;
   background: color-mix(in oklab, var(--bg) 82%, transparent);
   backdrop-filter: blur(14px) saturate(130%);
@@ -213,7 +215,8 @@ html.grid-mode, html.grid-mode body {
    the same blurred-plate scrim as every other HUD instrument (the room
    foot's bottom padding keeps the end of content clear of it). */
 .gv-caption {
-  position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  left: 14px; left: max(14px, env(safe-area-inset-left, 0px));
   z-index: 110;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
   color: var(--ink-faint);
@@ -278,7 +281,8 @@ html.grid-mode, html.grid-mode body {
 /* command palette: ⌘K jump to any room or card. Trigger docks
    bottom-right on desktop (mobile corners belong to the E/W pills). */
 .gv-palette-btn {
-  position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  right: 14px; right: max(14px, env(safe-area-inset-right, 0px));
   z-index: 120;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
   color: var(--ink-muted);
@@ -697,31 +701,6 @@ html.grid-mode, html.grid-mode body {
 }
 .gv-route-anim .gv-stop.lit:first-child::before { box-shadow: 0 0 10px rgba(62, 191, 198, 0.4); }
 
-/* S1 contact — relocation arc */
-.gv-arc {
-  position: relative;
-  margin-top: clamp(40px, 6vh, 64px);
-  border: 1px solid var(--line-faint);
-  background: var(--card-sheen), var(--bg-raised);
-  border-radius: var(--r-card);
-  box-shadow: var(--shadow-card);
-  padding: clamp(16px, 2.5vw, 28px);
-}
-.gv-arc svg { width: 100%; height: auto; display: block; }
-.gv-arc-path {
-  fill: none; stroke: rgba(62, 191, 198, 0.55); stroke-width: 1.4;
-  stroke-dasharray: 10 8;
-}
-.gv-arc-dot { fill: var(--accent); }
-.gv-arc-mid {
-  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em;
-  fill: rgba(62, 191, 198, 0.9);
-}
-.gv-arc-city {
-  font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.18em;
-  fill: var(--ink-muted);
-}
-
 /* S2 field log — photo plates, room-sized grid */
 .gv-plates {
   display: grid;
@@ -763,7 +742,7 @@ html.grid-mode, html.grid-mode body {
     max-width: 160px; opacity: 1; padding-right: 13px;
     overflow: hidden; text-overflow: ellipsis;
   }
-  .gv-edge-n { top: 10px; }
+  .gv-edge-n { top: 10px; top: max(10px, env(safe-area-inset-top, 0px)); }
   .gv-edge-s { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
   /* E/W: docked pill tabs at the bottom corners (they used to float
      unlabeled at mid-screen over body text), compact always-on room
@@ -773,8 +752,8 @@ html.grid-mode, html.grid-mode body {
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     min-height: 44px;
   }
-  .gv-edge-w { left: 8px; }
-  .gv-edge-e { right: 8px; }
+  .gv-edge-w { left: 8px; left: max(8px, env(safe-area-inset-left, 0px)); }
+  .gv-edge-e { right: 8px; right: max(8px, env(safe-area-inset-right, 0px)); }
   .gv-edge-w .gv-edge-arrow, .gv-edge-e .gv-edge-arrow { width: 30px; height: 44px; }
   .gv-edge-w .gv-edge-label, .gv-edge-e .gv-edge-label {
     max-width: 96px; opacity: 1;
@@ -785,8 +764,8 @@ html.grid-mode, html.grid-mode body {
   }
   .gv-edge-e .gv-edge-label { padding: 0 0 0 11px; text-align: right; }
 
-  .gv-homebtn { top: 10px; left: 10px; padding: 8px 11px; font-size: 10px; }
-  .gv-corner-map { top: 10px; right: 10px; padding: 7px; }
+  .gv-homebtn { top: max(10px, env(safe-area-inset-top, 0px)); left: max(10px, env(safe-area-inset-left, 0px)); padding: 8px 11px; font-size: 10px; }
+  .gv-corner-map { top: max(10px, env(safe-area-inset-top, 0px)); right: max(10px, env(safe-area-inset-right, 0px)); padding: 7px; }
   .gv-map.sm { grid-template-columns: repeat(5, 11px); grid-template-rows: repeat(5, 8px); gap: 2px; }
   .gv-caption { display: none; }
 
@@ -826,6 +805,12 @@ html.grid-mode, html.grid-mode body {
 /* very narrow: trim the N/S labels further */
 @media (max-width: 380px) {
   .gv-edge-n .gv-edge-label, .gv-edge-s .gv-edge-label { max-width: 120px; white-space: nowrap; }
+}
+
+/* short viewports (landscape phones): the decorative corner chips would
+   sit on body text, so they hide; edge arrows stay (essential nav) */
+@media (max-height: 500px) {
+  .gv-caption, .gv-palette-btn { display: none; }
 }
 
 /* ════════════════ reduced motion: instant swaps ════════════════ */
