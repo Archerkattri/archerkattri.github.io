@@ -12,9 +12,9 @@
 // ════════════════════════════════════════════════════════════
 import { useEffect, useRef, useState } from "react";
 
-const INK = [0.925, 0.902, 0.839];   /* --ink #ebe6d6 */
+const INK = [0.922, 0.902, 0.847];   /* --ink #ebe6d8 */
 const TEAL = [0.243, 0.749, 0.776];  /* --accent #3ebfc6 */
-const GROUND = [0.0392, 0.0471, 0.0627]; /* --bg #0a0c10 */
+const GROUND = [0.051, 0.0667, 0.0902]; /* --bg #0d1117 (lifted, halation-safe) */
 
 const BASE_VERT = `
 precision highp float;
@@ -623,7 +623,9 @@ function startFluid(canvas) {
 
   const onPointerMove = (e) => {
     noteInput();
-    if (e.pointerType === "touch" && e.buttons === 0 && !e.isPrimary) return;
+    /* touch is handled by the dedicated touch listeners below; skip it
+       here so a finger never double-splats (pointer + touch). */
+    if (e.pointerType === "touch") return;
     const p = toSim(e.clientX, e.clientY);
     if (px >= 0) {
       const dx = p.x - px, dy = p.y - py;
@@ -636,11 +638,41 @@ function startFluid(canvas) {
     px = p.x; py = p.y;
   };
   const onPointerDown = (e) => {
+    if (e.pointerType === "touch") return;
     noteInput();
     const p = toSim(e.clientX, e.clientY);
     splat(p.x, p.y, 0, 0, pointerColor(6), config.SPLAT_RADIUS * 0.9);
   };
   const onPointerLeave = () => { px = -1; py = -1; };
+
+  /* ── touch: phones/tablets have no hover cursor, so the sim must be
+     driven by finger contact. Passive listeners keep room scrolling
+     native; splats are a touch larger/stronger so they read on small
+     screens. Only the primary finger is tracked. ── */
+  const onTouchStart = (e) => {
+    noteInput();
+    const t = e.touches[0];
+    if (!t) return;
+    const p = toSim(t.clientX, t.clientY);
+    splat(p.x, p.y, 0, 0, pointerColor(9), config.SPLAT_RADIUS * 1.2);
+    px = p.x; py = p.y;
+  };
+  const onTouchMove = (e) => {
+    noteInput();
+    const t = e.touches[0];
+    if (!t) return;
+    const p = toSim(t.clientX, t.clientY);
+    if (px >= 0) {
+      const dx = p.x - px, dy = p.y - py;
+      const speed = Math.hypot(t.clientX - px * canvas.clientWidth, t.clientY - (1 - py) * canvas.clientHeight);
+      if (speed > 0.3) {
+        splat(p.x, p.y, correctDeltaX(dx) * config.SPLAT_FORCE, correctDeltaY(dy) * config.SPLAT_FORCE,
+          pointerColor(Math.max(speed, 5)), config.SPLAT_RADIUS * 1.25);
+      }
+    }
+    px = p.x; py = p.y;
+  };
+  const onTouchEnd = () => { px = -1; py = -1; };
 
   /* faint idle drift so the ground stays alive without input */
   function ambientSplat() {
@@ -710,6 +742,10 @@ function startFluid(canvas) {
   window.addEventListener("pointermove", onPointerMove, { passive: true });
   window.addEventListener("pointerdown", onPointerDown, { passive: true });
   document.documentElement.addEventListener("mouseleave", onPointerLeave);
+  window.addEventListener("touchstart", onTouchStart, { passive: true });
+  window.addEventListener("touchmove", onTouchMove, { passive: true });
+  window.addEventListener("touchend", onTouchEnd, { passive: true });
+  window.addEventListener("touchcancel", onTouchEnd, { passive: true });
   window.addEventListener("resize", onResize);
   document.addEventListener("visibilitychange", onVisibility);
 
@@ -720,6 +756,10 @@ function startFluid(canvas) {
     window.removeEventListener("pointermove", onPointerMove);
     window.removeEventListener("pointerdown", onPointerDown);
     document.documentElement.removeEventListener("mouseleave", onPointerLeave);
+    window.removeEventListener("touchstart", onTouchStart);
+    window.removeEventListener("touchmove", onTouchMove);
+    window.removeEventListener("touchend", onTouchEnd);
+    window.removeEventListener("touchcancel", onTouchEnd);
     window.removeEventListener("resize", onResize);
     document.removeEventListener("visibilitychange", onVisibility);
     /* NOTE: no WEBGL_lose_context here — StrictMode remounts in dev and

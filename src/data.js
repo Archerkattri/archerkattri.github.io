@@ -236,7 +236,7 @@ export const PORTFOLIO_DATA = {
       id: "mathlas",
       name: "mathlas",
       install: "pip install mathlas-mcp",
-      spec: "v1.5.0 · Apache-2.0 · 12 MCP tools · no LLM inside, no API key · official MCP registry · Glama grade A",
+      spec: "v1.5.0 · Apache-2.0 · 12 MCP tools · no LLM inside, no API key · official MCP registry · Glama quality A / license A",
       oneliner: "Airtight math tools an AI uses.",
       summary:
         "Language models hallucinate theorems, and prose is not verification. mathlas is an MCP server of 12 deterministic, data-returning tools an AI agent drives: search over a 3.68M-document index (dense + BM25 + rank fusion), PSLQ constant identification, OEIS sequence lookup, and real Lean-kernel checks that now verify full proofs, returning the kernel's error verbatim so the agent can repair and re-call. A quantized laptop tier serves the same index from 1.9 GB at 2.4 s/query on 4 CPU threads, measured recall-lossless. The discipline is airtight-or-nothing: every verification tier returns an independently checkable fact or an honest nothing, with zero false positives measured across all tiers.",
@@ -262,7 +262,7 @@ export const PORTFOLIO_DATA = {
         "A robot replanning through a world whose costs drift never knows how good its current route is once the map goes stale; classical planners silently trust the stale map. CERT-FLOW answers with a proof every round: a high-probability certificate LB ≤ OPT ≤ UB on the optimal route cost, built from age-weighted non-exchangeable conformal prediction over drift-adjusted residuals, and it spends paid sensing exactly where the certificate says the gap shrinks fastest. When the certificate proves the map tight, that proof licenses ns-to-µs preprocessed queries that self-expire the instant drift exceeds tolerance. Seven theorems (coverage through an impossibility result on lower bounds), validated on 17 synthetic regimes, game maps, and real traffic (METR-LA, PEMS-BAY); the failed hypotheses stay documented in the record.",
       stats: [
         { value: "0.95 – 1.00", label: "coverage on every condition ever run; classical replanning 0.02 – 0.59" },
-        { value: "269 ns", label: "certificate-gated static cost query; 15.1 ms p50 full certified round (60×60), one CPU core" },
+        { value: "269 ns", label: "certificate-gated static cost query; 3.7 ms p50 / 12.0 ms p95 full certified round (60×60), one CPU core" },
         { value: "2 – 3×", label: "lower sensing regret than freshness, uncertainty, or random at equal budget" },
       ],
       links: [
@@ -293,6 +293,8 @@ export const PORTFOLIO_DATA = {
         { label: "ActionABI", href: "https://github.com/Archerkattri/actionabi" },
         { label: "ActionShift", href: "https://github.com/Archerkattri/actionshift" },
         { label: "ActionShift on PyPI", href: "https://pypi.org/project/actionshift/" },
+        { label: "ActionABI preprint (engrXiv)", href: "https://doi.org/10.31224/7690" },
+        { label: "ActionShift preprint (engrXiv)", href: "https://doi.org/10.31224/7688" },
       ],
     },
     {
@@ -300,13 +302,13 @@ export const PORTFOLIO_DATA = {
       compact: true,
       name: "Clyde",
       install: "Download the arm64 APK",
-      spec: "v0.1.52 · Android 12+ · Jetpack Compose + Claude Agent SDK · 61 safety tests",
+      spec: "v0.1.52 · Android 12+ · Jetpack Compose + Claude Agent SDK · tiered safety contracts",
       oneliner: "Claude, with hands, on Android.",
       summary:
         "Clyde is an Android assistant shell for Claude on a user's own Pro or Max subscription: voice, overlay, planning, and a tiered control ladder from intents through accessibility, Shizuku, and root. It drives any app rather than a vendor whitelist, while consequential actions require a single-use confirmation token bound to the exact tool and arguments. Money movement is a hard stop, API-key billing fails loud, and the loopback secret is encrypted under an Android Keystore key. On-device Kokoro speech keeps the voice local.",
       stats: [
         { value: "T0 → T3", label: "intents, accessibility, Shizuku, root" },
-        { value: "61 / 61", label: "brain safety contract tests passing" },
+        { value: "single-use", label: "confirmation token bound to the exact tool and arguments" },
         { value: "0", label: "production npm vulnerabilities after the clean audit" },
       ],
       links: [
@@ -368,11 +370,13 @@ export const PORTFOLIO_DATA = {
       stats: [
         { value: "r = 0.91–0.98", label: "export-time feature predicts held-out reliability · 4 scenes" },
         { value: "~300–900×", label: "calibration error (ECE) reduction after isotonic calibration" },
-        { value: "1M → 52 MB", label: "confidence-annotated KHR GLB, plus OpenUSD 26.03 export" },
+        { value: "1.53 GB → 1.05 MB", label: "confidence-annotated KHR GLB at k=64, plus OpenUSD 26.03 export" },
       ],
       links: [
         { label: "Docs & guide", href: "https://archerkattri.github.io/aura/" },
         { label: "GitHub", href: "https://github.com/Archerkattri/aura" },
+        { label: "Preprint (engrXiv)", href: "https://doi.org/10.31224/7689" },
+        { label: "DOI 10.5281/zenodo.22820934", href: "https://doi.org/10.5281/zenodo.22820934" },
       ],
     },
     {
@@ -403,7 +407,7 @@ export const PORTFOLIO_DATA = {
       compact: true,
       name: "ProgressBeam",
       install: "npm install progressbeam",
-      spec: "v1.0.2 · MIT · zero-dep · ESM/CJS/browser + TS types",
+      spec: "v1.1.0 · MIT · zero-dep · ESM/CJS/browser + TS types",
       oneliner: "Slim, accessible progress bar for browser apps.",
       summary:
         "ProgressBeam continues NProgress (unmaintained) with its API intact: zero runtime dependencies, ESM/CommonJS/direct-browser builds, type-tested TypeScript declarations, valid progressbar semantics with labeled status and reduced-motion support, lifecycle events plus explicit fail/cancel/pause/reset, and adapters for fetch, routers, React, Next.js, Vue, and TanStack. Verified in real Chromium, Firefox, and WebKit with enforced size budgets; safe to import during SSR.",
@@ -423,19 +427,44 @@ export const PORTFOLIO_DATA = {
       compact: true,
       name: "vue-mini-bridge",
       install: "npm install vue-mini-bridge",
-      spec: "v2.0.8 · MIT · Vue 2 runtime + template compiler · 4 mini-program targets",
+      spec: "v2.0.11 · MIT · Vue 2 runtime + template compiler · 4 mini-program targets",
       oneliner: "Vue 2 single-file components, compiled to mini programs.",
       summary:
         "Independently maintained Vue-compatible runtime and template compiler for mini-program targets, continuing the useful parts of mpvue (dormant since 2022) with a rebuilt toolchain, English documentation, and regression coverage: one Vue template compiles to WeChat, Alipay, Baidu, and ByteDance targets, verified against the vendors' September 2026 documentation.",
       stats: [
         { value: "4", label: "targets: WeChat, Alipay, Baidu, ByteDance" },
-        { value: "235", label: "regression checks across the ssr, weex, and mpvue suites" },
+        { value: "3 suites", label: "regression coverage across the ssr, weex, and mpvue test suites" },
         { value: "2", label: "published packages: runtime + template compiler" },
       ],
       links: [
         { label: "npm", href: "https://www.npmjs.com/package/vue-mini-bridge" },
         { label: "GitHub", href: "https://github.com/Archerkattri/vue-mini-bridge" },
         { label: "DOI 10.5281/zenodo.22821137", href: "https://doi.org/10.5281/zenodo.22821137" },
+      ],
+    },
+    {
+      id: "jellyfin-kattri",
+      compact: true,
+      name: "jellyfin-kattri",
+      spec: "v0.7.0 · GPL-3.0 · Rust + egui + libmpv · native desktop, no web view",
+      oneliner: "A fast, native Jellyfin desktop client.",
+      summary:
+        "A Rust-native desktop client for Jellyfin built with egui and libmpv: no web view, no JavaScript UI, no server changes. It connects to a Jellyfin server like any other client and plays the library with hardware-accelerated mpv playback.",
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/jellyfin-kattri" },
+        { label: "Latest release", href: "https://github.com/Archerkattri/jellyfin-kattri/releases/latest" },
+      ],
+    },
+    {
+      id: "linguamesh",
+      compact: true,
+      name: "LinguaMesh",
+      spec: "3.7.5 · Apache-2.0 · Java · pluggable multilingual tokenization engines",
+      oneliner: "Modular Java text analysis with selectable language engines.",
+      summary:
+        "Java text tokenization with selectable language engines. LinguaMesh keeps the Ansj Chinese segmenter and adds a provider API so applications can choose an engine appropriate to their language, runtime, and use case. Independently maintained, continuing the Apache-2.0 ansj_seg lineage.",
+      links: [
+        { label: "GitHub", href: "https://github.com/Archerkattri/LinguaMesh" },
       ],
     },
     {
@@ -468,9 +497,9 @@ export const PORTFOLIO_DATA = {
     { name: "sam3d-plus", url: "https://github.com/Archerkattri/sam3d-plus", guide: "https://archerkattri.github.io/sam3d-plus/", desc: "HiCache (Hermite) · SAM 3D Objects" },
     { name: "fastsam3d-plus-plus", url: "https://github.com/Archerkattri/fastsam3d-plus-plus", guide: "https://archerkattri.github.io/fastsam3d-plus-plus/", desc: "HiCache++ (DMD) · Fast-SAM3D" },
     { name: "fastsam3d-plus", url: "https://github.com/Archerkattri/fastsam3d-plus", guide: "https://archerkattri.github.io/fastsam3d-plus/", desc: "HiCache (Hermite) · Fast-SAM3D" },
-    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", guide: "https://archerkattri.github.io/ComfyUI-HiCache/", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 41 tests" },
-    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", guide: "https://archerkattri.github.io/ComfyUI-TRELLIS-HiCache/", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless · 12 tests" },
-    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", guide: "https://archerkattri.github.io/ComfyUI-TRELLIS2-HiCache/", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load lifecycle safe · 15 tests" },
+    { name: "ComfyUI-HiCache", url: "https://github.com/Archerkattri/ComfyUI-HiCache", guide: "https://archerkattri.github.io/ComfyUI-HiCache/", desc: "ComfyUI node · Hunyuan3D via hicache-pp · beta, 45 tests" },
+    { name: "ComfyUI-TRELLIS-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS-HiCache", guide: "https://archerkattri.github.io/ComfyUI-TRELLIS-HiCache/", desc: "ComfyUI node · TRELLIS via HiCache · ~2×, near-lossless · 15 tests" },
+    { name: "ComfyUI-TRELLIS2-HiCache", url: "https://github.com/Archerkattri/ComfyUI-TRELLIS2-HiCache", guide: "https://archerkattri.github.io/ComfyUI-TRELLIS2-HiCache/", desc: "ComfyUI node · TRELLIS.2 via HiCache · lazy-load lifecycle safe · 22 tests" },
   ],
 
   /* ──────────────── 03 / EXPERIENCE ──────────────── */
@@ -674,12 +703,12 @@ export const PORTFOLIO_DATA = {
   ],
 
   gallery: [
-    { src: "assets/images/robotics-mechatronics.jpg", caption: "Quad-wheel research robot · LiDAR + vision SLAM · 2023" },
-    { src: "assets/images/aerial-robot.jpg", caption: "Custom carbon-fibre aerial platform" },
-    { src: "assets/images/silo.jpg", caption: "Vertical farming rack · Area2Farms · 2023" },
-    { src: "assets/images/silo-circuit.jpg", caption: "Relay control circuit · Silo automation" },
-    { src: "assets/images/beetlebot.jpg", caption: "Beetle-Bot · combat robotics · 2021" },
-    { src: "assets/images/personal-drone.jpg", caption: "Wi-Fi drone · personal build · 2021" },
+    { src: "assets/images/robotics-mechatronics.jpg", w: 1400, h: 1163, caption: "Quad-wheel research robot · LiDAR + vision SLAM · 2023" },
+    { src: "assets/images/aerial-robot.jpg", w: 1200, h: 1600, caption: "Custom carbon-fibre aerial platform" },
+    { src: "assets/images/silo.jpg", w: 1200, h: 1600, caption: "Vertical farming rack · Area2Farms · 2023" },
+    { src: "assets/images/silo-circuit.jpg", w: 1200, h: 1600, caption: "Relay control circuit · Silo automation" },
+    { src: "assets/images/beetlebot.jpg", w: 1600, h: 1200, caption: "Beetle-Bot · combat robotics · 2021" },
+    { src: "assets/images/personal-drone.jpg", w: 1600, h: 1200, caption: "Wi-Fi drone · personal build · 2021" },
   ],
   galleryVideos: [
     { src: "assets/videos/eod-robot.mp4", poster: "assets/videos/eod-robot-poster.jpg", caption: "EOD robot · undergraduate research" },

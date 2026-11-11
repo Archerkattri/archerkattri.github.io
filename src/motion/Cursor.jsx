@@ -25,10 +25,21 @@ export default function Cursor({ reduced }) {
     const place = (el, px, py) => {
       el.style.transform = `translate3d(${px}px, ${py}px, 0) translate(-50%, -50%)`;
     };
+    /* the lerp loop only runs while the cursor is visible and motion is
+       allowed; it parks itself when hidden so no rAF burns while idle */
+    const loop = () => {
+      raf = 0;
+      if (!visible || reduced) return;
+      rx += (x - rx) * 0.16;
+      ry += (y - ry) * 0.16;
+      place(ring, rx, ry);
+      raf = requestAnimationFrame(loop);
+    };
     const show = () => {
       visible = true;
       dot.style.opacity = "1";
       ring.style.opacity = "1";
+      if (!reduced && !raf) raf = requestAnimationFrame(loop);
     };
     const hide = () => {
       visible = false;
@@ -47,15 +58,6 @@ export default function Cursor({ reduced }) {
       ring.classList.toggle("is-hover", hot);
     };
     const onLeave = (e) => { if (!e.relatedTarget) hide(); };
-    const loop = () => {
-      if (!reduced) {
-        rx += (x - rx) * 0.16;
-        ry += (y - ry) * 0.16;
-        place(ring, rx, ry);
-      }
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerover", onOver, { passive: true });

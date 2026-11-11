@@ -127,14 +127,23 @@ function LazyClip({ media }) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  /* src ships in the markup so the no-JS prerender gets a playable,
+     controls-on video (preload="none" keeps the fetch opt-in there).
+     With JS, drive playback explicitly on entering view: flipping the
+     autoPlay attribute alone does not start a preload="none" clip. */
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || !on || reduced) return;
+    el.play().catch(() => {});
+  }, [on, reduced]);
   return (
     <video
       ref={ref}
-      src={on ? media.video : undefined}
+      src={media.video}
       poster={media.poster}
       autoPlay={on && !reduced}
-      controls={reduced}
-      muted loop playsInline preload="metadata"
+      controls={reduced || !on}
+      muted loop playsInline preload="none"
       aria-label={media.caption}
     />
   );
@@ -604,14 +613,14 @@ export function GallerySection({ data }) {
           <figure key={i} className="log-item">
             <picture>
               <source srcSet={toWebp(g.src)} type="image/webp" />
-              <img src={g.src} alt={g.caption} loading="lazy" decoding="async" />
+              <img src={g.src} alt={g.caption} width={g.w} height={g.h} loading="lazy" decoding="async" />
             </picture>
             <figcaption>{g.caption}</figcaption>
           </figure>
         ))}
         {data.galleryVideos.map((v, i) => (
           <figure key={"v" + i} className="log-item">
-            <video src={v.src} poster={v.poster} muted loop playsInline preload="none" controls />
+            <video src={v.src} poster={v.poster} muted loop playsInline preload="none" controls aria-label={v.caption} />
             <figcaption>▶ {v.caption}</figcaption>
           </figure>
         ))}

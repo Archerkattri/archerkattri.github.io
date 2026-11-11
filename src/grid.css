@@ -102,7 +102,7 @@ html.grid-mode, html.grid-mode body {
 .gv-edge {
   position: fixed; z-index: 120;
   display: inline-flex; align-items: center;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
   color: var(--ink-muted);
   background: color-mix(in oklab, var(--bg) 82%, transparent);
   backdrop-filter: blur(14px) saturate(130%);
@@ -162,7 +162,7 @@ html.grid-mode, html.grid-mode body {
   top: 14px; top: max(14px, env(safe-area-inset-top, 0px));
   left: 14px; left: max(14px, env(safe-area-inset-left, 0px));
   display: inline-flex; align-items: center; gap: 9px;
-  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.16em;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.02em;
   color: var(--ink);
   background: color-mix(in oklab, var(--bg) 82%, transparent);
   backdrop-filter: blur(14px) saturate(130%);
@@ -194,8 +194,8 @@ html.grid-mode, html.grid-mode body {
 .gv-edgehint {
   position: fixed; left: 50%; transform: translateX(-50%);
   z-index: 125; pointer-events: none;
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--ink);
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em;
+  color: var(--ink);
   background: color-mix(in oklab, var(--bg) 86%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -218,7 +218,7 @@ html.grid-mode, html.grid-mode body {
   position: fixed; bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   left: 14px; left: max(14px, env(safe-area-inset-left, 0px));
   z-index: 110;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.02em;
   color: var(--ink-faint);
   background: color-mix(in oklab, var(--bg) 86%, transparent);
   backdrop-filter: blur(14px);
@@ -270,8 +270,8 @@ html.grid-mode, html.grid-mode body {
 .gv-rail-label {
   position: absolute; right: calc(100% + 12px); top: 50%; transform: translateY(-50%);
   max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--ink);
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.02em;
+  color: var(--ink);
   transition: max-width 0.25s ease, opacity 0.2s ease;
   pointer-events: none;
 }
@@ -388,17 +388,17 @@ html.grid-mode, html.grid-mode body {
   border-radius: 6px;
 }
 .gv-cell-code {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
   color: var(--accent);
 }
 .gv-cell-name {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.07em;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.02em;
   color: var(--ink-muted); white-space: normal; text-align: center; line-height: 1.4;
 }
 .gv-cell:hover .gv-cell-name { color: var(--ink); }
 .gv-cell-here {
-  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.12em;
-  color: var(--accent);
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.03em;
+  color: var(--signal);
   animation: gvHere 2.2s ease-in-out infinite;
 }
 @keyframes gvHere { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -495,7 +495,7 @@ html.grid-mode, html.grid-mode body {
   margin: 0 0 22px;
   font-variation-settings: "opsz" 110;
 }
-.gv-home-tag em { font-style: italic; font-weight: 340; color: var(--accent); }
+.gv-home-tag em { font-style: normal; font-weight: inherit; color: inherit; }
 .gv-home .hero-sub { margin-bottom: 26px; }
 .gv-home .hero-meta { margin-bottom: 30px; }
 
@@ -542,8 +542,8 @@ html.grid-mode, html.grid-mode body {
 .gv-compass::before { content: "↑"; font-size: 11px; color: var(--accent-deep); }
 .gv-map-hint {
   display: block; margin-top: 8px; text-align: center;
-  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--ink-faint);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.02em;
+  color: var(--ink-faint);
 }
 /* compact chart: cells shrink to the card, never overflow */
 .gv-home-map .gv-map.lg {
@@ -562,15 +562,14 @@ html.grid-mode, html.grid-mode body {
 .gv-xref {
   margin-top: 30px;
   display: inline-flex; align-items: baseline; gap: 12px;
-  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.02em;
   color: var(--ink-muted);
   border: 1px dashed var(--line); border-radius: var(--r-ui);
   padding: 11px 16px;
   transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 .gv-xref:hover { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); transform: translateY(-1px); }
-.gv-xref-dir { color: var(--accent); letter-spacing: 0.16em; white-space: nowrap; }
+.gv-xref-dir { color: var(--accent); letter-spacing: 0.04em; white-space: nowrap; }
 .sw-body .gv-xref { margin-top: 20px; }
 
 /* N2 publications — roomier list */
@@ -596,8 +595,8 @@ html.grid-mode, html.grid-mode body {
 .gv-pub-links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 16px; }
 .gv-pub-link, .gv-pub-status {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--accent);
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.02em;
+  color: var(--accent);
 }
 .gv-pub-status { color: var(--ink-faint); }
 .gv-pub-link:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -728,8 +727,8 @@ html.grid-mode, html.grid-mode body {
 .gv-plate:hover img, .gv-plate:hover video { filter: saturate(1); }
 .gv-plate figcaption {
   margin-top: 9px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.07em;
-  text-transform: uppercase; color: var(--ink-faint);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.01em;
+  color: var(--ink-faint);
 }
 
 /* ════════════════ mobile (<760px) ════════════════ */

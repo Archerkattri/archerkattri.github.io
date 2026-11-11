@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>404 · Krishi Attri</title>
 <meta name="robots" content="noindex" />
-<meta name="theme-color" content="#0C0D10" />
+<meta name="theme-color" content="#0d1117" />
 <link rel="icon" type="image/png" sizes="64x64" href="/assets/images/favicon.png" />
-<meta http-equiv="refresh" content="2; url=/#home" />
+<meta http-equiv="refresh" content="2; url=/#top" />
 <style>
   html, body { height: 100%; margin: 0; }
   body {
     display: grid; place-items: center;
-    background: #0c0d10; color: #e9e4d6;
+    background: #0d1117; color: #e9e4d6;
     font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
-    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
   }
   main { text-align: center; padding: 24px; }
   .code { color: #3ebfc6; font-size: 28px; letter-spacing: 0.18em; margin-bottom: 14px; }
@@ -28,7 +28,7 @@
 <main>
   <div class="code">404</div>
   <p><span id="tmsg">Off the map. Returning to HOME.</span><span id="tcur" aria-hidden="true"></span></p>
-  <a href="/#home">Take me there now</a>
+  <a href="/#top">Take me there now</a>
 </main>
 <script>
 (function () {
@@ -36,7 +36,7 @@
   var cur = document.getElementById("tcur");
   var full = msg.textContent;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var go = function () { location.replace("/#home"); };
+  var go = function () { location.replace("/#top"); };
   if (reduce) { window.setTimeout(go, 300); return; }
   msg.textContent = "";
   cur.textContent = "\u00A0";

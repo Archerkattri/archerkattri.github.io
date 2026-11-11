@@ -38,7 +38,7 @@ export function GridMap({ cur, navigate, large = false }) {
             <>
               <span className="gv-cell-code">{r.code}</span>
               <span className="gv-cell-name">{r.name}</span>
-              {r.id === cur && <span className="gv-cell-here">● YOU ARE HERE</span>}
+              {r.id === cur && <span className="gv-cell-here">● you are here</span>}
             </>
           )}
         </button>
@@ -397,14 +397,14 @@ function GalleryRoom() {
             <figure key={i} className="gv-plate">
               <picture>
                 <source srcSet={toWebp(g.src)} type="image/webp" />
-                <img src={g.src} alt={g.caption} loading="lazy" decoding="async" />
+                <img src={g.src} alt={g.caption} width={g.w} height={g.h} loading="lazy" decoding="async" />
               </picture>
               <figcaption>{g.caption}</figcaption>
             </figure>
           ))}
           {D.galleryVideos.map((v, i) => (
             <figure key={"v" + i} className="gv-plate">
-              <video src={v.src} poster={v.poster} muted loop playsInline preload="none" controls />
+              <video src={v.src} poster={v.poster} muted loop playsInline preload="none" controls aria-label={v.caption} />
               <figcaption>▶ {v.caption}</figcaption>
             </figure>
           ))}
