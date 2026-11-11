@@ -770,14 +770,22 @@ html.grid-mode, html.grid-mode body {
   .gv-caption { display: none; }
 
   /* one column, identity first: name block → photo → map card.
-     The photo stays the primary visual mass; the map closes the page. */
+     The photo stays the primary visual mass; the map closes the page.
+     Tightened vertical rhythm so the social-links row clears the docked
+     bottom HUD at the initial scroll position on phones. */
   .gv-home {
     grid-template-columns: 1fr;
-    gap: 30px;
-    padding-top: 84px;
+    gap: 24px;
+    padding-top: 56px;
     align-items: start;
     align-content: start;
   }
+  .gv-home .hero-sub { font-size: 15px; margin-bottom: 18px; }
+  .gv-home .hero-proof { margin-bottom: 16px; padding: 16px 18px; }
+  .gv-home .hero-meta { margin-bottom: 16px; font-size: 11px; line-height: 1.5; gap: 6px; }
+  .gv-home .hero-links { gap: 8px; }
+  .gv-home .hero-links a { padding: 8px 12px; font-size: 11px; }
+  .gv-home .hero-avail { margin-top: 16px; }
   .gv-home-rail { max-width: none; justify-self: stretch; gap: 16px; }
   .gv-home-fig { max-width: 330px; padding: 11px; }
   .gv-home-name { font-size: clamp(42px, 12vw, 54px); }
