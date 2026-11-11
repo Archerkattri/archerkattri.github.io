@@ -220,7 +220,7 @@ html.grid-mode, html.grid-mode body {
   z-index: 110;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.02em;
   color: var(--ink-faint);
-  background: color-mix(in oklab, var(--bg) 86%, transparent);
+  background: color-mix(in oklab, var(--bg) 95%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--line); border-radius: var(--r-ui);
@@ -420,7 +420,7 @@ html.grid-mode, html.grid-mode body {
 .gv-boot .gv-home::before { animation: gvLamp 1.1s ease 0.15s both; }
 @keyframes gvLamp { from { opacity: 0; } }
 .gv-home {
-  min-height: 100%;
+  min-height: 100vh;
   max-width: var(--container);
   margin: 0 auto;
   padding: clamp(66px, 8.5vh, 100px) var(--pad) clamp(56px, 8vh, 92px);
@@ -428,6 +428,7 @@ html.grid-mode, html.grid-mode body {
   grid-template-columns: minmax(0, 1.12fr) minmax(330px, 0.88fr);
   gap: clamp(36px, 5vw, 72px);
   align-items: center;
+  align-content: center;
 }
 /* cold-open settle only (.gv-boot lands for the first ~1 s of the app):
    the identity stack rises in reading order, the rail follows; quick
@@ -810,6 +811,51 @@ html.grid-mode, html.grid-mode body {
    sit on body text, so they hide; edge arrows stay (essential nav) */
 @media (max-height: 500px) {
   .gv-caption, .gv-palette-btn { display: none; }
+}
+
+/* tablet (761–1020px): the two-column content is narrow enough that the
+   mid-screen side arrows would sit on it, so dock E/W to the bottom
+   corners exactly like mobile. Keeps every control clear of content. */
+@media (min-width: 761px) and (max-width: 1020px) {
+  .gv-edge-w, .gv-edge-e { top: auto; transform: none; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); min-height: 44px; }
+  .gv-edge-w { left: max(10px, env(safe-area-inset-left, 0px)); }
+  .gv-edge-e { right: max(10px, env(safe-area-inset-right, 0px)); }
+  .gv-edge-w .gv-edge-arrow, .gv-edge-e .gv-edge-arrow { width: 34px; height: 44px; }
+  .gv-edge-w .gv-edge-label, .gv-edge-e .gv-edge-label { max-width: 130px; opacity: 1; padding: 0 12px 0 0; white-space: normal; line-height: 1.3; font-size: 10px; text-align: left; }
+  .gv-edge-e .gv-edge-label { padding: 0 0 0 12px; text-align: right; }
+  .gv-foot { padding-bottom: 76px; }
+  /* the docked E button owns the bottom-right corner here, so the ⌘K chip
+     yields (palette stays on Ctrl/⌘+K; map cells remain tappable) */
+  .gv-palette-btn { display: none; }
+}
+
+/* very narrow (<400px): E/W go arrow-only so the three bottom controls
+   (W · CONTACT · E) never collide or truncate one another */
+@media (max-width: 400px) {
+  .gv-edge-w .gv-edge-label, .gv-edge-e .gv-edge-label { display: none; }
+  .gv-edge-w, .gv-edge-e { min-width: 44px; }
+  .gv-edge-w .gv-edge-arrow, .gv-edge-e .gv-edge-arrow { width: 44px; }
+}
+
+/* mobile home: bottom clearance so the closing map plate always scrolls
+   clear of the docked bottom HUD */
+@media (max-width: 760px) {
+  .gv-home { padding-bottom: 88px; }
+}
+
+/* large displays / TV: widen the measure and scale the home so it reads as
+   a composed page, not a small top-anchored cluster; keep the map legible */
+@media (min-width: 2000px) {
+  :root { --container: 1560px; }
+  .gv-home { gap: clamp(48px, 4vw, 96px); }
+  .gv-home-name { font-size: clamp(64px, 4.6vw, 116px); }
+  .gv-home-tag { font-size: clamp(28px, 2vw, 40px); }
+  .gv-home .hero-sub { font-size: 20px; }
+  .gv-home-map .gv-map.lg .gv-cell { min-height: 56px; }
+  .gv-home-map .gv-cell-name { font-size: 11px; }
+  .gv-home-map .gv-cell-code { font-size: 12px; }
+  .gv-home-map .gv-cell-here { font-size: 9px; }
+  .gv-home-map .gv-map-hint { font-size: 12px; }
 }
 
 /* ════════════════ reduced motion: instant swaps ════════════════ */

@@ -591,8 +591,8 @@ html.js .sec-title {
 .install:hover .install-copy { color: var(--accent); }
 .sw-spec {
   margin-top: 12px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--ink-faint); line-height: 1.8;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.01em;
+  color: var(--ink-muted); line-height: 1.8;
 }
 .sw-id .ext-links { margin-top: 16px; }
 .sw-body > p { color: var(--ink-muted); font-size: 15.5px; max-width: 640px; }
@@ -658,8 +658,8 @@ html.js .sec-title {
 .project-compact-copy p { margin-top: 3px; color: var(--ink-muted); font-size: 14px; }
 .project-compact-copy > span {
   display: block; margin-top: 7px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--ink-faint);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.01em;
+  color: var(--ink-muted);
 }
 .project-compact-row .ext-links { justify-content: flex-end; }
 .adapter-fold { margin-top: 58px; }
